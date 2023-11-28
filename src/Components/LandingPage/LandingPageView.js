@@ -6,7 +6,7 @@ import GrowPulseIcon from '../Images/growpulse-leaf-black.png';
 import headerLogo from '../Images/growpulse-leaf-white.png'
 import RegisterModal from "../RegisterModal/RegisterModal";
 import { features, descriptions } from './LandingPageModel';
-import { useLandingPageController } from './LandingPageController';
+import { useLandingPageController} from './LandingPageController';
 import GreenConcordia from '../Images/green_concordia.png';
 import Concordia from '../Images/Concordia-logo.png';
 import SAF from '../Images/SAF-Logo.png';
