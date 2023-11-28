@@ -1,11 +1,12 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/database';
-import 'firebase/compat/firestore';
-import 'firebase/compat/storage';
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 import { getAnalytics } from "firebase/analytics";
 
+// TODO: Replace the following with your app's Firebase project configuration
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -19,9 +20,13 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase services
+const auth = getAuth(app);
+const database = getDatabase(app);
+const firestore = getFirestore(app);
+const storage = getStorage(app);
 const analytics = getAnalytics(app);
 
-export const auth = firebase.auth();
-export const database = firebase.database();
-export const firestore = firebase.firestore();
-export const storage = firebase.storage();
+// Export for use in your components
+export { auth, database, firestore, storage, analytics };
