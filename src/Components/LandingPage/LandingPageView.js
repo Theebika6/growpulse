@@ -7,11 +7,11 @@ import headerLogo from '../Images/growpulse-leaf-white.png'
 import RegisterModal from "../RegisterModal/RegisterModal";
 import { features, descriptions } from './LandingPageModel';
 import { useLandingPageController } from './LandingPageController';
-import GreenConcordia from '../Images/green_concordia.png';
-import Concordia from '../Images/Concordia-logo.png';
-import SAF from '../Images/SAF-Logo.png';
-import Firebase from '../Images/Firebase_Logo.png';
-import AWS from '../Images/aws-logo.png';
+import GreenConcordia from '../Images/LandingPage/green_concordia.png';
+import Concordia from '../Images/LandingPage/Concordia-logo.png';
+import SAF from '../Images/LandingPage/SAF-Logo.png';
+import Firebase from '../Images/LandingPage/Firebase_Logo.png';
+import AWS from '../Images/LandingPage/aws-logo.png';
 
 
 function LandingPageView() {

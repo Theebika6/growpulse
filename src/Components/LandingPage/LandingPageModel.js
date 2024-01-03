@@ -1,14 +1,14 @@
 //LandingPageModel.js
-import hydroIcon from "../Images/hydro.png";
-import aiIcon from "../Images/ai_icon.png";
-import automationIcon from "../Images/automated.png";
-import remoteIcon from "../Images/remote_connection.png";
-import websiteIcon from "../Images/user_friendly.png";
-import fasterIcon from "../Images/faster.png";
-import yieldIcon from "../Images/yield.png";
-import costIcon from "../Images/cost.png";
-import greenIcon from "../Images/green_energy.png";
-import multiIcon from "../Images/multisystem.png";
+import hydroIcon from "../Images/LandingPage/hydro.png";
+import aiIcon from "../Images/LandingPage/ai_icon.png";
+import automationIcon from "../Images/LandingPage/automated.png";
+import remoteIcon from "../Images/LandingPage/remote_connection.png";
+import websiteIcon from "../Images/LandingPage/user_friendly.png";
+import fasterIcon from "../Images/LandingPage/faster.png";
+import yieldIcon from "../Images/LandingPage/yield.png";
+import costIcon from "../Images/LandingPage/cost.png";
+import greenIcon from "../Images/LandingPage/green_energy.png";
+import multiIcon from "../Images/LandingPage/multisystem.png";
 
 export const features = [
     { src: hydroIcon, alt: "Hydro Icon", text: "Hydroponics" },
