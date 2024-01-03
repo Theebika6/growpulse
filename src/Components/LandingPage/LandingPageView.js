@@ -13,7 +13,6 @@ import SAF from '../Images/LandingPage/SAF-Logo.png';
 import Firebase from '../Images/LandingPage/Firebase_Logo.png';
 import AWS from '../Images/LandingPage/aws-logo.png';
 
-
 function LandingPageView() {
     const introSectionRef = useRef(null);
     const mainSectionRef = useRef(null);
