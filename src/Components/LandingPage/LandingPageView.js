@@ -1,9 +1,9 @@
 //LandingPageView.js
 import React, { useEffect, useRef, useState } from 'react';
 import './LandingPage.css';
-import logo from '../Images/growpulse-align-left.png';
-import GrowPulseIcon from '../Images/growpulse-leaf-black.png';
-import headerLogo from '../Images/growpulse-leaf-white.png'
+import logo from '../Images/GrowpulseLogos/growpulse-align-left.png';
+import GrowPulseIcon from '../Images/GrowpulseLogos/growpulse-leaf-black.png';
+import headerLogo from '../Images/GrowpulseLogos/growpulse-leaf-white.png'
 import RegisterModal from "../RegisterModal/RegisterModal";
 import { features, descriptions } from './LandingPageModel';
 import { useLandingPageController } from './LandingPageController';
