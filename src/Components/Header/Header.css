@@ -1,0 +1,67 @@
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: rgb(252, 252, 252);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 3;
+    margin-left: 210px;
+}
+
+.logout-button {
+    background-color: #818181;
+    color: #ffffff;
+    border: rgba(204, 204, 204, 0);
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-family: 'Raleway', sans-serif;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.logout-button:hover {
+    background-color: #bb0000;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.topbar h1 {
+    font-size: 25px;
+    margin-bottom: 0;
+    color: #1e1e1e;
+    font-family: 'Raleway', sans-serif;
+}
+
+.collapse-left {
+    width: 25px;
+}
+
+.collapse-left:hover{
+    cursor: pointer;
+}
+
+.icons{
+    width: 27px;
+}
+
+.icons:hover{
+    cursor: pointer;
+}
+
+.left-side, .right-side {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.current-date{
+    margin-top: 6px;
+    margin-left: -15px;
+    font-family: 'Raleway', sans-serif;
+}

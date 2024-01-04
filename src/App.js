@@ -1,18 +1,53 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
+import React, { useState, useEffect } from 'react';
+import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom';
+import { auth } from './firebaseConfig';
 import LandingPageView from './Components/LandingPage/LandingPageView';
+import LoginModal from './Components/LoginModal/LoginModal';
+import SidebarController from './Components/Sidebar/SidebarController';
+import TopbarController from './Components/Header/HeaderController';
+import AllSystems from "./Components/AllSystems/AllSystems";
+const App = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isEmailVerified, setIsEmailVerified] = useState(false);
+    const [showSidebar, setShowSidebar] = useState(true);
 
-function App() {
-  return (
-    <Router>
-      <Toaster />
-      <Routes>
-        <Route path="/" element={<LandingPageView />} />
-        {/* other routes */}
-      </Routes>
-    </Router>
-  );
-}
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                setIsLoggedIn(true);
+                setIsEmailVerified(user.emailVerified);
+            } else {
+                setIsLoggedIn(false);
+                setIsEmailVerified(false);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    return (
+        <Router>
+            <div className="App">
+                {isLoggedIn && isEmailVerified && <SidebarController show={showSidebar} />}
+                {isLoggedIn && isEmailVerified && <TopbarController toggleSidebar={() => setShowSidebar(prev => !prev)} />}
+                {isLoggedIn && isEmailVerified ? (
+                    <Routes>
+                        <Route path="/" element={<Navigate to="/allSystems" />} />
+                       <Route path="/allSystems" element={<AllSystems />} />
+                    </Routes>
+                ) : (
+                    <Routes>
+                        <Route path="/" element={<LandingPageView />} />
+                        {isLoggedIn ? (
+                            <Route path="/allSystems" element={<AllSystems />} />
+                        ) : (
+                            <Route path="/login" element={<LoginModal />} />
+                        )}
+                    </Routes>
+                )}
+            </div>
+        </Router>
+    );
+};
 
 export default App;

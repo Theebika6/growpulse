@@ -1,0 +1,134 @@
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 210px;
+    background: rgba(243, 243, 243, 0.99);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+    font-family: 'Raleway', sans-serif;
+}
+
+.sidebar h2{
+    color: #999999;
+    font-size: 15px;
+    margin-top: 20px;
+}
+
+.sidebar h3{
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.h3-container {
+    flex-grow: 1;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    font-size: 14px;
+}
+
+.systems-number{
+    background-color: #868686;
+    border-radius: 5px;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 5px;
+}
+
+.sidebar li {
+    margin: 10px 0;
+    white-space: nowrap;
+}
+
+.sidebar a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    margin-top: 10px;
+    white-space: nowrap;
+}
+
+.sidebar a:first-child{
+    margin-top: 0;
+}
+
+.sidebar a:hover {
+    color: rgba(98, 98, 98, 0.56);
+}
+
+.sidebar-icon {
+    width: 100px;
+    align-self: center;
+    margin-bottom: 5px;
+}
+
+.bullet-points{
+    margin-left: 25px;
+}
+
+.subtitle-icon{
+    width: 30px;
+    margin-left : -10%;
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+.system-icon{
+    width: 15px;
+    margin-left: -4%;
+    margin-right: 17px;
+    margin-top: 5px;
+}
+
+.expand {
+    width: 15px;
+    cursor: pointer;
+    margin-right: -10%;
+    margin-top: 5px;
+}
+
+.Dashboards {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 10px 10px;
+}
+
+.Schedules {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.Overview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.Overview-link {
+    display: inline-flex;
+    margin-right: -10px;
+}
+
+.Overview-link h3{
+    margin-top: -10px;
+    margin-right: 50px;
+    color: #000000;
+}
+
+.Overview-link img{
+    margin-left: -15px;
+}

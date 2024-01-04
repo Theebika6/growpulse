@@ -7,11 +7,11 @@ import headerLogo from '../Images/GrowpulseLogos/growpulse-leaf-white.png'
 import RegisterModal from "../RegisterModal/RegisterModal";
 import { features, descriptions } from './LandingPageModel';
 import { useLandingPageController } from './LandingPageController';
-import GreenConcordia from '../Images/LandingPage/green_concordia.png';
-import Concordia from '../Images/LandingPage/Concordia-logo.png';
-import SAF from '../Images/LandingPage/SAF-Logo.png';
-import Firebase from '../Images/LandingPage/Firebase_Logo.png';
-import AWS from '../Images/LandingPage/aws-logo.png';
+import GreenConcordia from '../Images/LandingPageIcons/green_concordia.png';
+import Concordia from '../Images/LandingPageIcons/Concordia-logo.png';
+import SAF from '../Images/LandingPageIcons/SAF-Logo.png';
+import Firebase from '../Images/LandingPageIcons/Firebase_Logo.png';
+import AWS from '../Images/LandingPageIcons/aws-logo.png';
 
 function LandingPageView() {
     const introSectionRef = useRef(null);

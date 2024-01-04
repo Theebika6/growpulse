@@ -8,7 +8,7 @@ body {
 .landing-container {
     display: flex;
     flex-direction: column;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Raleway', sans-serif;
     position: relative;
 }
 
@@ -79,7 +79,7 @@ body {
     border-radius: 50px;
     padding: 10px 20px;
     font-size: 14px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Raleway', sans-serif;
     cursor: pointer;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
@@ -395,7 +395,7 @@ body {
 }
 
 .contactUs-section input,textarea{
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Raleway', sans-serif;
 }
 
 .contact-input {
@@ -514,7 +514,7 @@ body {
 
 /*Font*/
 @font-face {
-    font-family: 'Poppins';
+    font-family: 'Raleway';
     src: url('../Fonts/RalewayMedium.txt') format('truetype');
     font-weight: normal;
     font-style: normal;

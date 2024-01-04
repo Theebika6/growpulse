@@ -5,6 +5,7 @@ import './LoginModal.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useNavigate} from "react-router-dom";
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 
 Modal.setAppElement('#root');
@@ -38,9 +39,10 @@ const LoginModal = ({ isOpen, onRequestClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         try {
-            await auth.signInWithEmailAndPassword(formData.email, formData.password);
+            // Use the signInWithEmailAndPassword method from firebase/auth
+            await signInWithEmailAndPassword(auth, formData.email, formData.password);
             console.log('Logged in successfully');
             showSuccessMessage();
             onRequestClose();
