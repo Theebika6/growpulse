@@ -11,6 +11,11 @@
     padding: 0 20px;
     z-index: 3;
     margin-left: 210px;
+    transition: margin-left 0.3s ease;
+}
+
+.topbar-expanded {
+    margin-left: 0;
 }
 
 .logout-button {
@@ -38,11 +43,11 @@
     font-family: 'Raleway', sans-serif;
 }
 
-.collapse-left {
+.collapse-toggle {
     width: 25px;
 }
 
-.collapse-left:hover{
+.collapse-toggle:hover{
     cursor: pointer;
 }
 

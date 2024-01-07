@@ -12,7 +12,7 @@ import settingsIcon from '../Images/SidebarIcons/settings.png';
 import supportIcon from '../Images/SidebarIcons/support.png';
 import { ref, get } from 'firebase/database';
 
-const SidebarView = () => {
+const SidebarView = ({ sidebarClass }) => {
     const [expandedSystem, setExpandedSystem] = useState(null);
     const [systems, setSystems] = useState([]);
 
@@ -60,7 +60,7 @@ const SidebarView = () => {
     };
 
     return (
-        <div className="sidebar">
+        <div className={`sidebar ${sidebarClass}`}>
             <img src={GrowPulseLogo} alt="Header Icon" className="sidebar-icon"/>
             <ul>
                 <li>

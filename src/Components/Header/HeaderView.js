@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './Header.css';
 import collapseLeft from '../Images/HeaderIcons/left_collapse.png';
+import expandRight from '../Images/HeaderIcons/double-right.png';
 import fullScreen from '../Images/HeaderIcons/full_screen.png';
 import notificationIcon from '../Images/HeaderIcons/notification.png';
 import tasks from '../Images/HeaderIcons/tasks.png';
 import settingsIcon from '../Images/SidebarIcons/settings.png'
 
-const HeaderView = ({ fullName, handleLogout }) => {
+const HeaderView = ({ toggleSidebar, sidebarExpanded, fullName, handleLogout }) => {
     const formatDate = () => {
         const currentDate = new Date();
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -25,6 +26,7 @@ const HeaderView = ({ fullName, handleLogout }) => {
     };
 
     const [currentDateTime, setCurrentDateTime] = useState(formatDate());
+    const topbarClass = sidebarExpanded ? "" : "topbar-expanded";
 
     const toggleFullScreen = () => {
         if (!document.fullscreenElement) {
@@ -61,9 +63,12 @@ const HeaderView = ({ fullName, handleLogout }) => {
     }, []);
 
     return (
-        <div className="topbar">
-            <div className="left-side">
-                <img src={collapseLeft} alt={"collapse-left"} className={"collapse-left"}/>
+        <div className={`topbar ${topbarClass}`}>
+        <div className="left-side">
+        <img src={sidebarExpanded ? collapseLeft : expandRight}
+                 alt={sidebarExpanded ? "collapse-left" : "expand-right"}
+                 className="collapse-toggle"
+                 onClick={toggleSidebar} />
                 <h1>Hello, {fullName}</h1>
                 <div className='current-date'>{currentDateTime}</div>
             </div>

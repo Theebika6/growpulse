@@ -9,7 +9,11 @@ import AllSystems from "./Components/AllSystems/AllSystems";
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isEmailVerified, setIsEmailVerified] = useState(false);
-    const [showSidebar, setShowSidebar] = useState(true);
+    const [sidebarExpanded, setSidebarExpanded] = useState(true);
+
+    const toggleSidebar = () => {
+        setSidebarExpanded(prevState => !prevState);
+    };
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -28,8 +32,11 @@ const App = () => {
     return (
         <Router>
             <div className="App">
-                {isLoggedIn && isEmailVerified && <SidebarController show={showSidebar} />}
-                {isLoggedIn && isEmailVerified && <TopbarController toggleSidebar={() => setShowSidebar(prev => !prev)} />}
+            {isLoggedIn && isEmailVerified && <SidebarController show={sidebarExpanded} />}
+                {isLoggedIn && isEmailVerified && <TopbarController 
+                          toggleSidebar={() => setSidebarExpanded(prev => !prev)} 
+                          sidebarExpanded={sidebarExpanded} 
+                        />}
                 {isLoggedIn && isEmailVerified ? (
                     <Routes>
                         <Route path="/" element={<Navigate to="/allSystems" />} />
