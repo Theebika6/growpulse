@@ -11,10 +11,6 @@ const App = () => {
     const [isEmailVerified, setIsEmailVerified] = useState(false);
     const [sidebarExpanded, setSidebarExpanded] = useState(true);
 
-    const toggleSidebar = () => {
-        setSidebarExpanded(prevState => !prevState);
-    };
-
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (user) {
@@ -40,7 +36,7 @@ const App = () => {
                 {isLoggedIn && isEmailVerified ? (
                     <Routes>
                         <Route path="/" element={<Navigate to="/allSystems" />} />
-                       <Route path="/allSystems" element={<AllSystems />} />
+                        <Route path="/allSystems" element={<AllSystems />} />
                     </Routes>
                 ) : (
                     <Routes>

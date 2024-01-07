@@ -6,6 +6,7 @@ import fullScreen from '../Images/HeaderIcons/full_screen.png';
 import notificationIcon from '../Images/HeaderIcons/notification.png';
 import tasks from '../Images/HeaderIcons/tasks.png';
 import settingsIcon from '../Images/SidebarIcons/settings.png'
+import { Link } from 'react-router-dom';
 
 const HeaderView = ({ toggleSidebar, sidebarExpanded, fullName, handleLogout }) => {
     const formatDate = () => {
@@ -73,7 +74,9 @@ const HeaderView = ({ toggleSidebar, sidebarExpanded, fullName, handleLogout }) 
                 <div className='current-date'>{currentDateTime}</div>
             </div>
             <div className="right-side">
-                <img src={settingsIcon} alt={"settings-icon"} className={"icons"}/>
+                <Link to="/settings">
+                    <img src={settingsIcon} alt={"settings-icon"} className={"icons"}/>
+                </Link>
                 <img src={tasks} alt={"task-icon"} className={"icons"}/>
                 <img src={notificationIcon} alt={"notification-icon"} className={"icons"}/>
                 <img src={fullScreen} alt={"full-screen"} className={"icons"} onClick={toggleFullScreen}/>

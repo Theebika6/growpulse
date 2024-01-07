@@ -76,6 +76,15 @@
 
 .bullet-points{
     margin-left: 25px;
+    margin-top: 10px;
+}
+
+.bullet-points a.active {
+    color: #006cc4; 
+}
+
+.sidebar a.active {
+    color: #006cc4; 
 }
 
 .subtitle-icon{
@@ -89,7 +98,7 @@
     width: 15px;
     margin-left: -4%;
     margin-right: 17px;
-    margin-top: 5px;
+    margin-top: 15px;
 }
 
 .expand {
@@ -104,7 +113,8 @@
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
-    padding: 10px 10px;
+    padding: 1px 10px;
+    position: relative;
 }
 
 .Schedules {
@@ -134,6 +144,30 @@
     color: #000000;
 }
 
+
 .Overview-link img{
     margin-left: -15px;
+}
+
+.highlight {
+    position: absolute; 
+    width: 36px; 
+    height: 36px; 
+    left: 0%;
+    margin-top: 10px;
+    background-color: rgba(184, 184, 184, 0.514); 
+    border-radius: 30%; 
+    z-index: -1;
+}
+
+  
+.system-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+.system-letter {
+    font-size: 10px; 
+    color: #919191; 
 }

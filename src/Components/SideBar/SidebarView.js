@@ -15,6 +15,7 @@ import { ref, get } from 'firebase/database';
 const SidebarView = ({ sidebarClass }) => {
     const [expandedSystem, setExpandedSystem] = useState(null);
     const [systems, setSystems] = useState([]);
+    const [activeLink, setActiveLink] = useState(null);
 
     useEffect(() => {
         const fetchSystems = async () => {
@@ -55,8 +56,8 @@ const SidebarView = ({ sidebarClass }) => {
         }
     };
 
-    const handleOverview = () => {
-        // ... handle Overview action
+    const handleLinkClick = (linkName) => {
+        setActiveLink(linkName);
     };
 
     return (
@@ -64,8 +65,8 @@ const SidebarView = ({ sidebarClass }) => {
             <img src={GrowPulseLogo} alt="Header Icon" className="sidebar-icon"/>
             <ul>
                 <li>
-                    <h2>Overview</h2>
-                    <div className="Overview" onClick={handleOverview}>
+                    <h2>Account Overview</h2>
+                    <div className="Overview">
                         <Link to="/allSystems" className="Overview-link">
                             <img src={overviewIcon} alt="overview Icon" className="subtitle-icon"/>
                         </Link>
@@ -74,51 +75,81 @@ const SidebarView = ({ sidebarClass }) => {
                         </Link>
                     </div>
                 </li>
-
                 <li>
                     <h2>Individual Systems<span className="systems-number">{systems.length}</span></h2>
-                    {systems.map((system, index) => (
-                        <div key={index}>
-                            <div className="Dashboards" onClick={() => handleSystemToggle(system)}>
-                                <img src={systemIcon} alt="system Icon" className="system-icon"/>
-                                <div className="h3-container">
-                                    <h3>{system}</h3>
+                    {systems.map((system, index) => {
+                        const systemLetter = system.charAt(6);
+                        return (
+                            <div key={index} className="system-container">
+                                <div className="Dashboards" onClick={() => handleSystemToggle(system)}>
+                                    {expandedSystem === system && <div className="highlight"></div>}
+                                    <div className="system-item">
+                                        <img src={systemIcon} alt="system Icon" className="system-icon"/>
+                                        <span className="system-letter">{systemLetter}</span>
+                                    </div>
+                                    <div className="h3-container">
+                                        <h3>{system}</h3>
+                                    </div>
+                                    <img src={expandedSystem === system ? collapse : expand} alt="Expand Icon" className="expand"/>
                                 </div>
-                                <img src={expandedSystem === system ? collapse : expand} alt="Expand Icon" className="expand"/>
+                                {expandedSystem === system && (
+                                    <div className="bullet-points">
+                                        <Link
+                                            to={`/Overview/${system}`}
+                                            onClick={() => handleLinkClick(`Overview-${system}`)}
+                                            className={activeLink === `Overview-${system}` ? "active" : ""}>
+                                            • Overview
+                                        </Link>
+                                        <Link
+                                            to={`/systemControl/${system}`}
+                                            onClick={() => handleLinkClick(`SystemControl-${system}`)}
+                                            className={activeLink === `SystemControl-${system}` ? "active" : ""}>
+                                            • System Control
+                                        </Link>
+                                        <Link
+                                            to={`/schedule/${system}`}
+                                            onClick={() => handleLinkClick(`Schedule-${system}`)}
+                                            className={activeLink === `Schedule-${system}` ? "active" : ""}>
+                                            • Schedule
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
-                            {expandedSystem === system && (
-                                <div className="bullet-points">
-                                    <Link to={`/systemOverview/${system}`}>• Overview</Link>
-                                    <Link to={`/systemControl/${system}`}>• System Control</Link>
-                                    <Link to={`/schedule/${system}`}>• Schedule</Link>
-                                </div>
-                            )}
-                        </div>
-                    ))}
+                        );
+                    })}
                 </li>
                 <li>
-                    <h2>Alerts</h2>
-                    <div className="Overview" onClick={handleOverview}>
-                        <img src={notificationIcon} alt="notification Icon" className="subtitle-icon"/>
-                        <div className="h3-container">
-                            <h3>System Alerts</h3>
+                    <Link to="/systemAlerts">
+                        <h2>Alerts</h2>
+                        <div className="Overview">
+                            <img src={notificationIcon} alt="notification Icon" className="subtitle-icon"/>
+                            <div className="h3-container">
+                                <h3>System Alerts</h3>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                 </li>
                 <li>
-                    <h2>Settings</h2>
-                    <div className="Overview" onClick={handleOverview}>
-                        <img src={settingsIcon} alt="settings Icon" className="subtitle-icon"/>
-                        <div className="h3-container">
-                            <h3>Account Settings</h3>
+                    <Link to="/settings">
+                        <h2>Settings</h2>
+                        <div className="Overview">
+                            <img src={settingsIcon} alt="settings Icon" className="subtitle-icon"/>
+                            <div className="h3-container">
+                                <h3>Account Settings</h3>
+                            </div>
                         </div>
-                    </div>
-                    <div className="Overview" onClick={handleOverview}>
-                        <img src={supportIcon} alt="support Icon" className="subtitle-icon"/>
-                        <div className="h3-container">
-                            <h3>Help</h3>
+                    </Link>
+                </li>
+                <li>
+                    <Link to="/help">
+                        <h2>Support</h2>
+                        <div className="Overview">
+                            <img src={supportIcon} alt="support Icon" className="subtitle-icon"/>
+                            <div className="h3-container">
+                                <h3>Help</h3>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                 </li>
             </ul>
         </div>
