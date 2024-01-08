@@ -65,15 +65,17 @@ const SidebarView = ({ sidebarClass }) => {
             <img src={GrowPulseLogo} alt="Header Icon" className="sidebar-icon"/>
             <ul>
                 <li>
-                    <h2>Account Overview</h2>
-                    <div className="Overview">
-                        <Link to="/allSystems" className="Overview-link">
+                    <Link   
+                        to="/allSystems" 
+                        className={`Overview-link ${activeLink === "AllSystems" ? "active" : ""}`} 
+                        onClick={() => handleLinkClick("AllSystems")}
+                    >
+                        <h2>Account Overview</h2>
+                        <div className="Overview">
                             <img src={overviewIcon} alt="overview Icon" className="subtitle-icon"/>
-                        </Link>
-                        <Link to="/allSystems" className="Overview-link">
-                            <h3>All Systems</h3>
-                        </Link>
-                    </div>
+                            <h3 className="AllSystems-title">All Systems</h3>  
+                        </div>
+                    </Link>
                 </li>
                 <li>
                     <h2>Individual Systems<span className="systems-number">{systems.length}</span></h2>
@@ -119,18 +121,24 @@ const SidebarView = ({ sidebarClass }) => {
                     })}
                 </li>
                 <li>
-                    <Link to="/systemAlerts">
-                        <h2>Alerts</h2>
-                        <div className="Overview">
-                            <img src={notificationIcon} alt="notification Icon" className="subtitle-icon"/>
-                            <div className="h3-container">
-                                <h3>System Alerts</h3>
+                    <Link 
+                        to="/systemAlerts"  
+                        className={`systemAlerts-link ${activeLink === "systemAlerts" ? "active" : ""}`} 
+                        onClick={() => handleLinkClick(`systemAlerts`)}>
+                            <h2>Alerts</h2>
+                            <div className="Overview">
+                                <img src={notificationIcon} alt="notification Icon" className="subtitle-icon"/>
+                                <div className="h3-container">
+                                    <h3>System Alerts</h3>
+                                </div>
                             </div>
-                        </div>
                     </Link>
                 </li>
                 <li>
-                    <Link to="/settings">
+                    <Link 
+                        to="/settings"  
+                        className={`settings-link ${activeLink === "settings" ? "active" : ""}`} 
+                        onClick={() => handleLinkClick(`settings`)}>
                         <h2>Settings</h2>
                         <div className="Overview">
                             <img src={settingsIcon} alt="settings Icon" className="subtitle-icon"/>
@@ -141,7 +149,10 @@ const SidebarView = ({ sidebarClass }) => {
                     </Link>
                 </li>
                 <li>
-                    <Link to="/help">
+                    <Link 
+                        to="/help"  
+                        className={`help-link ${activeLink === "help" ? "active" : ""}`} 
+                        onClick={() => handleLinkClick(`help`)}>
                         <h2>Support</h2>
                         <div className="Overview">
                             <img src={supportIcon} alt="support Icon" className="subtitle-icon"/>

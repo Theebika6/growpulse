@@ -64,7 +64,7 @@
     margin-top: 0;
 }
 
-.sidebar a:hover {
+.sidebar a:hover, .Overview-link h3:hover {
     color: rgba(98, 98, 98, 0.56);
 }
 
@@ -79,11 +79,12 @@
     margin-top: 10px;
 }
 
-.bullet-points a.active {
+.bullet-points a.active,
+.sidebar a.active {
     color: #006cc4; 
 }
 
-.sidebar a.active {
+.active-title {
     color: #006cc4; 
 }
 
@@ -96,8 +97,8 @@
 
 .system-icon{
     width: 15px;
-    margin-left: -4%;
-    margin-right: 17px;
+    margin-left: -7%;
+    margin-right: 21px;
     margin-top: 15px;
 }
 
@@ -139,9 +140,7 @@
 }
 
 .Overview-link h3{
-    margin-top: -10px;
     margin-right: 50px;
-    color: #000000;
 }
 
 
