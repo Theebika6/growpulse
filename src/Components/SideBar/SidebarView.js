@@ -10,6 +10,7 @@ import overviewIcon from '../Images/SidebarIcons/overview.png';
 import notificationIcon from '../Images/HeaderIcons/notification.png';
 import settingsIcon from '../Images/SidebarIcons/settings.png';
 import supportIcon from '../Images/SidebarIcons/support.png';
+import { addNewSystem } from './addNewSystem';
 import { ref, get } from 'firebase/database';
 
 const SidebarView = ({ sidebarClass }) => {
@@ -17,6 +18,21 @@ const SidebarView = ({ sidebarClass }) => {
     const [systems, setSystems] = useState([]);
     const [activeLink, setActiveLink] = useState(null);
     const location = useLocation();
+
+    const handleAddNewSystem = async () => {
+        const currentUser = auth.currentUser;
+        if (currentUser) {
+            try {
+                const newSystemId = await addNewSystem(currentUser.uid);
+                // You may want to update your local state to include the new system
+                // For example, if you have a state variable that tracks system IDs:
+                setSystems([...systems, newSystemId]);
+            } catch (error) {
+                // Handle the error (e.g., show an error message to the user)
+                console.error(error);
+            }
+        }
+    };
 
     useEffect(() => {
         const fetchSystems = async () => {
@@ -101,7 +117,12 @@ const SidebarView = ({ sidebarClass }) => {
                     </Link>
                 </li>
                 <li>
-                    <h2>Individual Systems<span className="systems-number">{systems.length}</span></h2>
+                    <div className="addSystem">
+                        <h2>Individual Systems
+                            <span className="systems-number">{systems.length}</span>
+                            <button onClick={handleAddNewSystem} className="add-system-button">+</button>
+                        </h2>
+                    </div>
                     {systems.map((system, index) => {
                         const systemLetter = system.charAt(6);
                         return (

@@ -42,8 +42,11 @@
     background-color: #868686;
     border-radius: 5px;
     color: white;
+    align-content: center;
+    justify-content: center;
     padding-left: 5px;
     padding-right: 5px;
+    padding-bottom: 2px;
     margin-left: 5px;
 }
 
@@ -170,6 +173,22 @@
     height: 36px;
 }
 
+.add-system-button {
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #919191;
+    margin-left: 10px;
+    margin-top: 1px;
+    font-size: 20px;
+}
 
+.add-system-button:hover {
+    color: #000000;
+}
 
-
+.addSystem h2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
