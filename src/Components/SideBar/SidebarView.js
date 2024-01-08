@@ -57,8 +57,16 @@ const SidebarView = ({ sidebarClass }) => {
     };
 
     const handleLinkClick = (linkName) => {
+
         setActiveLink(linkName);
     };
+
+    const isPageOfSystemActive = (system) => {
+        // Ensure activeLink is a string before calling includes
+        return activeLink && activeLink.includes(system);
+    };
+    
+    
 
     return (
         <div className={`sidebar ${sidebarClass}`}>
@@ -88,8 +96,7 @@ const SidebarView = ({ sidebarClass }) => {
                         return (
                             <div key={index} className="system-container">
                                 <div className="Dashboards" onClick={() => handleSystemToggle(system)}>
-                                    {expandedSystem === system && <div className="highlight"></div>}
-                                    <div className="system-item">
+                                    <div className={`icon-container ${isPageOfSystemActive(system) ? "highlight" : ""}`}>
                                         <img src={systemIcon} alt="system Icon" className="system-icon"/>
                                         <span className="system-letter">{systemLetter}</span>
                                     </div>
