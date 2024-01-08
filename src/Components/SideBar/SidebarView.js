@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation  } from 'react-router-dom';
 import './Sidebar.css';
 import GrowPulseLogo from '../Images/GrowpulseLogos/growpulse-high-resolution-logo-transparent.png';
 import systemIcon from '../Images/SidebarIcons/system.png';
@@ -16,6 +16,7 @@ const SidebarView = ({ sidebarClass }) => {
     const [expandedSystem, setExpandedSystem] = useState(null);
     const [systems, setSystems] = useState([]);
     const [activeLink, setActiveLink] = useState(null);
+    const location = useLocation();
 
     useEffect(() => {
         const fetchSystems = async () => {
@@ -48,6 +49,16 @@ const SidebarView = ({ sidebarClass }) => {
         fetchSystems(); // Call the async function to fetch systems
     }, []);
 
+    useEffect(() => {
+        const currentPath = location.pathname;
+        
+        if (currentPath.includes('settings')) {
+            setActiveLink('settings');
+        }  else if (currentPath.includes('allSystems')){
+            setActiveLink('allSystems');
+        } 
+    }, [location, systems]);
+
     const handleSystemToggle = (system) => {
         if (expandedSystem === system) {
             setExpandedSystem(null);
@@ -75,12 +86,12 @@ const SidebarView = ({ sidebarClass }) => {
                 <li>
                     <Link   
                         to="/allSystems" 
-                        className={`Overview-link ${activeLink === "AllSystems" ? "active" : ""}`} 
-                        onClick={() => handleLinkClick("AllSystems")}
+                        className={`Overview-link ${activeLink === "allSystems" ? "active" : ""}`} 
+                        onClick={() => handleLinkClick("allSystems")}
                     >
                         <h2>Account Overview</h2>
                         <div className="Overview">
-                            <div className={`icon-container ${activeLink === "AllSystems" ? "highlight" : ""} all-systems-icon`}>
+                            <div className={`icon-container ${activeLink === "allSystems" ? "highlight" : ""} all-systems-icon`}>
                                 <img src={overviewIcon} alt="overview Icon" className="subtitle-icon"/>
                             </div>
                             <div className="h3-container">
