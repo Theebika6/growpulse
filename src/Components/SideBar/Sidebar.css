@@ -192,3 +192,21 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.trash {
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    width: 15px;
+    height: 15px;
+    margin-top: 5px;
+}
+
+.system-container:hover .trash{
+    opacity: 1;
+}
+
+.icon-actions {
+    display: flex; 
+    gap: 10px;
+}

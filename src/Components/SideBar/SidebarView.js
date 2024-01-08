@@ -10,8 +10,9 @@ import overviewIcon from '../Images/SidebarIcons/overview.png';
 import notificationIcon from '../Images/HeaderIcons/notification.png';
 import settingsIcon from '../Images/SidebarIcons/settings.png';
 import supportIcon from '../Images/SidebarIcons/support.png';
+import trashIcon from '../Images/SidebarIcons/trash.png';
 import { addNewSystem } from './addNewSystem';
-import { ref, get } from 'firebase/database';
+import { ref, remove, get } from 'firebase/database';
 
 const SidebarView = ({ sidebarClass }) => {
     const [expandedSystem, setExpandedSystem] = useState(null);
@@ -93,7 +94,22 @@ const SidebarView = ({ sidebarClass }) => {
         return activeLink && activeLink.includes(system);
     };
     
-    
+    const handleDeleteSystem = async (systemId) => {
+        const confirmed = window.confirm(`Are you sure you want to delete ${systemId}?`);
+        if (confirmed) {
+            const currentUser = auth.currentUser;
+            if (currentUser) {
+                try {
+                    const systemRef = ref(database, `Registered Users/${currentUser.uid}/${systemId}`);
+                    await remove(systemRef);
+                    // Update local state
+                    setSystems(systems.filter(system => system !== systemId));
+                } catch (error) {
+                    console.error("Error deleting system:", error);
+                }
+            }
+        }
+    };
 
     return (
         <div className={`sidebar ${sidebarClass}`}>
@@ -135,7 +151,10 @@ const SidebarView = ({ sidebarClass }) => {
                                     <div className="h3-container">
                                         <h3>{system}</h3>
                                     </div>
-                                    <img src={expandedSystem === system ? collapse : expand} alt="Expand Icon" className="expand"/>
+                                    <div className="icon-actions">
+                                        <img src={trashIcon} alt="Trash Icon" className="trash" onClick={(e) => { e.stopPropagation(); handleDeleteSystem(system); }}/>
+                                        <img src={expandedSystem === system ? collapse : expand} alt="Expand Icon" className="expand"/>
+                                    </div>
                                 </div>
                                 {expandedSystem === system && (
                                     <div className="bullet-points">
