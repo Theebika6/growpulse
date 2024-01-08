@@ -72,8 +72,12 @@ const SidebarView = ({ sidebarClass }) => {
                     >
                         <h2>Account Overview</h2>
                         <div className="Overview">
-                            <img src={overviewIcon} alt="overview Icon" className="subtitle-icon"/>
-                            <h3 className="AllSystems-title">All Systems</h3>  
+                            <div className={`icon-container ${activeLink === "AllSystems" ? "highlight" : ""} all-systems-icon`}>
+                                <img src={overviewIcon} alt="overview Icon" className="subtitle-icon"/>
+                            </div>
+                            <div className="h3-container">
+                                    <h3>All Systems</h3>
+                            </div>
                         </div>
                     </Link>
                 </li>
@@ -127,7 +131,9 @@ const SidebarView = ({ sidebarClass }) => {
                         onClick={() => handleLinkClick(`systemAlerts`)}>
                             <h2>Alerts</h2>
                             <div className="Overview">
-                                <img src={notificationIcon} alt="notification Icon" className="subtitle-icon"/>
+                                <div className={`icon-container ${activeLink === "systemAlerts" ? "highlight" : ""}`}>
+                                    <img src={notificationIcon} alt="notification Icon" className="subtitle-icon"/>
+                                </div>
                                 <div className="h3-container">
                                     <h3>System Alerts</h3>
                                 </div>
@@ -141,7 +147,9 @@ const SidebarView = ({ sidebarClass }) => {
                         onClick={() => handleLinkClick(`settings`)}>
                         <h2>Settings</h2>
                         <div className="Overview">
-                            <img src={settingsIcon} alt="settings Icon" className="subtitle-icon"/>
+                            <div className={`icon-container ${activeLink === "settings" ? "highlight" : ""}`}>
+                                <img src={settingsIcon} alt="settings Icon" className="subtitle-icon"/>
+                            </div>
                             <div className="h3-container">
                                 <h3>Account Settings</h3>
                             </div>
@@ -155,7 +163,9 @@ const SidebarView = ({ sidebarClass }) => {
                         onClick={() => handleLinkClick(`help`)}>
                         <h2>Support</h2>
                         <div className="Overview">
-                            <img src={supportIcon} alt="support Icon" className="subtitle-icon"/>
+                            <div className={`icon-container ${activeLink === "help" ? "highlight" : ""}`}>
+                                <img src={supportIcon} alt="support Icon" className="subtitle-icon"/>
+                            </div>
                             <div className="h3-container">
                                 <h3>Help</h3>
                             </div>
