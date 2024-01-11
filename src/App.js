@@ -38,7 +38,7 @@ const App = () => {
                     <Routes>
                         <Route path="/" element={<Navigate to="/allSystems" />} />
                         <Route path="/allSystems" element={<AllSystems />} />
-                        <Route path="/Overview/:systemName" element={<Overview key={window.location.pathname}/>} />
+                        <Route path="/Overview/:systemName" element={<Overview key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
                     </Routes>
                 ) : (
                     <Routes>
