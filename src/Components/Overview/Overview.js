@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { auth } from "../../firebaseConfig";
-import { ref, getDownloadURL } from "firebase/storage";
-import { storage } from '../../firebaseConfig';
 import {useParams} from "react-router-dom";
+import { fetchImage} from '../Services/CameraServices';
 import './Overview.css';
 
 const Overview = ({ sidebarExpanded }) => {
@@ -10,20 +8,11 @@ const Overview = ({ sidebarExpanded }) => {
     const { systemName } = useParams();
 
     useEffect(() => {
-        const fetchImage = async () => {
-            const currentUser = auth.currentUser;
-            if (currentUser){
-                const storageRef = ref(storage, `Registered Users/${currentUser.uid}/${systemName}/placeHolder.jpg`);
-                try {
-                    const url = await getDownloadURL(storageRef);
-                    setImageUrl(url);
-                } catch (error) {
-                    console.error("Error fetching image:", error);
-                }
-            }
+        const loadImage = async () => {
+            const url = await fetchImage(systemName);
+            setImageUrl(url); 
         };
-
-        fetchImage();
+        loadImage();
     }, [systemName]);
 
     return (
@@ -35,8 +24,13 @@ const Overview = ({ sidebarExpanded }) => {
                 <main className="overview-main">
                     <div className="container camera-container">
                         <h3>Camera</h3>
-                            {imageUrl ? <img className="camera" src={imageUrl} alt="Camera"/>
-                                : <p>Loading image...</p>}
+                            {imageUrl === null ? (
+                                <p className="no-image">No Image Found</p> // Display "No Image Found" when imageUrl is null
+                            ) : imageUrl ? (
+                                <img className="camera" src={imageUrl} alt="Camera"/>
+                            ) : (
+                                <p>Loading image...</p>
+                            )}
                     </div>
                 </main>
             </div>

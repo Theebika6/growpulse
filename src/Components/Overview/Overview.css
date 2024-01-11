@@ -54,8 +54,9 @@
     text-align: start;
     align-items: center;
     justify-content: center;
-    padding: 5rem;
+    padding: 7.78rem;
     font-size: 22px;
+    transition: padding 0.3s ease;
 }
 
 /* Camera */
@@ -66,6 +67,11 @@
     position: fixed;
     height: 30rem;
     align-items: center;
+}
+
+.sidebar-collapsed .no-image{
+    padding: 10rem;
+    transition: padding 0.3s ease;
 }
 
 .camera{
