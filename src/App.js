@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom
 import { auth } from './firebaseConfig';
 import LandingPageView from './Components/LandingPage/LandingPageView';
 import LoginModal from './Components/LoginModal/LoginModal';
-import SidebarController from './Components/Sidebar/SidebarController';
+import SidebarController from './Components/SideBar/SidebarController';
 import TopbarController from './Components/Header/HeaderController';
 import AllSystems from "./Components/AllSystems/AllSystems";
 const App = () => {
