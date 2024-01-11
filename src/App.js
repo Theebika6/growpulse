@@ -6,6 +6,7 @@ import LoginModal from './Components/LoginModal/LoginModal';
 import SidebarController from './Components/SideBar/SidebarController';
 import TopbarController from './Components/Header/HeaderController';
 import AllSystems from "./Components/AllSystems/AllSystems";
+import Overview from "./Components/Overview/Overview";
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isEmailVerified, setIsEmailVerified] = useState(false);
@@ -37,6 +38,7 @@ const App = () => {
                     <Routes>
                         <Route path="/" element={<Navigate to="/allSystems" />} />
                         <Route path="/allSystems" element={<AllSystems />} />
+                        <Route path="/Overview/:systemName" element={<Overview key={window.location.pathname}/>} />
                     </Routes>
                 ) : (
                     <Routes>

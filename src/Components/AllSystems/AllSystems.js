@@ -1,9 +1,10 @@
 import React from 'react';
 import './AllSystems.css';
+import '../Common/background.css'
 
 const AllSystems = () => {
     return (
-        <div className="AllSystems">
+        <div className="background-overlay">
         </div>
     );
 };
