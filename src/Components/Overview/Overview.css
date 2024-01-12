@@ -13,7 +13,7 @@
     display: grid;
     grid-template-columns: 55% 45%;
     row-gap: 1rem;
-    column-gap: 0.5rem;
+    column-gap: 0.1rem;
     margin-top: 2rem;
     margin-right: 1rem;
 }
@@ -54,9 +54,34 @@
     text-align: start;
     align-items: center;
     justify-content: center;
-    padding: 7.78rem;
+    margin-left: 1rem;
+    margin-bottom: 1.5rem;
+    margin-top: 2.5rem;
     font-size: 22px;
-    transition: padding 0.3s ease;
+}
+
+/* Control Grids */
+
+.control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buttons{
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.auto{
+    display: flex;
+    flex-direction: column;
+    color: grey;
+}
+
+.chart{
+    margin-left: -0.5rem;
+    height: 130px;
 }
 
 /* Camera */
@@ -92,4 +117,55 @@
     transition: width 0.3s ease;
 }
 
+/* pH */
 
+.ph-container {
+    grid-row: 1;
+    grid-column: 2;
+    transition: margin-left 0.3s ease;
+}
+
+.sidebar-collapsed .ph-container{
+    margin-left: -2rem;
+    transition: margin-left 0.3s ease;
+}
+
+.arrow-button{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0);
+    color: #000;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0.5rem;
+    border-style: solid;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.arrow-button:hover{
+    transform: scale(1.1);
+}
+
+.arrow-button.active{
+    color: #0099ff;
+    border-color: #0099ff;
+}
+
+.arrow-button:focus {
+    outline: none;
+}
+
+/* Live Feed Update Flash Animation */
+
+@keyframes flash {
+    0% { color: rgb(25, 200, 0);  }
+    50% { color: rgb(25, 200, 0); }
+    100% { color: black; }
+}
+
+.flash-animation {
+    animation: flash 1s;
+}
