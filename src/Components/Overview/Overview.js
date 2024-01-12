@@ -3,6 +3,7 @@ import {useParams} from "react-router-dom";
 import { fetchImage} from '../Services/CameraServices';
 import {fetchPhAutoStatus, fetchPhValue} from "../Services/phServices";
 import * as pumpService from "../Services/DosingPumpsServices";
+import { createPhChart, fetchLastSevenSamples } from "../Services/chartsServices";
 import './Overview.css';
 
 const Overview = ({ sidebarExpanded }) => {
@@ -10,6 +11,9 @@ const Overview = ({ sidebarExpanded }) => {
     const [imageUrl, setImageUrl] = useState('');
     
     const [flashUpdate, setFlashUpdate] = useState(false);
+    const [recentSamples, setRecentSamples] = useState({
+        pH: []
+    });
 
     const [phValue, setPhValue] = useState(null);
     const [phAuto, setPhAuto] = useState(false);
@@ -50,10 +54,24 @@ const Overview = ({ sidebarExpanded }) => {
 
 
     /* Common Fetches */
+    /* Image + DP status */
     useEffect(() => {
         loadImage();
         initializeDosingPumpsStatus();
     }, [loadImage, initializeDosingPumpsStatus]);
+
+    /* Live Feed Charts */
+    useEffect(() => {
+
+        if (phChartRef.current) {
+            phChartRef.current.destroy();
+        }
+        phChartRef.current = createPhChart(document.getElementById('phChart').getContext('2d'), recentSamples);
+    }, [recentSamples]);
+    
+    useEffect(() => {
+        fetchLastSevenSamples(setRecentSamples, systemName);
+    }, [systemName]);
 
     return (
         <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}> {/* css file in src/Components/Common */}
@@ -71,7 +89,7 @@ const Overview = ({ sidebarExpanded }) => {
                             ) : imageUrl ? (
                                 <img className="camera" src={imageUrl} alt="Camera"/>
                             ) : (
-                                <p>Loading image...</p>
+                                <p className="no-image">Loading image...</p>
                             )}
                     </div>
 
