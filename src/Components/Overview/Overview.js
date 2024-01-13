@@ -6,8 +6,12 @@ import {fetchTdsValue} from "../Services/tdsServices";
 import {fetchWaterTempValue} from "../Services/WaterTempServices";
 import {fetchAirTemperature} from "../Services/AirTempServices";
 import * as pumpService from "../Services/DosingPumpsServices";
-import {createPhChart, createTdsChart, createWaterTemperatureChart, createAirTemperatureChart, fetchLastSevenSamples} from "../Services/chartsServices";
+import {createPhChart, createTdsChart, createWaterTemperatureChart, createAirTemperatureChart, fetchLastSevenSamples, createHumidityChart} from "../Services/chartsServices";
+import on from "../Images/Dashboard/ON.png";
+import off from "../Images/Dashboard/OFF.png";
+
 import './Overview.css';
+import { fetchHumidity } from '../Services/HumidityServices';
 
 const Overview = ({ sidebarExpanded }) => {
     const {systemName } = useParams();
@@ -39,6 +43,11 @@ const Overview = ({ sidebarExpanded }) => {
 
     const [airTempValue, setAirTempValue] = useState(null);
     const airTempChartRef = useRef(null);
+
+    const HumidityChartRef = useRef(null);
+    const [humidityValue, setHumidityValue] = useState(null);
+    const [humidityAuto] = useState(false);
+    const [humidifierOn, setHumidifierOn] = useState(false);
 
     /* Camera */
     /* Image Fetching */
@@ -116,6 +125,28 @@ const Overview = ({ sidebarExpanded }) => {
 
     }, [systemName]);
 
+    /*Humidity*/
+    /* ON/OFF Button functionality (empty for now) */
+    const toggleHumidity = () => {
+        setHumidifierOn(currentState => !currentState);
+    };
+
+    /* Live Feed Fetching */
+    useEffect(() => {
+        setHumidityValue(0);
+
+        fetchHumidity((newHumidityValue) => {
+            setFlashUpdate(true);
+
+            setTimeout(() => {
+                setFlashUpdate(false);
+            }, 1000);
+
+            setHumidityValue(newHumidityValue);
+        }, systemName);
+
+    }, [systemName]);
+
     /* Button State Fetching */ 
     const initializeDosingPumpsStatus = useCallback(() => {
         pumpService.fetchDP1Status(setDP1Status, () => {}, systemName);
@@ -137,6 +168,7 @@ const Overview = ({ sidebarExpanded }) => {
             const tdsCtx = document.getElementById('tdsChart');
             const waterTempCtx = document.getElementById('waterTempChart');
             const airTempCtx = document.getElementById('airTempChart');
+            const humidityCtx = document.getElementById('HumidityChart');
 
 
             if (recentSamples.pH.length > 0) {
@@ -150,6 +182,9 @@ const Overview = ({ sidebarExpanded }) => {
             }
             if (recentSamples.AirTemperature.length > 0) {
                 airTempChartRef.current = createAirTemperatureChart(airTempCtx.getContext('2d'), recentSamples, airTempChartRef);
+            }
+            if (recentSamples.Humidity.length > 0) {
+                HumidityChartRef.current = createHumidityChart(humidityCtx.getContext('2d'), recentSamples, HumidityChartRef);
             }
         }, 300);
     }, [recentSamples]);
@@ -262,6 +297,31 @@ const Overview = ({ sidebarExpanded }) => {
                         </div>
                         <div className="chart">
                             <canvas id="airTempChart"></canvas>
+                        </div>
+                    </div>
+
+                    {/*Humidity*/}
+                    <div className="container humidity-container">
+                        <h3>Humidity</h3>
+                        <div className="control">
+                            <div>
+                                <p className={flashUpdate ? 'flash-animation' : ''}>{humidityValue} %</p>
+                            </div>
+                            <div className="control auto auto-hum">
+                                <div className="control button">
+                                    <button
+                                        className="on-off-button"
+                                        onClick={toggleHumidity}
+                                    >
+                                        <img src={humidifierOn ? on : off} alt={humidifierOn ? "Humidifier On" : "Humidifier Off"} />
+                                        <span style={{ color: humidifierOn ? '#08B200' : 'grey' }}>{humidifierOn ? 'On' : 'Off'}</span>
+                                    </button>
+                                </div>
+                                <h5 style={humidityAuto ? { color: '#08B200', fontSize: '16px' } : {}} >Auto</h5>
+                            </div>
+                        </div>
+                        <div className="chart">
+                            <canvas id="HumidityChart"></canvas>
                         </div>
                     </div>
                 </main>

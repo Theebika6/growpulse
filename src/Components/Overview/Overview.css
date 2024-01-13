@@ -98,10 +98,8 @@
 }
 
 .camera{
-    padding-top: 30px;
-    padding-bottom: 30px;
     align-self: center;
-    margin-right: 20px;
+    margin-right: 17px;
     width: 25rem;
     transition: width 0.3s ease;
 }
@@ -111,8 +109,6 @@
 }
 
 .sidebar-collapsed .camera{
-    padding-top: 30px;
-    padding-bottom: 30px;
     align-self: center;
     margin-right: 20px;
     width: 30rem;
@@ -181,6 +177,33 @@
     grid-row: 4;
     grid-column: 2;
     transition: margin-left 0.3s ease;
+}
+
+/* Humidity */
+
+.humidity-container {
+    grid-row: 5;
+    grid-column: 2;
+}
+
+.auto-hum h5{
+    margin-top: 0.5rem;
+    margin-right: 2.25rem;
+}
+
+.on-off-button {
+    background-color: transparent;
+    border: transparent;
+    margin-right: 2rem;
+    cursor: pointer;
+}
+
+.on-off-button:hover{
+    transform: scale(1.1);
+}
+
+.on-off-button img{
+    width: 50px;
 }
 
 /* Live Feed Update Flash Animation */
