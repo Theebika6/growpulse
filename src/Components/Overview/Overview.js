@@ -51,8 +51,8 @@ const Overview = ({ sidebarExpanded }) => {
 
     const HumidityChartRef = useRef(null);
     const [humidityValue, setHumidityValue] = useState(null);
-    const [humidityAuto] = useState(false);
-    const [humidifierOn, setHumidifierOn] = useState(false);
+    //const [humidityAuto] = useState(false);
+    //const [humidifierOn, setHumidifierOn] = useState(false);
 
     const [lightPwrOn, setLightPwrOn] = useState(null);
     const [lightON, setLightON] = useState(null);
@@ -142,13 +142,18 @@ const Overview = ({ sidebarExpanded }) => {
 
     /*Humidity*/
     /* ON/OFF Button functionality (empty for now) */
+
+    /*
+    
     const toggleHumidity = () => {
         setHumidifierOn(currentState => !currentState);
-    };
+    }; 
 
     useEffect(() => {
         setHumidifierOn(false);
     }, [systemName]);
+    
+    */
 
     /* Live Feed Fetching */
     useEffect(() => {
@@ -438,7 +443,7 @@ const Overview = ({ sidebarExpanded }) => {
                                 <p className={flashUpdate ? 'flash-animation' : ''}>{humidityValue} %</p>
                             </div>
                             <div className="control auto auto-hum">
-                                <div className="control button">
+                                {/*<div className="control button">
                                     <button
                                         className="on-off-button"
                                         onClick={toggleHumidity}
@@ -447,7 +452,7 @@ const Overview = ({ sidebarExpanded }) => {
                                         <span style={{ color: humidifierOn ? '#0096ff' : 'grey' }}>{humidifierOn ? 'On' : 'Off'}</span>
                                     </button>
                                 </div>
-                                <h5 style={humidityAuto ? { color: '#08B200', fontSize: '16px' } : {}} >Auto</h5>
+                                <h5 style={humidityAuto ? { color: '#08B200', fontSize: '16px' } : {}} >Auto</h5>*/}
                             </div>
                         </div>
                         <div className="chart">
