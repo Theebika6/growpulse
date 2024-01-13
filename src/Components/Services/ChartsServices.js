@@ -169,7 +169,7 @@ export const createHumidityChart = (humidityCtx, recentSamples, humidityChartRef
         humidityChartRef.current = new Chart(humidityCtx, {
             type: 'line',
             data: {
-                labels: [...recentSamples.Times].reverse(),
+                labels: [...recentSamples.Times],
                 datasets: [{
                     label: 'Humidity Samples',
                     data: [...recentSamples.Humidity].reverse(),
@@ -221,7 +221,7 @@ export const createAirTemperatureChart = (airTempCtx, recentSamples, airTempChar
         airTempChartRef.current = new Chart(airTempCtx, {
             type: 'line',
             data: {
-                labels: [...recentSamples.Times.reverse()],
+                labels: [...recentSamples.Times],
                 datasets: [{
                     label: 'Air Temperature Samples',
                     data: [...recentSamples.AirTemperature].reverse(),

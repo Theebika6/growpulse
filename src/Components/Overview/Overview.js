@@ -239,7 +239,7 @@ const Overview = ({ sidebarExpanded }) => {
                                         &#9660;
                                     </button>
                                 </div>
-                                <h5 style={phAuto ? { color: '#52e000', fontSize: '16px' } : {}} >Auto</h5>
+                                <h5 style={phAuto ? { color: '#08B200', fontSize: '16px' } : {}} >Auto</h5>
                             </div>
                         </div>
                         <div className="chart">
@@ -254,7 +254,7 @@ const Overview = ({ sidebarExpanded }) => {
                             <div>
                                 <p className={flashUpdate ? 'flash-animation' : ''}>{tdsValue} ppm</p>
                             </div>
-                            <div className="control auto">
+                            <div className="control auto tds-buttons">
                                 <div className="control button">
                                     <button
                                         className={`arrow-button ${dp3Status ? 'active' : ''}`}
@@ -314,7 +314,7 @@ const Overview = ({ sidebarExpanded }) => {
                                         onClick={toggleHumidity}
                                     >
                                         <img src={humidifierOn ? on : off} alt={humidifierOn ? "Humidifier On" : "Humidifier Off"} />
-                                        <span style={{ color: humidifierOn ? '#08B200' : 'grey' }}>{humidifierOn ? 'On' : 'Off'}</span>
+                                        <span style={{ color: humidifierOn ? '#0096ff' : 'grey' }}>{humidifierOn ? 'On' : 'Off'}</span>
                                     </button>
                                 </div>
                                 <h5 style={humidityAuto ? { color: '#08B200', fontSize: '16px' } : {}} >Auto</h5>
