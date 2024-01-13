@@ -8,6 +8,7 @@ import {fetchAirTemperature} from "../Services/AirTempServices";
 import * as pumpService from "../Services/DosingPumpsServices";
 import {createPhChart, createTdsChart, createWaterTemperatureChart, createAirTemperatureChart, fetchLastSevenSamples, createHumidityChart} from "../Services/chartsServices";
 import { fetchLogHistory } from '../Services/HistoryServices';
+import { handleToggleMainPump, fetchMainPumpStatus } from '../Services/MainPumpServices';
 import on from "../Images/Dashboard/ON.png";
 import off from "../Images/Dashboard/OFF.png";
 
@@ -41,6 +42,8 @@ const Overview = ({ sidebarExpanded }) => {
 
     const [waterTempValue, setWaterTempValue] = useState(null);
     const waterTempChartRef = useRef(null);
+    
+    const [MainPumpOn, setMainPumpOn] = useState(false);
 
     const [airTempValue, setAirTempValue] = useState(null);
     const airTempChartRef = useRef(null);
@@ -151,12 +154,44 @@ const Overview = ({ sidebarExpanded }) => {
     }, [systemName]);
 
     /* Button State Fetching */ 
-    const initializeDosingPumpsStatus = useCallback(() => {
-        pumpService.fetchDP1Status(setDP1Status, () => {}, systemName);
-        pumpService.fetchDP2Status(setDP2Status, () => {}, systemName);
-        pumpService.fetchDP3Status(setDP3Status, () => {}, systemName);
-        pumpService.fetchDP4Status(setDP4Status, () => {}, systemName);
+    // For DP1
+    useEffect(() => {
+        const unsubscribeDP1 = pumpService.fetchDP1Status(setDP1Status, systemName);
+        return unsubscribeDP1;
     }, [systemName]);
+
+    useEffect(() => {
+        const unsubscribeDP2 = pumpService.fetchDP2Status(setDP2Status, systemName);
+        return unsubscribeDP2;
+    }, [systemName]);
+
+    useEffect(() => {
+        const unsubscribeDP3 = pumpService.fetchDP3Status(setDP3Status, systemName);
+        return unsubscribeDP3;
+    }, [systemName]);
+
+    useEffect(() => {
+        const unsubscribeDP4 = pumpService.fetchDP4Status(setDP4Status, systemName);
+        return unsubscribeDP4;
+    }, [systemName]);
+
+
+    /*Main Pump*/
+    useEffect(() => {
+        const unsubscribe = fetchMainPumpStatus(setMainPumpOn, systemName);
+        // Clean up the subscription
+        return unsubscribe;
+    }, [systemName]);
+    
+
+      const toggleMainPump = async () => {
+        try {
+          await handleToggleMainPump(systemName, !MainPumpOn); 
+          setMainPumpOn(!MainPumpOn); 
+        } catch (error) {
+          console.error('Error toggling the main pump:', error);
+        }
+      };
 
     /* Dispense History */
     /* Fetching and displaying */
@@ -167,8 +202,7 @@ const Overview = ({ sidebarExpanded }) => {
     /* Common Fetches */
     useEffect(() => {
         loadImage();
-        initializeDosingPumpsStatus();
-    }, [loadImage, initializeDosingPumpsStatus]);
+    }, [loadImage]);
 
     /* Live Feed Charts */
     const initializeCharts = useCallback(() => {
@@ -302,13 +336,19 @@ const Overview = ({ sidebarExpanded }) => {
                     <div className="container main-pump-container">
                         <h3>Main Pump</h3>
                         <div className="control">
-                        <div className="control auto main-pump-button">
+                            <div className="control auto main-pump-button">
                                 <div className="control button">
                                     <button
-                                        className="on-off-button"
-                                    >
-                                        <img src={humidifierOn ? on : off} alt={humidifierOn ? "Humidifier On" : "Humidifier Off"} />
-                                        <span style={{ color: humidifierOn ? '#0096ff' : 'grey' }}>{humidifierOn ? 'On' : 'Off'}</span>
+                                        className={`on-off-button ${MainPumpOn ? 'on' : 'off'}`}
+                                        onClick={toggleMainPump}
+                                        >
+                                        <img
+                                            src={MainPumpOn ? on : off}
+                                            alt={MainPumpOn ? "Main Pump On" : "Main Pump Off"}
+                                        />
+                                        <span style={{ color: MainPumpOn ? '#0096ff' : 'grey' }}>
+                                            {MainPumpOn ? 'On' : 'Off'}
+                                        </span>
                                     </button>
                                 </div>
                             </div>

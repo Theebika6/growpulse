@@ -373,7 +373,6 @@
 
 .camera{
     align-self: center;
-    margin-right: 17px;
     width: 25rem;
     transition: width 0.3s ease;
 }

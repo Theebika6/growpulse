@@ -42,6 +42,7 @@ export const fetchLogHistory = async (setLogHistory, systemName) => {
 };
 
 const formatDate = (date) => {
+    // eslint-disable-next-line
     const [year, month, day] = date.split("-");
     return `${day}/${month}`;
 };

@@ -1,6 +1,5 @@
 import { auth, database } from "../../firebaseConfig";
 import { ref, onValue, set, get } from "firebase/database";
-import { debounce } from "lodash";
 
 export const handleTogglePump = async (pump, systemName) => {
     const currentUser = auth.currentUser;
@@ -13,58 +12,72 @@ export const handleTogglePump = async (pump, systemName) => {
     }
 };
 
-export const fetchDP1Status = async (setDP1Status, setDataLoaded, systemName) => {
+export const fetchDP1Status = (setDP1Status, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
         const DP1StatusRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/DosingPumps/DP1`);
-        onValue(DP1StatusRef, debounce((snapshot) => {
+        const unsubscribe = onValue(DP1StatusRef, (snapshot) => {
             const value = snapshot.val();
-            if (value !== null) {
-                setDP1Status(value ? 1 : 0);
-                setDataLoaded(true);
-            }
-        }, 0));
+            setDP1Status(value !== null ? value : false);
+        });
+
+        // Return a cleanup function
+        return () => unsubscribe();
+    } else {
+        // If no user, return a no-op cleanup function
+        return () => {};
     }
 };
 
-export const fetchDP2Status = async (setDP2Status, setDataLoaded, systemName) => {
+export const fetchDP2Status = (setDP2Status, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
         const DP2StatusRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/DosingPumps/DP2`);
-        onValue(DP2StatusRef, debounce((snapshot) => {
+        const unsubscribe = onValue(DP2StatusRef, (snapshot) => {
             const value = snapshot.val();
-            if (value !== null) {
-                setDP2Status(value ? 1 : 0);
-                setDataLoaded(true);
-            }
-        }, 0));
+            setDP2Status(value !== null ? value : false);
+        });
+
+        // Return a cleanup function
+        return () => unsubscribe();
+    } else {
+        // If no user, return a no-op cleanup function
+        return () => {};
     }
 };
 
-export const fetchDP3Status = async (setDP3Status, setDataLoaded, systemName) => {
+
+export const fetchDP3Status = (setDP3Status, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
         const DP3StatusRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/DosingPumps/DP3`);
-        onValue(DP3StatusRef, debounce((snapshot) => {
+        const unsubscribe = onValue(DP3StatusRef, (snapshot) => {
             const value = snapshot.val();
-            if (value !== null) {
-                setDP3Status(value ? 1 : 0);
-                setDataLoaded(true);
-            }
-        }, 0));
+            setDP3Status(value !== null ? value : false);
+        });
+
+        // Return a cleanup function
+        return () => unsubscribe();
+    } else {
+        // If no user, return a no-op cleanup function
+        return () => {};
     }
 };
 
-export const fetchDP4Status = async (setDP4Status, setDataLoaded, systemName) => {
+export const fetchDP4Status = (setDP4Status, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
         const DP4StatusRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/DosingPumps/DP4`);
-        onValue(DP4StatusRef, debounce((snapshot) => {
+        const unsubscribe = onValue(DP4StatusRef, (snapshot) => {
             const value = snapshot.val();
-            if (value !== null) {
-                setDP4Status(value ? 1 : 0);
-                setDataLoaded(true);
-            }
-        }, 0));
+            setDP4Status(value !== null ? value : false);
+        });
+
+        // Return a cleanup function
+        return () => unsubscribe();
+    } else {
+        // If no user, return a no-op cleanup function
+        return () => {};
     }
 };
+
