@@ -175,6 +175,14 @@
     transition: margin-left 0.3s ease;
 }
 
+/* Air Temp */
+
+.temperature-container {
+    grid-row: 4;
+    grid-column: 2;
+    transition: margin-left 0.3s ease;
+}
+
 /* Live Feed Update Flash Animation */
 
 @keyframes flash {

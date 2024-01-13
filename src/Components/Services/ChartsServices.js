@@ -107,9 +107,14 @@ export const createTdsChart = (tdsCtx, recentSamples, TdsChartRef) => {
     } 
 };
 
-export const createWaterTemperatureChart = (waterTempCtx, recentSamples, waterTempRef) => {
+export const createWaterTemperatureChart = (waterTempCtx, recentSamples, waterTempChartRef) => {
+    
+    if (waterTempChartRef.current) {
+        waterTempChartRef.current.destroy();
+    }
+
     if (recentSamples.WaterTemperature.length > 0) {
-        return new Chart(waterTempCtx, {
+        waterTempChartRef.current = new Chart(waterTempCtx, {
             type: 'line',
             data: {
                 labels: [...recentSamples.Times.reverse()],
@@ -150,12 +155,18 @@ export const createWaterTemperatureChart = (waterTempCtx, recentSamples, waterTe
                 }
             }
         });
+        return waterTempChartRef.current;
     } 
 };
 
-export const createHumidityChart = (context, recentSamples) => {
+export const createHumidityChart = (humidityCtx, recentSamples, humidityChartRef) => {
+
+    if (humidityChartRef.current) {
+        humidityChartRef.current.destroy();
+    }
+
     if (recentSamples.Humidity.length > 0) {
-        return new Chart(context, {
+        humidityChartRef.current = new Chart(humidityCtx, {
             type: 'line',
             data: {
                 labels: [...recentSamples.Times].reverse(),
@@ -196,12 +207,18 @@ export const createHumidityChart = (context, recentSamples) => {
                 }
             }
         });
+        return humidityChartRef.current;
     } 
 };
 
-export const createAirTemperatureChart = (context, recentSamples) => {
+export const createAirTemperatureChart = (airTempCtx, recentSamples, airTempChartRef) => {
+
+    if (airTempChartRef.current) {
+        airTempChartRef.current.destroy();
+    }
+
     if (recentSamples.AirTemperature.length > 0) {
-        return new Chart(context, {
+        airTempChartRef.current = new Chart(airTempCtx, {
             type: 'line',
             data: {
                 labels: [...recentSamples.Times.reverse()],
@@ -242,6 +259,7 @@ export const createAirTemperatureChart = (context, recentSamples) => {
                 }
             }
         });
+        return airTempChartRef.current;
     } 
 };
 

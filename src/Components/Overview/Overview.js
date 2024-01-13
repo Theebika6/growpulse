@@ -4,8 +4,9 @@ import { fetchImage} from '../Services/CameraServices';
 import {fetchPhAutoStatus, fetchPhValue} from "../Services/phServices";
 import {fetchTdsValue} from "../Services/tdsServices";
 import {fetchWaterTempValue} from "../Services/WaterTempServices";
+import {fetchAirTemperature} from "../Services/AirTempServices";
 import * as pumpService from "../Services/DosingPumpsServices";
-import { createPhChart, createTdsChart, fetchLastSevenSamples } from "../Services/chartsServices";
+import {createPhChart, createTdsChart, createWaterTemperatureChart, createAirTemperatureChart, fetchLastSevenSamples} from "../Services/chartsServices";
 import './Overview.css';
 
 const Overview = ({ sidebarExpanded }) => {
@@ -17,6 +18,7 @@ const Overview = ({ sidebarExpanded }) => {
         TDS: [],
         pH: [],
         AirTemperature: [],
+        WaterTemperature: [],
         Humidity: [],
         Times: []
     });
@@ -33,7 +35,10 @@ const Overview = ({ sidebarExpanded }) => {
     const TdsChartRef = useRef(null);
 
     const [waterTempValue, setWaterTempValue] = useState(null);
-    const waterTempValueChartRef = useRef(null);
+    const waterTempChartRef = useRef(null);
+
+    const [airTempValue, setAirTempValue] = useState(null);
+    const airTempChartRef = useRef(null);
 
     /* Camera */
     /* Image Fetching */
@@ -94,6 +99,23 @@ const Overview = ({ sidebarExpanded }) => {
 
     }, [systemName]);
 
+    /* Air Temperature */
+    /* Live Feed Fetching */
+    useEffect(() => {
+        setAirTempValue(0);
+
+        fetchAirTemperature((newAirTempValue) => {
+            setFlashUpdate(true);
+
+            setTimeout(() => {
+                setFlashUpdate(false);
+            }, 1000);
+
+            setAirTempValue(newAirTempValue);
+        }, systemName);
+
+    }, [systemName]);
+
     /* Button State Fetching */ 
     const initializeDosingPumpsStatus = useCallback(() => {
         pumpService.fetchDP1Status(setDP1Status, () => {}, systemName);
@@ -113,11 +135,21 @@ const Overview = ({ sidebarExpanded }) => {
         setTimeout(() => {
             const phCtx = document.getElementById('phChart');
             const tdsCtx = document.getElementById('tdsChart');
+            const waterTempCtx = document.getElementById('waterTempChart');
+            const airTempCtx = document.getElementById('airTempChart');
+
+
             if (recentSamples.pH.length > 0) {
                 phChartRef.current = createPhChart(phCtx.getContext('2d'), recentSamples, phChartRef);
             }
             if (recentSamples.TDS.length > 0) {
                 TdsChartRef.current = createTdsChart(tdsCtx.getContext('2d'), recentSamples, TdsChartRef);
+            }
+            if (recentSamples.WaterTemperature.length > 0) {
+                waterTempChartRef.current = createWaterTemperatureChart(waterTempCtx.getContext('2d'), recentSamples, waterTempChartRef);
+            }
+            if (recentSamples.AirTemperature.length > 0) {
+                airTempChartRef.current = createAirTemperatureChart(airTempCtx.getContext('2d'), recentSamples, airTempChartRef);
             }
         }, 300);
     }, [recentSamples]);
@@ -219,6 +251,17 @@ const Overview = ({ sidebarExpanded }) => {
                         </div>
                         <div className="chart">
                             <canvas id="waterTempChart"></canvas>
+                        </div>
+                    </div>
+
+                    {/*Air Temperature*/}
+                    <div className="container temperature-container">
+                        <h3>Air Temperature</h3>
+                        <div>
+                            <p className={flashUpdate ? 'flash-animation' : ''}>{airTempValue} °C</p>
+                        </div>
+                        <div className="chart">
+                            <canvas id="airTempChart"></canvas>
                         </div>
                     </div>
                 </main>
