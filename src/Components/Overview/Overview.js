@@ -7,6 +7,7 @@ import {fetchWaterTempValue} from "../Services/WaterTempServices";
 import {fetchAirTemperature} from "../Services/AirTempServices";
 import * as pumpService from "../Services/DosingPumpsServices";
 import {createPhChart, createTdsChart, createWaterTemperatureChart, createAirTemperatureChart, fetchLastSevenSamples, createHumidityChart} from "../Services/chartsServices";
+import { fetchLogHistory } from '../Services/HistoryServices';
 import on from "../Images/Dashboard/ON.png";
 import off from "../Images/Dashboard/OFF.png";
 
@@ -48,6 +49,8 @@ const Overview = ({ sidebarExpanded }) => {
     const [humidityValue, setHumidityValue] = useState(null);
     const [humidityAuto] = useState(false);
     const [humidifierOn, setHumidifierOn] = useState(false);
+
+    const [logHistory, setLogHistory] = useState([]);
 
     /* Camera */
     /* Image Fetching */
@@ -153,6 +156,12 @@ const Overview = ({ sidebarExpanded }) => {
         pumpService.fetchDP2Status(setDP2Status, () => {}, systemName);
         pumpService.fetchDP3Status(setDP3Status, () => {}, systemName);
         pumpService.fetchDP4Status(setDP4Status, () => {}, systemName);
+    }, [systemName]);
+
+    /* Dispense History */
+    /* Fetching and displaying */
+    useEffect(() => {
+        fetchLogHistory(setLogHistory, systemName);
     }, [systemName]);
 
     /* Common Fetches */
@@ -289,6 +298,23 @@ const Overview = ({ sidebarExpanded }) => {
                         </div>
                     </div>
 
+                    {/*Main Pump*/}
+                    <div className="container main-pump-container">
+                        <h3>Main Pump</h3>
+                        <div className="control">
+                        <div className="control auto main-pump-button">
+                                <div className="control button">
+                                    <button
+                                        className="on-off-button"
+                                    >
+                                        <img src={humidifierOn ? on : off} alt={humidifierOn ? "Humidifier On" : "Humidifier Off"} />
+                                        <span style={{ color: humidifierOn ? '#0096ff' : 'grey' }}>{humidifierOn ? 'On' : 'Off'}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     {/*Air Temperature*/}
                     <div className="container temperature-container">
                         <h3>Air Temperature</h3>
@@ -322,6 +348,37 @@ const Overview = ({ sidebarExpanded }) => {
                         </div>
                         <div className="chart">
                             <canvas id="HumidityChart"></canvas>
+                        </div>
+                    </div>
+
+                    {/* Disposal History */}
+                    <div className="container log-container">
+                        <h3>Disposal History</h3>
+                        <div className="disposal-table">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Time</th>
+                                    <th>Date</th>
+                                </tr>
+                                </thead>
+                            </table>
+                            <div className="table-body-wrapper">
+                                <table>
+                                    <tbody>
+                                    {logHistory.map((entry, index) => (
+                                        <tr key={index}>
+                                            <td>{entry.Type}</td>
+                                            <td>{entry.Amount}mL</td>
+                                            <td>{entry.time}</td>
+                                            <td>{entry.date}</td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </main>
