@@ -9,6 +9,7 @@ import * as pumpService from "../Services/DosingPumpsServices";
 import {createPhChart, createTdsChart, createWaterTemperatureChart, createAirTemperatureChart, fetchLastSevenSamples, createHumidityChart} from "../Services/chartsServices";
 import { fetchLogHistory } from '../Services/HistoryServices';
 import { handleToggleMainPump, fetchMainPumpStatus } from '../Services/MainPumpServices';
+import { calculateDayNightDurations, handleToggleLight, fetchLightTimes, fetchLigthPowerStatus } from '../Services/LightServices';
 import on from "../Images/Dashboard/ON.png";
 import off from "../Images/Dashboard/OFF.png";
 
@@ -52,6 +53,14 @@ const Overview = ({ sidebarExpanded }) => {
     const [humidityValue, setHumidityValue] = useState(null);
     const [humidityAuto] = useState(false);
     const [humidifierOn, setHumidifierOn] = useState(false);
+
+    const [lightPwrOn, setLightPwrOn] = useState(null);
+    const [lightON, setLightON] = useState(null);
+    const [lightOFF, setLightOFF] = useState(null);
+    const [lightAuto, setLightAuto] = useState(false);
+    const { dayDuration, nightDuration } = lightON && lightOFF ? calculateDayNightDurations(lightON, lightOFF) : { dayDuration: 0, nightDuration: 0 };
+    const dayHours = Math.floor(dayDuration / 60);
+    const nightHours = Math.floor(nightDuration / 60);
 
     const [logHistory, setLogHistory] = useState([]);
 
@@ -188,14 +197,41 @@ const Overview = ({ sidebarExpanded }) => {
     }, [systemName]);
     
 
-      const toggleMainPump = async () => {
+    const toggleMainPump = async () => {
         try {
           await handleToggleMainPump(systemName, !MainPumpOn); 
           setMainPumpOn(!MainPumpOn); 
         } catch (error) {
           console.error('Error toggling the main pump:', error);
         }
-      };
+    };
+
+    /*Light Control*/
+    useEffect(() => {
+        setLightON("00:00");
+        setLightOFF("12:00");
+
+        const cleanup = fetchLightTimes(setLightON, setLightOFF, setLightAuto, systemName);
+
+        return () => {
+            cleanup();
+        };
+
+    }, [systemName]);
+
+    useEffect(() => {
+        const unsubscribe = fetchLigthPowerStatus(setLightPwrOn, systemName);
+        // Clean up the subscription
+        return unsubscribe;
+    }, [systemName]);
+    
+    const toggleLight = async () => {
+        try {
+            await handleToggleLight(systemName); 
+            } catch (error) {
+            console.error('Error toggling the light power:', error);
+        }
+    };
 
     /* Dispense History */
     /* Fetching and displaying */
@@ -416,6 +452,33 @@ const Overview = ({ sidebarExpanded }) => {
                         </div>
                         <div className="chart">
                             <canvas id="HumidityChart"></canvas>
+                        </div>
+                    </div>
+
+                    {/*Light Control*/}
+                    <div className="container light-container" key={systemName}>
+                        <h3>Light Schedule</h3>
+                        <div className="control">
+                            <div>
+                                <p>{dayHours}hrs<span className="Day-Night"> Light</span>/{nightHours}hrs<span className="Day-Night"> Dark</span></p>
+                            </div>
+                            <div className="control auto auto-hum">
+                                <div className="control button">
+                                <button
+                                        className={`on-off-button ${lightPwrOn ? 'on' : 'off'}`}
+                                        onClick={toggleLight}
+                                        >
+                                        <img
+                                            src={lightPwrOn ? on : off}
+                                            alt={lightPwrOn ? "light Power On" : "light Power Off"}
+                                        />
+                                        <span style={{ color: lightPwrOn ? '#0096ff' : 'grey' }}>
+                                            {lightPwrOn ? 'On' : 'Off'}
+                                        </span>
+                                    </button>
+                                </div>
+                                <h5 style={lightAuto ? { color: '#52e000', fontSize: '16px' } : {}} >Auto</h5>
+                            </div>
                         </div>
                     </div>
 
