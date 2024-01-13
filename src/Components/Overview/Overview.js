@@ -205,7 +205,9 @@ const Overview = ({ sidebarExpanded }) => {
     }, [loadImage]);
 
     /* Live Feed Charts */
+
     const initializeCharts = useCallback(() => {
+
         setTimeout(() => {
             const phCtx = document.getElementById('phChart');
             const tdsCtx = document.getElementById('tdsChart');
@@ -213,10 +215,9 @@ const Overview = ({ sidebarExpanded }) => {
             const airTempCtx = document.getElementById('airTempChart');
             const humidityCtx = document.getElementById('HumidityChart');
 
-
             if (recentSamples.pH.length > 0) {
                 phChartRef.current = createPhChart(phCtx.getContext('2d'), recentSamples, phChartRef);
-            }
+            } 
             if (recentSamples.TDS.length > 0) {
                 TdsChartRef.current = createTdsChart(tdsCtx.getContext('2d'), recentSamples, TdsChartRef);
             }
@@ -229,16 +230,39 @@ const Overview = ({ sidebarExpanded }) => {
             if (recentSamples.Humidity.length > 0) {
                 HumidityChartRef.current = createHumidityChart(humidityCtx.getContext('2d'), recentSamples, HumidityChartRef);
             }
-        }, 300);
-    }, [recentSamples]);
 
-    useEffect(() => {
-        fetchLastSevenSamples(setRecentSamples, systemName);
-    }, [systemName]);
+        }, 0);
+    }, [recentSamples]);
 
     useEffect(() => {
         initializeCharts();
     }, [recentSamples, initializeCharts]);
+
+    const resetChartData = () => {
+        // Destroy existing charts
+        if (phChartRef.current) phChartRef.current.destroy();
+        if (TdsChartRef.current) TdsChartRef.current.destroy();
+        if (waterTempChartRef.current) waterTempChartRef.current.destroy();
+        if (airTempChartRef.current) airTempChartRef.current.destroy();
+        if (HumidityChartRef.current) HumidityChartRef.current.destroy();
+    
+        // Reset chart data
+        setRecentSamples({
+            TDS: [],
+            pH: [],
+            AirTemperature: [],
+            WaterTemperature: [],
+            Humidity: [],
+            Times: []
+        });
+    };
+
+    useEffect(() => {
+
+        resetChartData();
+        fetchLastSevenSamples(setRecentSamples, systemName);
+        
+    }, [systemName]);
 
     return (
         <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}> {/* css file in src/Components/Common */}
