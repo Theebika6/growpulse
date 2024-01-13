@@ -446,12 +446,12 @@
 .Water-Temperature-container{
     grid-row: 3;
     grid-column: 1 / span 2;
-    margin-left: 11rem;
+    margin-left: 21rem;
     transition: margin-left 0.3s ease;
 }
 
 .sidebar-collapsed .Water-Temperature-container{
-    margin-left: 15rem;
+    margin-left: 24rem;
     transition: margin-left 0.3s ease;
 }
 
@@ -555,22 +555,22 @@
 .main-pump-container{
     grid-row: 3;
     grid-column: 1;
-    width: 10rem;
+    width: 20rem;
     transition: width 0.3s ease;
 }
 
 .sidebar-collapsed .main-pump-container{
-    width: 14rem;
+    width: 23rem;
     transition: width 0.3s ease;
 }
 
 .main-pump-button{
-    margin-left: 30px;
+    margin-left: 7rem;
     transition: margin-left 0.3s ease;
 }
 
 .sidebar-collapsed .main-pump-button{
-    margin-left: 60px;
+    margin-left: 9rem;
     transition: margin-left 0.3s ease;
 }
 
