@@ -474,6 +474,10 @@
     margin-right: 2.25rem;
 }
 
+.auto-hum{
+    margin: 0.5rem;
+}
+
 .on-off-button {
     background-color: transparent;
     border: transparent;

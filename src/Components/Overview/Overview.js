@@ -137,6 +137,10 @@ const Overview = ({ sidebarExpanded }) => {
         setHumidifierOn(currentState => !currentState);
     };
 
+    useEffect(() => {
+        setHumidifierOn(false);
+    }, [systemName]);
+
     /* Live Feed Fetching */
     useEffect(() => {
         setHumidityValue(0);
@@ -261,7 +265,7 @@ const Overview = ({ sidebarExpanded }) => {
 
         resetChartData();
         fetchLastSevenSamples(setRecentSamples, systemName);
-        
+
     }, [systemName]);
 
     return (
