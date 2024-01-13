@@ -2,8 +2,10 @@ import React, { useEffect, useState,  useRef, useCallback } from 'react';
 import {useParams} from "react-router-dom";
 import { fetchImage} from '../Services/CameraServices';
 import {fetchPhAutoStatus, fetchPhValue} from "../Services/phServices";
+import {fetchTdsValue} from "../Services/tdsServices";
+import {fetchWaterTempValue} from "../Services/WaterTempServices";
 import * as pumpService from "../Services/DosingPumpsServices";
-import { createPhChart, fetchLastSevenSamples } from "../Services/chartsServices";
+import { createPhChart, createTdsChart, fetchLastSevenSamples } from "../Services/chartsServices";
 import './Overview.css';
 
 const Overview = ({ sidebarExpanded }) => {
@@ -12,7 +14,11 @@ const Overview = ({ sidebarExpanded }) => {
     
     const [flashUpdate, setFlashUpdate] = useState(false);
     const [recentSamples, setRecentSamples] = useState({
-        pH: []
+        TDS: [],
+        pH: [],
+        AirTemperature: [],
+        Humidity: [],
+        Times: []
     });
 
     const [phValue, setPhValue] = useState(null);
@@ -20,6 +26,14 @@ const Overview = ({ sidebarExpanded }) => {
     const [dp1Status, setDP1Status] = useState(false);
     const [dp2Status, setDP2Status] = useState(false); 
     const phChartRef = useRef(null);
+
+    const [tdsValue, setTdsValue] = useState(null);
+    const [dp3Status, setDP3Status] = useState(false);
+    const [dp4Status, setDP4Status] = useState(false); 
+    const TdsChartRef = useRef(null);
+
+    const [waterTempValue, setWaterTempValue] = useState(null);
+    const waterTempValueChartRef = useRef(null);
 
     /* Camera */
     /* Image Fetching */
@@ -46,32 +60,75 @@ const Overview = ({ sidebarExpanded }) => {
         fetchPhAutoStatus(setPhAuto, systemName);
     }, [systemName]);
 
+    /* TDS */
+    /* Live Feed Fetching */
+    useEffect(() => {
+        setTdsValue(0);
+
+        fetchTdsValue((newTdsValue) => {
+            setFlashUpdate(true);
+
+            setTimeout(() => {
+                setFlashUpdate(false);
+            }, 1000);
+
+            setTdsValue(newTdsValue);
+        }, systemName);
+
+    }, [systemName]);
+
+    /* Water Temperature */
+    /* Live Feed Fetching */
+    useEffect(() => {
+        setWaterTempValue(0);
+
+        fetchWaterTempValue((newWaterTempValue) => {
+            setFlashUpdate(true);
+
+            setTimeout(() => {
+                setFlashUpdate(false);
+            }, 1000);
+
+            setWaterTempValue(newWaterTempValue);
+        }, systemName);
+
+    }, [systemName]);
+
     /* Button State Fetching */ 
     const initializeDosingPumpsStatus = useCallback(() => {
         pumpService.fetchDP1Status(setDP1Status, () => {}, systemName);
         pumpService.fetchDP2Status(setDP2Status, () => {}, systemName);
+        pumpService.fetchDP3Status(setDP3Status, () => {}, systemName);
+        pumpService.fetchDP4Status(setDP4Status, () => {}, systemName);
     }, [systemName]);
 
-
     /* Common Fetches */
-    /* Image + DP status */
     useEffect(() => {
         loadImage();
         initializeDosingPumpsStatus();
     }, [loadImage, initializeDosingPumpsStatus]);
 
     /* Live Feed Charts */
-    useEffect(() => {
-
-        if (phChartRef.current) {
-            phChartRef.current.destroy();
-        }
-        phChartRef.current = createPhChart(document.getElementById('phChart').getContext('2d'), recentSamples);
+    const initializeCharts = useCallback(() => {
+        setTimeout(() => {
+            const phCtx = document.getElementById('phChart');
+            const tdsCtx = document.getElementById('tdsChart');
+            if (recentSamples.pH.length > 0) {
+                phChartRef.current = createPhChart(phCtx.getContext('2d'), recentSamples, phChartRef);
+            }
+            if (recentSamples.TDS.length > 0) {
+                TdsChartRef.current = createTdsChart(tdsCtx.getContext('2d'), recentSamples, TdsChartRef);
+            }
+        }, 300);
     }, [recentSamples]);
-    
+
     useEffect(() => {
         fetchLastSevenSamples(setRecentSamples, systemName);
     }, [systemName]);
+
+    useEffect(() => {
+        initializeCharts();
+    }, [recentSamples, initializeCharts]);
 
     return (
         <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}> {/* css file in src/Components/Common */}
@@ -123,6 +180,47 @@ const Overview = ({ sidebarExpanded }) => {
                         </div>
                     </div>
 
+                    {/*TDS*/}
+                    <div className="container TDS-container">
+                        <h3>TDS</h3>
+                        <div className="control">
+                            <div>
+                                <p className={flashUpdate ? 'flash-animation' : ''}>{tdsValue} ppm</p>
+                            </div>
+                            <div className="control auto">
+                                <div className="control button">
+                                    <button
+                                        className={`arrow-button ${dp3Status ? 'active' : ''}`}
+                                        onClick={() => pumpService.handleTogglePump('DP3',systemName)}
+                                    >
+                                        A
+                                    </button>
+                                    <button
+                                        className={`arrow-button ${dp4Status ? 'active' : ''}`}
+                                        onClick={() => pumpService.handleTogglePump('DP4',systemName)}
+                                    >
+                                        B
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="chart">
+                            <canvas id="tdsChart"></canvas>
+                        </div>
+                    </div>
+
+                    {/*Water Temperature*/}
+                    <div className="container Water-Temperature-container">
+                        <h3>Water Temperature</h3>
+                        <div className="control">
+                            <div>
+                                <p className={flashUpdate ? 'flash-animation' : ''}>{waterTempValue} °C</p>
+                            </div>
+                        </div>
+                        <div className="chart">
+                            <canvas id="waterTempChart"></canvas>
+                        </div>
+                    </div>
                 </main>
             </div>
         </div>
