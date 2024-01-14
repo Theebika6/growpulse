@@ -436,12 +436,12 @@ const Overview = ({ sidebarExpanded }) => {
 
     // Effect to update Daily Chart based on selectedDay and liveData
     useEffect(() => {
+        if (window.myDailyChart) {
+            window.myDailyChart.destroy(); // Destroy the previous instance of the chart
+        }
+
         if (liveData.length > 0 && dailyChartRef.current) {
             const dailyChartData = getDailyChartData(selectedDay, liveData);
-
-            if (window.myDailyChart) {
-                window.myDailyChart.destroy(); // Destroy the previous instance of the chart
-            }
 
             // Create the new Daily Line Chart
             window.myDailyChart = new Chart(dailyChartRef.current, {
