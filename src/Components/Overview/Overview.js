@@ -8,7 +8,7 @@ import {fetchWaterTempValue} from "../Services/WaterTempServices";
 import {fetchAirTemperature} from "../Services/AirTempServices";
 import { fetchHumidity } from '../Services/HumidityServices';
 import * as pumpService from "../Services/DosingPumpsServices";
-import {createPhChart, createTdsChart, createWaterTemperatureChart, createAirTemperatureChart, fetchLastSevenSamples, createHumidityChart, fetchDayAverages, getChartData} from "../Services/chartsServices";
+import {createPhChart, createTdsChart, createWaterTemperatureChart, createAirTemperatureChart, fetchLastSevenSamples, createHumidityChart, fetchDayAverages, getChartData} from "../Services/ChartsServices";
 import { fetchLogHistory } from '../Services/HistoryServices';
 import { handleToggleMainPump, fetchMainPumpStatus } from '../Services/MainPumpServices';
 import { calculateDayNightDurations, handleToggleLight, fetchLightTimes, fetchLigthPowerStatus, createLightScheduleGanttChart } from '../Services/LightServices';
@@ -68,6 +68,7 @@ const Overview = ({ sidebarExpanded }) => {
 
     const avgChartRef = useRef(null);
     const [dayAverages, setDayAverages] = useState([]);
+    const avgChartContainerRef = useRef(null);
 
     /* Camera */
     /* Image Fetching */
@@ -325,21 +326,31 @@ const Overview = ({ sidebarExpanded }) => {
         fetchDayAverages(setDayAverages, systemName);
     }, [systemName]);
 
+    const debounce = (func, delay) => {
+        let inDebounce;
+        return function() {
+            const context = this;
+            const args = arguments;
+            clearTimeout(inDebounce);
+            inDebounce = setTimeout(() => func.apply(context, args), delay);
+        };
+    };
+
     useEffect(() => {
-        // Function to redraw the chart
-        const redrawChart = () => {
+        // Function to initialize or update the chart
+        const initializeOrUpdateChart = () => {
             if (window.myAvgChart) {
                 window.myAvgChart.destroy();
             }
-    
+
             const avgChartData = getChartData(dayAverages);
-    
+
             window.myAvgChart = new Chart(avgChartRef.current, {
                 type: 'bar',
                 data: avgChartData,
                 options: {
                     animation: {
-                        duration: 10,
+                        duration: 500, // Increase duration for smoother animation
                     },
                     scales: {
                         x: {
@@ -370,13 +381,38 @@ const Overview = ({ sidebarExpanded }) => {
                 }
             });
         };
-    
-        // Refresh the chart after a delay when the sidebar collapses
-        if (!sidebarExpanded) {
-            const timeoutId = setTimeout(redrawChart, 300); // Delay in ms to match sidebar transition
-            return () => clearTimeout(timeoutId);
+
+        // Initialize the chart on first render
+        initializeOrUpdateChart();
+
+        const handleResize = debounce(() => {
+            // Re-initialize the chart on resize, debounced
+            initializeOrUpdateChart();
+        }, 100); // 100ms debounce period
+
+        // Set up a resize observer to watch for changes in the chart container size
+        const resizeObserver = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                if (entry.target === avgChartContainerRef.current) {
+                    handleResize();
+                }
+            }
+        });
+
+        // Start observing the chart container
+        if (avgChartContainerRef.current) {
+            resizeObserver.observe(avgChartContainerRef.current);
         }
-    }, [dayAverages, sidebarExpanded]); // Dependency array includes sidebarExpanded to trigger effect when it changes    
+
+        // Cleanup function to disconnect the resize observer
+        return () => {
+            resizeObserver.disconnect();
+            if (window.myAvgChart) {
+                window.myAvgChart.destroy();
+            }
+        };
+    }, [dayAverages]);
+
 
     return (
         <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}> {/* css file in src/Components/Common */}
@@ -594,7 +630,7 @@ const Overview = ({ sidebarExpanded }) => {
                     {/*Daily Avg Chart*/}
                     <div className="container avg-chart-container">
                         <h3>Average Chart</h3>
-                        <div className="avg-chart">
+                        <div className="avg-chart" ref={avgChartContainerRef}>
                             <canvas ref={avgChartRef} id="avgChart"></canvas>
                         </div>
                     </div>
