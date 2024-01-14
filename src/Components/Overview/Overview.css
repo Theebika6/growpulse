@@ -594,6 +594,15 @@
     transition: 0.3s ease;
 }
 
+/* Daily Avg Chart */
+.avg-chart-container{
+    grid-row: 6;
+    grid-column: 2;
+}
+
+.avg-chart{
+    margin-top: 20px;
+}
 
 /* Live Feed Update Flash Animation */
 

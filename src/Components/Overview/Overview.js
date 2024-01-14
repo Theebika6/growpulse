@@ -1,20 +1,22 @@
 import React, { useEffect, useState,  useRef, useCallback } from 'react';
 import {useParams} from "react-router-dom";
+import Chart from 'chart.js/auto';
 import { fetchImage} from '../Services/CameraServices';
 import {fetchPhAutoStatus, fetchPhValue} from "../Services/phServices";
 import {fetchTdsValue} from "../Services/tdsServices";
 import {fetchWaterTempValue} from "../Services/WaterTempServices";
 import {fetchAirTemperature} from "../Services/AirTempServices";
+import { fetchHumidity } from '../Services/HumidityServices';
 import * as pumpService from "../Services/DosingPumpsServices";
-import {createPhChart, createTdsChart, createWaterTemperatureChart, createAirTemperatureChart, fetchLastSevenSamples, createHumidityChart} from "../Services/chartsServices";
+import {createPhChart, createTdsChart, createWaterTemperatureChart, createAirTemperatureChart, fetchLastSevenSamples, createHumidityChart, fetchDayAverages, getChartData} from "../Services/chartsServices";
 import { fetchLogHistory } from '../Services/HistoryServices';
 import { handleToggleMainPump, fetchMainPumpStatus } from '../Services/MainPumpServices';
 import { calculateDayNightDurations, handleToggleLight, fetchLightTimes, fetchLigthPowerStatus, createLightScheduleGanttChart } from '../Services/LightServices';
+
 import on from "../Images/Dashboard/ON.png";
 import off from "../Images/Dashboard/OFF.png";
 
 import './Overview.css';
-import { fetchHumidity } from '../Services/HumidityServices';
 
 const Overview = ({ sidebarExpanded }) => {
     const {systemName } = useParams();
@@ -63,6 +65,9 @@ const Overview = ({ sidebarExpanded }) => {
     const nightHours = Math.floor(nightDuration / 60);
 
     const [logHistory, setLogHistory] = useState([]);
+
+    const avgChartRef = useRef(null);
+    const [dayAverages, setDayAverages] = useState([]);
 
     /* Camera */
     /* Image Fetching */
@@ -315,6 +320,57 @@ const Overview = ({ sidebarExpanded }) => {
 
     }, [systemName]);
 
+    /*Daily Avg Chart*/
+    useEffect(() => {
+        fetchDayAverages(setDayAverages, systemName);
+    }, [systemName]);
+
+    useEffect(() => {
+        const avgChartData = getChartData(dayAverages);
+
+        if (avgChartRef.current) {
+            // Ensure previous charts are destroyed to avoid memory leaks
+            if (window.myAvgChart) window.myAvgChart.destroy();
+
+            // Create the Average Bar Chart
+            window.myAvgChart = new Chart(avgChartRef.current, {
+                type: 'bar',  // Changed to bar chart
+                data: avgChartData,
+                options: {
+                    animation: {
+                        duration: 0,
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date',
+                            },
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Sensor Values',
+                            },
+                        },
+                        'y-axis-tds': {
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'TDS',
+                            },
+                        },
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                    },
+                }
+            });
+        }
+    }, [dayAverages]);
+
     return (
         <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}> {/* css file in src/Components/Common */}
             <div className="overview">
@@ -525,6 +581,14 @@ const Overview = ({ sidebarExpanded }) => {
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                    </div>
+
+                    {/*Daily Avg Chart*/}
+                    <div className="container avg-chart-container">
+                        <h3>Average Chart</h3>
+                        <div className="avg-chart">
+                            <canvas ref={avgChartRef} id="avgChart"></canvas>
                         </div>
                     </div>
                 </main>
