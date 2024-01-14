@@ -125,6 +125,7 @@ export const createLightScheduleGanttChart = (containerId, lightON, lightOFF) =>
     const currentTime = new Date();
     const currentHours = currentTime.getHours();
     const currentMinutes = currentTime.getMinutes();
+    const currentTimeInMs = Date.UTC(2024, 0, 1, currentHours, currentMinutes);
 
     Highcharts.ganttChart(containerId, {
         chart: {
@@ -132,7 +133,7 @@ export const createLightScheduleGanttChart = (containerId, lightON, lightOFF) =>
             type: 'gantt',
             marginTop: 0, // Space at the top
             marginRight: 0, // Space on the right
-            marginBottom: 20, // Space at the bottom
+            marginBottom: 45, // Space at the bottom
             marginLeft: 0, // Space on the left
             spacing: [0, 0, 0, 0] // Spacing between the outer edge of the chart and the plot area
         },
@@ -143,26 +144,34 @@ export const createLightScheduleGanttChart = (containerId, lightON, lightOFF) =>
             visible: true,
             type: 'datetime',
             plotLines: [{
-                color: 'red',
+                color: 'black',
                 width: 2,
-                value: Date.UTC(2024, 0, 1, currentHours, currentMinutes),
-                zIndex: 5
+                value: currentTimeInMs,
+                zIndex: 5,
+                label: {
+                    text: `Cur. Time: ${currentHours}:${currentMinutes}`,
+                    x: -55, 
+                    y: 120, 
+                    rotation : 0,
+                    style: {
+                        color: 'grey', 
+                        fontSize: 'smaller',
+                    }
+                }
             }],
             labels: {
                 enabled: false
             },
-            tickLength: 0,
-            lineWidth: 0,
-            minorGridLineWidth: 0,
-            lineColor: 'transparent',
-            minorTickLength: 0,
-            tickColor: 'transparent'
+            tickLength: 1,
+            lineWidth: 1,
+            minorGridLineWidth: 1,
+            minorTickLength: 1,
         }],
         yAxis: {
             visible: true,
-            gridLineWidth: 0,
+            gridLineWidth: 1,
             labels: {
-                enabled: false
+                enabled: true
             }
         },
         series: [{
@@ -187,7 +196,7 @@ export const createLightScheduleGanttChart = (containerId, lightON, lightOFF) =>
                 const start = Highcharts.dateFormat('%H:%M', this.point.options.start);
                 const end = Highcharts.dateFormat('%H:%M', this.point.options.end);
                 const seriesName = this.point.y === 0 ? 'Day' : 'Night';
-                return `<b>${seriesName}</b><br/>Start: ${start}<br/>End: ${end}`;
+                return `<b>${seriesName}</b><br/>Start: ${start}</b><br/>End: ${end}<br/> Current Time: ${currentHours}:${currentMinutes} `;
             }
         },
         credits: {
@@ -201,7 +210,6 @@ export const createLightScheduleGanttChart = (containerId, lightON, lightOFF) =>
                 borderRadius: 5,
                 pointPadding: 0.1,
                 groupPadding: 0,
-                // Additional properties to remove borders
                 borderColor: 'transparent', // Ensure no border color
                 edgeColor: 'transparent', // Ensures no edge color
                 borderWidth: 0 // Ensures no border width
