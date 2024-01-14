@@ -454,7 +454,7 @@ export const getDailyChartData = (selectedDay, liveData) => {
     const chartLabels = sortedFilteredData.map((data) =>
         moment(`${data.date} ${data.time}`, 'YYYY-MM-DD HH:mm:ss').toDate()
     );
-    
+        
     const chartData = sortedFilteredData.map((data) => [
         data.tdsValue,
         data.phValue,

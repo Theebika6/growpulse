@@ -1,4 +1,4 @@
-import React, { useEffect, useState,  useRef, useCallback } from 'react';
+import React, { useEffect, useState,  useRef, useCallback, useMemo } from 'react';
 import {useParams} from "react-router-dom";
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-moment';
@@ -520,6 +520,19 @@ const Overview = ({ sidebarExpanded }) => {
         }
     }, [selectedDay, liveData]);
 
+    const sortedUniqueDates = useMemo(() => {
+        const uniqueDates = Array.from(new Set(liveData.map((data) => data.date)));
+        return uniqueDates.sort((a, b) => moment(a, 'YYYY-MM-DD').diff(moment(b, 'YYYY-MM-DD'))).reverse();
+    }, [liveData]);    
+
+    useEffect(() => {
+        if (liveData.length > 0) {
+            const mostRecentDate = liveData
+                .map((data) => data.date)
+                .sort((a, b) => moment(b, 'YYYY-MM-DD').diff(moment(a, 'YYYY-MM-DD')))[0];
+            setSelectedDay(mostRecentDate);
+        }
+    }, [liveData]);
 
     return (
         <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}> {/* css file in src/Components/Common */}
@@ -752,7 +765,7 @@ const Overview = ({ sidebarExpanded }) => {
                                     value={selectedDay}
                                     onChange={(e) => setSelectedDay(e.target.value)}
                             >
-                                {Array.from(new Set(liveData.map((data) => data.date))).map((uniqueDate) => (
+                                 {sortedUniqueDates.map((uniqueDate) => (
                                     <option key={uniqueDate} value={uniqueDate}>
                                         {moment(uniqueDate).format('MMM D, YYYY')}
                                     </option>

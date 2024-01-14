@@ -149,7 +149,7 @@ export const createLightScheduleGanttChart = (containerId, lightON, lightOFF) =>
                 value: currentTimeInMs,
                 zIndex: 5,
                 label: {
-                    text: `Cur. Time: ${currentHours}:${currentMinutes}`,
+                    text: `Curr. Time: ${currentHours}:${currentMinutes}`,
                     x: -55, 
                     y: 120, 
                     rotation : 0,
