@@ -408,29 +408,26 @@ export const getChartData = (dayAverages) => {
 };
 
 /* Sensor History */
-export const fetchLiveData = async (setLiveData, selectedDay, systemName) => {
+export const fetchLiveData = async (setLiveData, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
-        const liveDataDocRef = doc(firestore, `Registered Users/${currentUser.uid}/${systemName}/SensorHistory`);
+        const sensorHistoryRef = doc(firestore, `Registered Users/${currentUser.uid}/${systemName}/SensorHistory`);
 
         try {
-            const liveDataSnapshot = await getDoc(liveDataDocRef);
+            const liveDataSnapshot = await getDoc(sensorHistoryRef);
             if (liveDataSnapshot.exists()) {
-                const data = liveDataSnapshot.data()[selectedDay];
-                if (data) {
-                    // Convert the object to an array and filter out the 'DailyAverage' key if it exists
-                    const formattedData = Object.entries(data)
-                        .filter(([time, _]) => time !== 'DailyAverage')
-                        .map(([time, sensorData]) => ({
-                            date: selectedDay,
-                            time,
-                            ...sensorData,
-                        }));
-
-                    setLiveData(formattedData);
-                } else {
-                    console.error("No data found for the selected day.");
-                }
+                const sensorHistoryData = liveDataSnapshot.data();
+                const filteredData = Object.entries(sensorHistoryData).flatMap(([date, timeData]) => {
+                    if (timeData.DailyAverage) {
+                        delete timeData.DailyAverage;
+                    }
+                    return Object.entries(timeData).map(([time, sensorData]) => ({
+                        date,
+                        time,
+                        ...sensorData,
+                    }))
+                });
+                setLiveData(filteredData);
             } else {
                 console.error("No such document in Firestore.");
             }
@@ -442,15 +439,29 @@ export const fetchLiveData = async (setLiveData, selectedDay, systemName) => {
     }
 };
 
-
 export const getSelectedDayData = (selectedDay, liveData) => {
     return liveData.filter((data) => data.date === selectedDay);
 };
 
 export const getDailyChartData = (selectedDay, liveData) => {
     const filteredData = getSelectedDayData(selectedDay, liveData);
-    const chartLabels = filteredData.map((data) => moment(`${data.date} ${data.time}`, 'YYYY-MM-DD HH:mm').toDate());
-    const chartData = filteredData.map((data) => [data.tdsValue, data.phValue, data.AirTemperature, data.AirHumidity, data.WaterTemperature]);
+
+    // Sort the data by time in ascending order
+    const sortedFilteredData = filteredData.sort((a, b) =>
+        moment(a.time, 'HH:mm:ss').diff(moment(b.time, 'HH:mm:ss'))
+    );
+
+    const chartLabels = sortedFilteredData.map((data) =>
+        moment(`${data.date} ${data.time}`, 'YYYY-MM-DD HH:mm:ss').toDate()
+    );
+    
+    const chartData = sortedFilteredData.map((data) => [
+        data.tdsValue,
+        data.phValue,
+        data.AirTemperature,
+        data.AirHumidity,
+        data.WaterTemperature,
+    ]);
 
     return {
         labels: chartLabels,

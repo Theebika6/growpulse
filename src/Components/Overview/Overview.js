@@ -1,6 +1,7 @@
 import React, { useEffect, useState,  useRef, useCallback } from 'react';
 import {useParams} from "react-router-dom";
 import Chart from 'chart.js/auto';
+import 'chartjs-adapter-moment';
 import moment from 'moment';
 import { fetchImage} from '../Services/CameraServices';
 import {fetchPhAutoStatus, fetchPhValue} from "../Services/phServices";
