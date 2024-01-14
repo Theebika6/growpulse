@@ -8,7 +8,7 @@ import {fetchWaterTempValue} from "../Services/WaterTempServices";
 import {fetchAirTemperature} from "../Services/AirTempServices";
 import { fetchHumidity } from '../Services/HumidityServices';
 import * as pumpService from "../Services/DosingPumpsServices";
-import {createPhChart, createTdsChart, createWaterTemperatureChart, createAirTemperatureChart, fetchLastSevenSamples, createHumidityChart, fetchDayAverages, getChartData} from "../Services/ChartsServices";
+import {createPhChart, createTdsChart, createWaterTemperatureChart, createAirTemperatureChart, fetchLastSevenSamples, createHumidityChart, fetchDayAverages, getChartData} from "../Services/chartsServices";
 import { fetchLogHistory } from '../Services/HistoryServices';
 import { handleToggleMainPump, fetchMainPumpStatus } from '../Services/MainPumpServices';
 import { calculateDayNightDurations, handleToggleLight, fetchLightTimes, fetchLigthPowerStatus, createLightScheduleGanttChart } from '../Services/LightServices';
