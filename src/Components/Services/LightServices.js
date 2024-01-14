@@ -1,5 +1,9 @@
 import { auth, database } from "../../firebaseConfig";
 import { ref, onValue, set, get } from "firebase/database";
+import Highcharts from 'highcharts';
+import HighchartsGantt from 'highcharts/modules/gantt';
+
+HighchartsGantt(Highcharts);
 
 export const fetchLightTimes = (setLightStart, setLightEnd, setLightScheduleAuto, systemName) => {
     const currentUser = auth.currentUser;
@@ -116,3 +120,4 @@ export const fetchLigthPowerStatus = (setLightPowerOn, systemName) => {
         return () => {};
     }
 };
+
