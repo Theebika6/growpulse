@@ -266,52 +266,58 @@ export const createAirTemperatureChart = (airTempCtx, recentSamples, airTempChar
 export const fetchLastSevenSamples = async (setRecentSamples, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
-      const sensorHistoryRef = doc(firestore, `Registered Users/${currentUser.uid}/${systemName}/SensorHistory`);
-  
-      const sensorHistorySnapshot = await getDoc(sensorHistoryRef);
-  
-      if (sensorHistorySnapshot.exists()) {
-        const sensorHistoryData = sensorHistorySnapshot.data();
-        // Convert the object keys (dates) into an array, sort them to find the most recent date
-        const dates = Object.keys(sensorHistoryData).sort((a, b) => moment(b, 'YYYY-MM-DD').diff(moment(a, 'YYYY-MM-DD')));
-        const mostRecentDate = dates[0]; // Most recent date
-  
-        // Check if mostRecentDate exists and has entries
-        if (mostRecentDate && sensorHistoryData[mostRecentDate]) {
-          const timeEntries = sensorHistoryData[mostRecentDate]; // Access the map of time entries for the most recent date
-  
-          // Convert timeEntries object to an array and sort by time descending to get the last entries
-          const sortedTimeEntries = Object.entries(timeEntries)
-            .sort(([timeA], [timeB]) => moment.utc(timeB, 'HH:mm:ss').diff(moment.utc(timeA, 'HH:mm:ss')))
-            .slice(0, 7); // Get the last 7 samples
-  
-          const recentSamples = {
-            TDS: [],
-            pH: [],
-            AirTemperature: [],
-            WaterTemperature : [],
-            Humidity: [],
-            Times: []
-          };
-  
-          sortedTimeEntries.forEach(([time, data]) => {
-            recentSamples.TDS.push(data.tdsValue);
-            recentSamples.pH.push(data.phValue);
-            recentSamples.AirTemperature.push(data.AirTemperature);
-            recentSamples.Humidity.push(data.Humidity);
-            recentSamples.WaterTemperature.push(data.WaterTemperature);
-            recentSamples.Times.push(moment(time, 'HH:mm:ss').format('HH:mm'));
-          });
-  
-          setRecentSamples(recentSamples);
+        const sensorHistoryRef = doc(firestore, `Registered Users/${currentUser.uid}/${systemName}/SensorHistory`);
+
+        const sensorHistorySnapshot = await getDoc(sensorHistoryRef);
+
+        if (sensorHistorySnapshot.exists()) {
+            const sensorHistoryData = sensorHistorySnapshot.data();
+            // Convert the object keys (dates) into an array, sort them to find the most recent date
+            const dates = Object.keys(sensorHistoryData).sort((a, b) => moment(b, 'YYYY-MM-DD').diff(moment(a, 'YYYY-MM-DD')));
+            const mostRecentDate = dates[0]; // Most recent date
+
+            // Check if mostRecentDate exists and has entries
+            if (mostRecentDate && sensorHistoryData[mostRecentDate] && sensorHistoryData[mostRecentDate].DailyAverage) {
+                // Ignore the DailyAverage map
+                delete sensorHistoryData[mostRecentDate].DailyAverage;
+            }
+
+            if (mostRecentDate && sensorHistoryData[mostRecentDate]) {
+                // Access the map of time entries for the most recent date
+                const timeEntries = sensorHistoryData[mostRecentDate];
+
+                // Convert timeEntries object to an array and sort by time descending to get the last entries
+                const sortedTimeEntries = Object.entries(timeEntries)
+                    .sort(([timeA], [timeB]) => moment.utc(timeB, 'HH:mm:ss').diff(moment.utc(timeA, 'HH:mm:ss')))
+                    .slice(0, 7); // Get the last 7 samples
+
+                const recentSamples = {
+                    TDS: [],
+                    pH: [],
+                    AirTemperature: [],
+                    WaterTemperature : [],
+                    Humidity: [],
+                    Times: []
+                };
+
+                sortedTimeEntries.forEach(([time, data]) => {
+                    recentSamples.TDS.push(data.tdsValue);
+                    recentSamples.pH.push(data.phValue);
+                    recentSamples.AirTemperature.push(data.AirTemperature);
+                    recentSamples.Humidity.push(data.Humidity);
+                    recentSamples.WaterTemperature.push(data.WaterTemperature);
+                    recentSamples.Times.push(moment(time, 'HH:mm:ss').format('HH:mm'));
+                });
+
+                setRecentSamples(recentSamples);
+            } else {
+                console.error("The most recent date does not have any entries or does not exist.");
+            }
         } else {
-          console.error("The most recent date does not have any entries or does not exist.");
+            console.error("The SensorHistory document does not exist.");
         }
-      } else {
-        console.error("The SensorHistory document does not exist.");
-      }
     } else {
-      console.error("User is not logged in or authenticated.");
+        console.error("User is not logged in or authenticated.");
     }
 };
 
