@@ -9,7 +9,7 @@ import * as pumpService from "../Services/DosingPumpsServices";
 import {createPhChart, createTdsChart, createWaterTemperatureChart, createAirTemperatureChart, fetchLastSevenSamples, createHumidityChart} from "../Services/chartsServices";
 import { fetchLogHistory } from '../Services/HistoryServices';
 import { handleToggleMainPump, fetchMainPumpStatus } from '../Services/MainPumpServices';
-import { calculateDayNightDurations, handleToggleLight, fetchLightTimes, fetchLigthPowerStatus } from '../Services/LightServices';
+import { calculateDayNightDurations, handleToggleLight, fetchLightTimes, fetchLigthPowerStatus, createLightScheduleGanttChart } from '../Services/LightServices';
 import on from "../Images/Dashboard/ON.png";
 import off from "../Images/Dashboard/OFF.png";
 
@@ -237,6 +237,12 @@ const Overview = ({ sidebarExpanded }) => {
             console.error('Error toggling the light power:', error);
         }
     };
+
+    useEffect(() => {
+        if (lightON && lightOFF) {
+            createLightScheduleGanttChart('lightScheduleGanttChartContainer', lightON, lightOFF);
+        }
+    }, [lightON, lightOFF]);
 
     /* Dispense History */
     /* Fetching and displaying */
@@ -486,6 +492,8 @@ const Overview = ({ sidebarExpanded }) => {
                                 </div>
                                 <h5 style={lightAuto ? { color: '#52e000', fontSize: '16px' } : {}} >Auto</h5>
                             </div>
+                        </div>
+                        <div id="lightScheduleGanttChartContainer" className="chart-gantt">
                         </div>
                     </div>
 

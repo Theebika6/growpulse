@@ -588,6 +588,13 @@
     color: grey;
 }
 
+.chart-gantt{
+    margin-top: 10px;
+    margin-right: 10px;
+    transition: 0.3s ease;
+}
+
+
 /* Live Feed Update Flash Animation */
 
 @keyframes flash {
