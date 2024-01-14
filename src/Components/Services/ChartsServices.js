@@ -406,3 +406,101 @@ export const getChartData = (dayAverages) => {
         ],
     };
 };
+
+/* Sensor History */
+export const fetchLiveData = async (setLiveData, selectedDay, systemName) => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+        const liveDataDocRef = doc(firestore, `Registered Users/${currentUser.uid}/${systemName}/SensorHistory`);
+
+        try {
+            const liveDataSnapshot = await getDoc(liveDataDocRef);
+            if (liveDataSnapshot.exists()) {
+                const data = liveDataSnapshot.data()[selectedDay];
+                if (data) {
+                    // Convert the object to an array and filter out the 'DailyAverage' key if it exists
+                    const formattedData = Object.entries(data)
+                        .filter(([time, _]) => time !== 'DailyAverage')
+                        .map(([time, sensorData]) => ({
+                            date: selectedDay,
+                            time,
+                            ...sensorData,
+                        }));
+
+                    setLiveData(formattedData);
+                } else {
+                    console.error("No data found for the selected day.");
+                }
+            } else {
+                console.error("No such document in Firestore.");
+            }
+        } catch (error) {
+            console.error("Error fetching live data:", error);
+        }
+    } else {
+        console.error("User is not logged in or authenticated.");
+    }
+};
+
+
+export const getSelectedDayData = (selectedDay, liveData) => {
+    return liveData.filter((data) => data.date === selectedDay);
+};
+
+export const getDailyChartData = (selectedDay, liveData) => {
+    const filteredData = getSelectedDayData(selectedDay, liveData);
+    const chartLabels = filteredData.map((data) => moment(`${data.date} ${data.time}`, 'YYYY-MM-DD HH:mm').toDate());
+    const chartData = filteredData.map((data) => [data.tdsValue, data.phValue, data.AirTemperature, data.AirHumidity, data.WaterTemperature]);
+
+    return {
+        labels: chartLabels,
+        datasets: [
+            {
+                label: 'TDS',
+                data: chartData.map((data) => data[0]),
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1,
+                fill: true,
+                pointRadius: 0,
+                yAxisID: 'y-axis-tds',
+            },
+            {
+                label: 'pH',
+                data: chartData.map((data) => data[1]),
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                fill: true,
+                pointRadius: 0,
+            },
+            {
+                label: 'Air Temperature',
+                data: chartData.map((data) => data[2]),
+                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 1,
+                fill: true,
+                pointRadius: 0,
+            },
+            {
+                label: 'Humidity',
+                data: chartData.map((data) => data[3]),
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1,
+                fill: true,
+                pointRadius: 0,
+            },
+            {
+                label: 'Water Temperature',
+                data: chartData.map((data) => data[4]),
+                backgroundColor: 'rgba(1, 1, 122, 0.3)',
+                borderColor: 'rgba(1, 1, 122, 1)',
+                borderWidth: 1,
+                fill: true,
+                pointRadius: 0,
+            },
+        ],
+    };
+};

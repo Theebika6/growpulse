@@ -1,6 +1,7 @@
 import React, { useEffect, useState,  useRef, useCallback } from 'react';
 import {useParams} from "react-router-dom";
 import Chart from 'chart.js/auto';
+import moment from 'moment';
 import { fetchImage} from '../Services/CameraServices';
 import {fetchPhAutoStatus, fetchPhValue} from "../Services/phServices";
 import {fetchTdsValue} from "../Services/tdsServices";
@@ -8,7 +9,7 @@ import {fetchWaterTempValue} from "../Services/WaterTempServices";
 import {fetchAirTemperature} from "../Services/AirTempServices";
 import { fetchHumidity } from '../Services/HumidityServices';
 import * as pumpService from "../Services/DosingPumpsServices";
-import {createPhChart, createTdsChart, createWaterTemperatureChart, createAirTemperatureChart, fetchLastSevenSamples, createHumidityChart, fetchDayAverages, getChartData} from "../Services/chartsServices";
+import {createPhChart, createTdsChart, createWaterTemperatureChart, createAirTemperatureChart, fetchLastSevenSamples, createHumidityChart, fetchDayAverages, getChartData, fetchLiveData, getDailyChartData} from "../Services/chartsServices";
 import { fetchLogHistory } from '../Services/HistoryServices';
 import { handleToggleMainPump, fetchMainPumpStatus } from '../Services/MainPumpServices';
 import { calculateDayNightDurations, handleToggleLight, fetchLightTimes, fetchLigthPowerStatus, createLightScheduleGanttChart } from '../Services/LightServices';
@@ -69,6 +70,9 @@ const Overview = ({ sidebarExpanded }) => {
     const avgChartRef = useRef(null);
     const [dayAverages, setDayAverages] = useState([]);
     const avgChartContainerRef = useRef(null);
+
+    const [liveData, setLiveData] = useState([]);
+    const dailyChartRef = useRef(null);
 
     /* Camera */
     /* Image Fetching */
@@ -148,9 +152,7 @@ const Overview = ({ sidebarExpanded }) => {
 
     /*Humidity*/
     /* ON/OFF Button functionality (empty for now) */
-
     /*
-
         const toggleHumidity = () => {
             setHumidifierOn(currentState => !currentState);
         }; 
@@ -158,7 +160,6 @@ const Overview = ({ sidebarExpanded }) => {
         useEffect(() => {
             setHumidifierOn(false);
         }, [systemName]);
-    
     */
 
     /* Live Feed Fetching */
@@ -413,6 +414,111 @@ const Overview = ({ sidebarExpanded }) => {
         };
     }, [dayAverages]);
 
+    /* Samples Data Chart */
+    const getCurrentFormattedDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (`0${today.getMonth() + 1}`).slice(-2); 
+        const day = (`0${today.getDate()}`).slice(-2); 
+        return `${year}-${month}-${day}`;
+    };
+
+    const [selectedDay, setSelectedDay] = useState(getCurrentFormattedDate());
+
+    useEffect(() => {
+        const fetchAndSetLiveData = async () => {
+            await fetchLiveData(setLiveData, systemName);
+        };
+
+        fetchAndSetLiveData();
+    }, [systemName]);
+
+    // Effect to update Daily Chart based on selectedDay and liveData
+    useEffect(() => {
+        if (liveData.length > 0 && dailyChartRef.current) {
+            const dailyChartData = getDailyChartData(selectedDay, liveData);
+
+            if (window.myDailyChart) {
+                window.myDailyChart.destroy(); // Destroy the previous instance of the chart
+            }
+
+            // Create the new Daily Line Chart
+            window.myDailyChart = new Chart(dailyChartRef.current, {
+                type: 'line',
+                data: dailyChartData,
+                options: {
+                    animation: {
+                        duration: 0,
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'minute',
+                                displayFormats: {
+                                    minute: 'h:mm a'
+                                },
+                                tooltipFormat: 'MMM d, yyyy h:mm a',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Time',
+                            },
+                            ticks: {
+                                source: 'data',
+                                maxTicksLimit: 5,
+                                maxRotation: 45,
+                                minRotation: 45,
+                            },
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Values',
+                            },
+                        },
+                        'y-axis-tds': {
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'TDS',
+                            },
+                            min: 0,
+                            max: 1500,
+                            ticks: {
+                                beginAtZero: true,
+                                stepSize: 100
+                            },
+                        },
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        zoom: {
+                            pan: {
+                                enabled: true,
+                                mode: 'x',
+                            },
+                            zoom: {
+                                wheel: {
+                                    enabled: true,
+                                },
+                                pinch: {
+                                    enabled: true,
+                                },
+                                mode: 'x',
+                            },
+                        },
+                    },
+                    maintainAspectRatio: false,
+                    responsive: true,
+                }
+            });
+        }
+    }, [selectedDay, liveData]);
+
 
     return (
         <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}> {/* css file in src/Components/Common */}
@@ -632,6 +738,28 @@ const Overview = ({ sidebarExpanded }) => {
                         <h3>Average Chart</h3>
                         <div className="avg-chart" ref={avgChartContainerRef}>
                             <canvas ref={avgChartRef} id="avgChart"></canvas>
+                        </div>
+                    </div>
+
+                    {/*Daily Samples Chart*/}
+                    <div className="container daily-chart-container">
+                        <h3>Daily Chart</h3>
+                        <div className="select-container">
+                            <label htmlFor="day-selector">Select Day: </label>
+                            <select className="custom-select"
+                                    id="day-selector"
+                                    value={selectedDay}
+                                    onChange={(e) => setSelectedDay(e.target.value)}
+                            >
+                                {Array.from(new Set(liveData.map((data) => data.date))).map((uniqueDate) => (
+                                    <option key={uniqueDate} value={uniqueDate}>
+                                        {moment(uniqueDate).format('MMM D, YYYY')}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="daily-chart">
+                            <canvas ref={dailyChartRef} id="dailyChart"></canvas>
                         </div>
                     </div>
                 </main>
