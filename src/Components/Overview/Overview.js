@@ -326,30 +326,31 @@ const Overview = ({ sidebarExpanded }) => {
     }, [systemName]);
 
     useEffect(() => {
-        const avgChartData = getChartData(dayAverages);
-
-        if (avgChartRef.current) {
-            // Ensure previous charts are destroyed to avoid memory leaks
-            if (window.myAvgChart) window.myAvgChart.destroy();
-
-            // Create the Average Bar Chart
+        // Function to redraw the chart
+        const redrawChart = () => {
+            if (window.myAvgChart) {
+                window.myAvgChart.destroy();
+            }
+    
+            const avgChartData = getChartData(dayAverages);
+    
             window.myAvgChart = new Chart(avgChartRef.current, {
-                type: 'bar',  // Changed to bar chart
+                type: 'bar',
                 data: avgChartData,
                 options: {
                     animation: {
-                        duration: 0,
+                        duration: 10,
                     },
                     scales: {
                         x: {
                             title: {
-                                display: true,
+                                display: false,
                                 text: 'Date',
                             },
                         },
                         y: {
                             title: {
-                                display: true,
+                                display: false,
                                 text: 'Sensor Values',
                             },
                         },
@@ -368,8 +369,14 @@ const Overview = ({ sidebarExpanded }) => {
                     },
                 }
             });
+        };
+    
+        // Refresh the chart after a delay when the sidebar collapses
+        if (!sidebarExpanded) {
+            const timeoutId = setTimeout(redrawChart, 300); // Delay in ms to match sidebar transition
+            return () => clearTimeout(timeoutId);
         }
-    }, [dayAverages]);
+    }, [dayAverages, sidebarExpanded]); // Dependency array includes sidebarExpanded to trigger effect when it changes    
 
     return (
         <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}> {/* css file in src/Components/Common */}
