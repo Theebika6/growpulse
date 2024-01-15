@@ -6,9 +6,9 @@ export const fetchInitialDosingValues = async (setStartInitialDosing, setSolutio
     const currentUser = getAuth().currentUser;
     if (currentUser) {
         const startInitialDosingRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/InitialDose/startInitialDosing`);
-        const solutionA_DoseRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/InitialDose/solutionA_dose`);
-        const solutionB_DoseRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/InitialDose/solutionB_dose`);
-        const systemVolumeRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/InitialDose/systemVolume`);
+        const solutionA_DoseRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/InitialDose/Amounts/A`);
+        const solutionB_DoseRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/InitialDose/Amounts/B`);
+        const systemVolumeRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/InitialDose/Amounts/systemVolume`);
 
         onValue(startInitialDosingRef, (snapshot) => {
             const value = snapshot.val();
@@ -35,9 +35,9 @@ export const fetchInitialDosingValues = async (setStartInitialDosing, setSolutio
 export const updateInitialDosingValues = async (solutionA_Dose, solutionB_Dose, systemVolume, systemName) => {
     const currentUser = getAuth().currentUser;
     if (currentUser) {
-        const solutionA_DoseRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/InitialDose/solutionA_dose`);
-        const solutionB_DoseRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/InitialDose/solutionB_dose`);
-        const systemVolumeRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/InitialDose/systemVolume`);
+        const solutionA_DoseRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/InitialDose/Amounts/A`);
+        const solutionB_DoseRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/InitialDose/Amounts/B`);
+        const systemVolumeRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/InitialDose/Amounts/systemVolume`);
 
         await set(solutionA_DoseRef, parseFloat(solutionA_Dose));
         await set(solutionB_DoseRef, parseFloat(solutionB_Dose));
