@@ -5,8 +5,8 @@ import { debounce } from "lodash";
 export const fetchHumidityData = (setHumidityLevel, setScheduleAutomationHumidity, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
-        const humidityLevelRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Humidity/humidityLevel`);
-        const scheduleAutomationHumidityRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Humidity/scheduleAutomationHumidity`);
+        const humidityLevelRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/HumidityControl/humidityLevel`);
+        const scheduleAutomationHumidityRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/HumidityControl/automationHumidity`);
 
         onValue(humidityLevelRef, (snapshot) => {
             const humidityValue = snapshot.val();
@@ -29,7 +29,7 @@ export const fetchHumidityData = (setHumidityLevel, setScheduleAutomationHumidit
 export const updateHumidityLevel = (newLevel, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
-        const humidityLevelRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Humidity/humidityLevel`);
+        const humidityLevelRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/HumidityControl/humidityLevel`);
         set(humidityLevelRef, newLevel);
     }
 };
@@ -37,7 +37,7 @@ export const updateHumidityLevel = (newLevel, systemName) => {
 export const toggleAutomationHumidity = (currentState, setScheduleAutomationHumidity, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
-        const scheduleAutomationHumidityRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Humidity/scheduleAutomationHumidity`);
+        const scheduleAutomationHumidityRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/HumidityControl/automationHumidity`);
 
         // Setting the opposite value to the current state
         const newState = !currentState;
@@ -62,7 +62,7 @@ export const fetchHumidity = async (setAirHumidity, systemName) => {
 export const fetchHumidityAutoStatus = async (setHumidityAuto, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
-        const HumidityAutoRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Humidity/scheduleAutomationHumidity`);
+        const HumidityAutoRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/HumidityControl/automationHumidity`);
         onValue(HumidityAutoRef, (snapshot) => {
             const value = snapshot.val();
             if (value !== null) {
