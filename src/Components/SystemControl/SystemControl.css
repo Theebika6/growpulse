@@ -1,6 +1,11 @@
 .systemControl {
-    margin-left: 13.125rem;
+    margin-left: 14rem;
+    transition: margin-left 0.3s ease;
     font-family: 'Raleway', sans-serif;
+}
+
+.sidebar-collapsed .systemControl {
+    margin-left: 2rem;
 }
 
 .systemControl:before {
@@ -104,6 +109,7 @@
     height: 30px;
     border: none;
     text-align: center;
+    font-family: 'Raleway', sans-serif;
     outline: none;
     background-color: rgba(30, 30, 30, 0);
 }
@@ -125,8 +131,8 @@
 }
 
 .input-container button:hover {
-    border-color: rgb(25, 200, 0);
-    color: rgb(25, 200, 0);
+    border-color: #0096ff;
+    color: #0096ff;
 }
 
 .input-container:hover{
@@ -146,6 +152,7 @@
     background-color: rgba(68, 68, 68, 0);
     border-radius: 5px;
     overflow: hidden;
+    font-family: 'Raleway', sans-serif;
     width: 7rem;
     padding-left: 10px;
     padding-right: 5px;
@@ -249,7 +256,7 @@
 .slider-container input[type="range"]::-webkit-slider-thumb {
     width: 20px;
     height: 20px;
-    background: rgba(0, 210, 4);
+    background: #0096ff;
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -260,7 +267,7 @@
 .slider-container input[type="range"]::-moz-range-thumb {
     width: 20px;
     height: 20px;
-    background: rgba(0, 210, 4);
+    background: #0096ff;
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -268,11 +275,11 @@
 }
 
 .slider-container input[type="range"]:hover::-webkit-slider-thumb {
-    background: rgba(0, 210, 4);
+    background: #0096ff;
 }
 
 .slider-container input[type="range"]:hover::-moz-range-thumb {
-    background: rgb(0, 210, 4);
+    background: #0096ff;
 }
 
 .humidity-value {

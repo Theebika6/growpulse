@@ -576,7 +576,7 @@ const Overview = ({ sidebarExpanded }) => {
                                         &#9660;
                                     </button>
                                 </div>
-                                <h5 style={phAuto ? { color: '#08B200', fontSize: '16px' } : {}} >Auto</h5>
+                                <h5 style={phAuto ? { color: '#52e000', fontSize: '16px' } : {}} >Auto</h5>
                             </div>
                         </div>
                         <div className="chart">
