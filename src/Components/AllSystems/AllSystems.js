@@ -5,7 +5,7 @@ import '../Common/background.css';
 import worldMap from './countries-110m.json';
 import countriesCoordinates from './countriesCoordinates.json';
 import { database, auth } from '../../firebaseConfig';
-import { ref, get } from 'firebase/database';
+import { ref, get, set } from 'firebase/database';
 
 const AllSystems = ({ sidebarExpanded }) => {
     const [systemsData, setSystemsData] = useState([]);
@@ -15,9 +15,23 @@ const AllSystems = ({ sidebarExpanded }) => {
     const systemsCountPerCountry = systemsData.reduce((acc, system) => {
         acc[system.Location] = (acc[system.Location] || 0) + 1;
         return acc;
-      }, {});
+    }, {});
 
-    
+    const handleLocationChange = async (event, systemName, index) => {
+        const newLocation = event.target.value;
+        // Update the database
+        const systemRef = ref(database, `Registered Users/${auth.currentUser.uid}/${systemName}`);
+        try {
+          await set(systemRef, { ...systemsData[index], Location: newLocation });
+          // Update the state
+          const updatedSystemsData = [...systemsData];
+          updatedSystemsData[index].Location = newLocation;
+          setSystemsData(updatedSystemsData);
+        } catch (error) {
+          console.error("Error updating location:", error);
+        }
+    };      
+
     /*Fetch All User's Systems*/
     useEffect(() => {
         const fetchSystemsData = async () => {
@@ -103,14 +117,23 @@ const AllSystems = ({ sidebarExpanded }) => {
                             </table>
                             <table className="table-body">
                                 <tbody>
-                                    {systemsData.map(system => (
-                                        <tr key={system.systemName}>
-                                            <td>{system.systemName}</td>
-                                            <td>{system.Location}</td>
-                                            <td className={system.Status ? 'status-good' : 'status-bad'}>
-                                                {system.Status ? "Good" : "Needs Attention!"}
-                                            </td>
-                                        </tr>
+                                    {systemsData.map((system, index) => (
+                                    <tr key={system.systemName}>
+                                        <td>{system.systemName}</td>
+                                        <td>
+                                        <select
+                                            value={system.Location}
+                                            className="custom-select location"
+                                            onChange={(e) => handleLocationChange(e, system.systemName, index)}>
+                                            {Object.keys(countriesCoordinates).map(country => (
+                                            <option key={country} value={country}>{country}</option>
+                                            ))}
+                                        </select>
+                                        </td>
+                                        <td className={system.Status ? 'status-good' : 'status-bad'}>
+                                        {system.Status ? "Good" : "Needs Attention!"}
+                                        </td>
+                                    </tr>
                                     ))}
                                 </tbody>
                             </table>
