@@ -60,7 +60,7 @@ export const addNewSystem = async (userId) => {
         // Updates to be made in the database
         const updates = {};
         updates[nextSystemIdentifier] = {
-            location: "Canada", // Initial data for the new system
+            Location: "Canada", // Initial data for the new system
             // ... any other initial data
         };
 
