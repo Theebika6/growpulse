@@ -73,8 +73,9 @@
 }
 
 .table-body tbody {
-    height: 240px; /* Set a minimum height */
+    height: 230px;
     display: table;
+    margin-top: 10px;
     width: 100%;
 }
 
