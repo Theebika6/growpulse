@@ -5,7 +5,7 @@ import '../Common/background.css';
 import worldMap from './countries-110m.json';
 import countriesCoordinates from './countriesCoordinates.json';
 import { database, auth } from '../../firebaseConfig';
-import { ref, get, set } from 'firebase/database';
+import { ref, get, set, onValue } from 'firebase/database';
 
 const AllSystems = ({ sidebarExpanded }) => {
     const [systemsData, setSystemsData] = useState([]);
@@ -62,6 +62,30 @@ const AllSystems = ({ sidebarExpanded }) => {
 
         fetchSystemsData();
     }, []);
+
+    useEffect(() => {
+        const currentUser = auth.currentUser;
+        if (currentUser) {
+            const userRef = ref(database, `Registered Users/${currentUser.uid}`);
+    
+            const unsubscribe = onValue(userRef, (snapshot) => {
+                const fetchedSystemsData = [];
+                snapshot.forEach(childSnapshot => {
+                    const systemName = childSnapshot.key;
+                    if (systemName.startsWith("System")) {
+                        const { Location, Status } = childSnapshot.val();
+                        fetchedSystemsData.push({ systemName, Location, Status });
+                    }
+                });
+                setSystemsData(fetchedSystemsData);
+            }, {
+                onlyOnce: false
+            });
+    
+            // Cleanup subscription on component unmount
+            return () => unsubscribe();
+        }
+    }, []);    
 
     return (
         <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}>
