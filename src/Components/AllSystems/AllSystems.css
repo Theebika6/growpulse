@@ -39,6 +39,13 @@
     flex-direction: column;
     align-items: stretch;
     margin-right: 10px;
+    margin-top: 20px;
+    transition: margin-top 0.3s ease;
+}
+
+.sidebar-collapsed .table-curr-sys{
+    transition: margin-top 0.3s ease;
+    height: 100%;
 }
 
 .table-header, .table-body {
@@ -70,6 +77,12 @@
     flex-grow: 1;
     max-height: 240px;
     overflow-y: auto;
+    transition: max-height 0.3s ease;
+}
+
+.sidebar-collapsed .table-body{
+    max-height: 300px;
+    transition: max-height 0.3s ease;
 }
 
 .table-body tbody {

@@ -81,7 +81,7 @@ const AllSystems = ({ sidebarExpanded }) => {
                                 return (
                                 <Marker key={country} coordinates={coordinates}>
                                     <circle r={17} fill="#0099ff" stroke="#fff" strokeWidth={2} />
-                                    <text textAnchor="middle" y={4} style={{ fontSize: 24, fontWeight: 'bold', fill: '#FFF' }}>
+                                    <text textAnchor="middle" y={5} style={{ fontSize: 24, fontWeight: 'bold', fill: '#FFF' }}>
                                     {count}
                                     </text>
                                 </Marker>
