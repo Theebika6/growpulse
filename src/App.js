@@ -39,7 +39,7 @@ const App = () => {
                 {isLoggedIn && isEmailVerified ? (
                     <Routes>
                         <Route path="/" element={<Navigate to="/allSystems" />} />
-                        <Route path="/allSystems" element={<AllSystems />} />
+                        <Route path="/allSystems" element={<AllSystems key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
                         <Route path="/Overview/:systemName" element={<Overview key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
                         <Route path="/systemControl/:systemName" element={<SystemControl key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
                     </Routes>

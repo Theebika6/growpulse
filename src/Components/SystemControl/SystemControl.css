@@ -256,7 +256,7 @@
 .slider-container input[type="range"]::-webkit-slider-thumb {
     width: 20px;
     height: 20px;
-    background: #0096ff;
+    background: #505050;
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -267,7 +267,7 @@
 .slider-container input[type="range"]::-moz-range-thumb {
     width: 20px;
     height: 20px;
-    background: #0096ff;
+    background: #505050;
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -275,11 +275,11 @@
 }
 
 .slider-container input[type="range"]:hover::-webkit-slider-thumb {
-    background: #0096ff;
+    background: #505050;
 }
 
 .slider-container input[type="range"]:hover::-moz-range-thumb {
-    background: #0096ff;
+    background: #505050;
 }
 
 .humidity-value {

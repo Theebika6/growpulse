@@ -1,0 +1,17 @@
+.allSystems {
+    margin-left: 15rem;
+    margin-top: 6rem;
+    transition: margin-left 0.3s ease;
+}
+
+.sidebar-collapsed .allSystems {
+    margin-left: 2rem;
+}
+
+.map-container {
+    width: 50%;
+}
+
+.geography:focus {
+    outline: none; 
+}
