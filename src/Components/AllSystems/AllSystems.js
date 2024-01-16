@@ -80,8 +80,8 @@ const AllSystems = ({ sidebarExpanded }) => {
                                 if (!coordinates) return null;
                                 return (
                                 <Marker key={country} coordinates={coordinates}>
-                                    <circle r={10} fill="#FF5533" stroke="#fff" strokeWidth={2} />
-                                    <text textAnchor="middle" y={-12} style={{ fontSize: 14, fontWeight: 'bold' }}>
+                                    <circle r={17} fill="#0099ff" stroke="#fff" strokeWidth={2} />
+                                    <text textAnchor="middle" y={4} style={{ fontSize: 24, fontWeight: 'bold', fill: '#FFF' }}>
                                     {count}
                                     </text>
                                 </Marker>
