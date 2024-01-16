@@ -5,7 +5,7 @@ import '../Common/background.css';
 import worldMap from './countries-110m.json';
 import countriesCoordinates from './countriesCoordinates.json';
 import { database, auth } from '../../firebaseConfig';
-import { ref, get, set, onValue } from 'firebase/database';
+import { ref, get, update, onValue } from 'firebase/database';
 
 const AllSystems = ({ sidebarExpanded }) => {
     const [systemsData, setSystemsData] = useState([]);
@@ -21,8 +21,9 @@ const AllSystems = ({ sidebarExpanded }) => {
         const newLocation = event.target.value;
         // Update the database
         const systemRef = ref(database, `Registered Users/${auth.currentUser.uid}/${systemName}`);
+    
         try {
-          await set(systemRef, { ...systemsData[index], Location: newLocation });
+          await update(systemRef, { Location: newLocation });
           // Update the state
           const updatedSystemsData = [...systemsData];
           updatedSystemsData[index].Location = newLocation;
@@ -30,7 +31,7 @@ const AllSystems = ({ sidebarExpanded }) => {
         } catch (error) {
           console.error("Error updating location:", error);
         }
-    };      
+    };         
 
     /*Fetch All User's Systems*/
     useEffect(() => {
