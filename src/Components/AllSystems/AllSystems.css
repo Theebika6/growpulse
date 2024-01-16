@@ -47,6 +47,7 @@
     height: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
+    text-align: center;
 }
 
 .current-systems table thead {

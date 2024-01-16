@@ -83,7 +83,7 @@ const AllSystems = ({ sidebarExpanded }) => {
                                     <td>{system.systemName}</td>
                                     <td>{system.Location}</td>
                                     <td className={system.Status ? 'status-good' : 'status-bad'}>
-                                        {system.Status ? "Good" : "Bad"}
+                                        {system.Status ? "Good" : "Needs Attention!"}
                                     </td>
                                 </tr>
                             ))}
