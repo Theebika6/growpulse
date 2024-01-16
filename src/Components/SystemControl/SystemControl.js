@@ -226,6 +226,7 @@ const SystemControl = ({ sidebarExpanded }) => {
     /* Live Feed Fetching */
     useEffect(() => {
         setPhValue(0);
+        setPhAuto(false);
 
         fetchPhValue((newPhValue) => {
             setFlashUpdate(true);
