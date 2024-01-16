@@ -459,7 +459,7 @@ export const getDailyChartData = (selectedDay, liveData) => {
         data.tdsValue,
         data.phValue,
         data.AirTemperature,
-        data.AirHumidity,
+        data.Humidity,
         data.WaterTemperature,
     ]);
 
