@@ -69,26 +69,30 @@ const AllSystems = ({ sidebarExpanded }) => {
                     </div>
                     <div className="container current-systems">
                         <h3>Your Current Systems</h3>
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>System Name</th>
-                                <th>Location</th>
-                                <th>Status</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {systemsData.map(system => (
-                                <tr key={system.systemName}>
-                                    <td>{system.systemName}</td>
-                                    <td>{system.Location}</td>
-                                    <td className={system.Status ? 'status-good' : 'status-bad'}>
-                                        {system.Status ? "Good" : "Needs Attention!"}
-                                    </td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
+                        <div className="table-curr-sys">
+                            <table className="table-header">
+                                <thead>
+                                    <tr>
+                                        <th>System Name</th>
+                                        <th>Location</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <table className="table-body">
+                                <tbody>
+                                    {systemsData.map(system => (
+                                        <tr key={system.systemName}>
+                                            <td>{system.systemName}</td>
+                                            <td>{system.Location}</td>
+                                            <td className={system.Status ? 'status-good' : 'status-bad'}>
+                                                {system.Status ? "Good" : "Needs Attention!"}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div className="container Live-Feed-AllSystems">
                         <h3>Live Feed</h3>
