@@ -60,7 +60,7 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 12px 15px;
-    text-align: left;
+    text-align: center;
 }
 
 .current-systems table tbody tr:hover {
