@@ -82,7 +82,9 @@ const AllSystems = ({ sidebarExpanded }) => {
                                 <tr key={system.systemName}>
                                     <td>{system.systemName}</td>
                                     <td>{system.Location}</td>
-                                    <td>{system.Status ? "Good" : "Bad"}</td>
+                                    <td className={system.Status ? 'status-good' : 'status-bad'}>
+                                        {system.Status ? "Good" : "Bad"}
+                                    </td>
                                 </tr>
                             ))}
                             </tbody>
