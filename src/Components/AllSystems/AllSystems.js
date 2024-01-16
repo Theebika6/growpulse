@@ -11,7 +11,7 @@ const AllSystems = ({ sidebarExpanded }) => {
                 <header>
                     <h2 className="Header">Quick view of all of your systems:</h2>
                 </header>
-                <main>
+                <main className='overview-main'>
                     <div className="map-container">
                         <ComposableMap>
                             <Geographies geography={worldMap}>
@@ -32,6 +32,22 @@ const AllSystems = ({ sidebarExpanded }) => {
                                 }
                             </Geographies>
                         </ComposableMap>
+                    </div>
+                    <div className="container current-systems">
+                        <h3>Your Current Systems</h3>
+                           
+                    </div>
+                    <div className="container Live-Feed-AllSystems">
+                        <h3>Live Feed</h3>
+                           
+                    </div>
+                    <div className="container indiv-costs">
+                        <h3>Solution Costs</h3>
+                           
+                    </div>
+                    <div className="container total-costs">
+                        <h3>Total Sol. Costs</h3>
+                           
                     </div>
                 </main>
             </div>

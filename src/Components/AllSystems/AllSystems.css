@@ -2,16 +2,65 @@
     margin-left: 15rem;
     margin-top: 6rem;
     transition: margin-left 0.3s ease;
+    margin-right: 10px;
 }
 
 .sidebar-collapsed .allSystems {
     margin-left: 2rem;
 }
 
-.map-container {
-    width: 50%;
-}
+/*Map*/
 
 .geography:focus {
     outline: none; 
+}
+
+.map-container{
+    max-width: 40rem;
+    align-content: center;
+    justify-content: center;
+}
+
+/*Current Systems*/
+
+.current-systems{
+    grid-row: 1;
+    grid-column: 2;
+}
+
+/*Live Feed*/
+
+.Live-Feed-AllSystems{
+    grid-row: 2;
+    grid-column: 1 / span 2;
+    height: 15rem;
+}
+
+/*Solution Costs*/
+
+.indiv-costs{
+    grid-row: 3;
+    grid-column: 1 / span 2;
+    height: 15rem;
+    margin-right: 16rem;
+    transition: margin-right 0.3s ease;
+}
+
+.sidebar-collapsed .indiv-costs{
+    margin-right: 18rem;
+    transition: margin-right 0.3s ease;
+}
+
+/*Total Costs*/
+.total-costs{
+    grid-row: 3;
+    grid-column: 2;
+    height: 15rem;
+    margin-left: 9rem;
+    transition: margin-left 0.3s ease;
+}
+
+.sidebar-collapsed .total-costs{
+    margin-left: 13.25rem;
+    transition: margin-left 0.3s ease;
 }
