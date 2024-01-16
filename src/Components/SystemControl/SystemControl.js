@@ -1,11 +1,15 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState, useRef} from 'react';
 import {auth, database} from "../../firebaseConfig";
 import { fetchPhMinMax, updatePhMinMax, togglePhAuto } from '../Services/phServices';
 import {fetchLightTimes, updateLightStart, updateLightEnd, toggleLightScheduleAuto} from '../Services/LightServices';
 import {fetchHumidityData, updateHumidityLevel, toggleAutomationHumidity} from '../Services/HumidityServices';
 import {fetchInitialDosingValues, updateInitialDosingValues, toggleStartInitialDosing} from '../Services/InitialDosingServices'
 import './SystemControl.css';
+import {createPhChart, createTdsChart, fetchLastSevenSamples} from "../Services/chartsServices";
 import { ref, onValue, off } from 'firebase/database';
+import {fetchPhAutoStatus, fetchPhValue} from "../Services/phServices";
+import {fetchTdsValue} from "../Services/tdsServices";
+import * as pumpService from "../Services/DosingPumpsServices";
 import on from '../Images/Dashboard/ON.png';
 import off_icon from '../Images/Dashboard/OFF.png';
 import {useParams} from "react-router-dom";
@@ -34,6 +38,24 @@ const SystemControl = ({ sidebarExpanded }) => {
     const { systemName } = useParams();
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const [hasUnsavedChangesInitialDosing, sethasUnsavedChangesInitialDosing] = useState(false);
+
+    const [flashUpdate, setFlashUpdate] = useState(false);
+    const [recentSamples, setRecentSamples] = useState({
+        TDS: [],
+        pH: [],
+        Times: []
+    });
+
+    const [phValue, setPhValue] = useState(null);
+    const [phAuto, setPhAuto] = useState(false);
+    const [dp1Status, setDP1Status] = useState(false);
+    const [dp2Status, setDP2Status] = useState(false); 
+    const phChartRef = useRef(null);
+
+    const [tdsValue, setTdsValue] = useState(null);
+    const [dp3Status, setDP3Status] = useState(false);
+    const [dp4Status, setDP4Status] = useState(false); 
+    const TdsChartRef = useRef(null);
 
     const [initialValues, setInitialValues] = useState({
         phMin: null,
@@ -157,6 +179,7 @@ const SystemControl = ({ sidebarExpanded }) => {
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     const saveChanges = () => {
             updatePhMinMax(phMin, phMax, systemName);
             updateLightStart(lightStart, systemName);
@@ -199,9 +222,167 @@ const SystemControl = ({ sidebarExpanded }) => {
         checkForUnsavedInitialDosing();
     }, [amountSolutionA, amountSolutionB, systemVolume, checkForUnsavedInitialDosing]);
 
+    /* pH */
+    /* Live Feed Fetching */
+    useEffect(() => {
+        setPhValue(0);
+
+        fetchPhValue((newPhValue) => {
+            setFlashUpdate(true);
+
+            setTimeout(() => {
+                setFlashUpdate(false);
+            }, 1000);
+
+            setPhValue(newPhValue);
+        }, systemName);
+
+        fetchPhAutoStatus(setPhAuto, systemName);
+    }, [systemName]);
+
+    /* TDS */
+    /* Live Feed Fetching */
+    useEffect(() => {
+        setTdsValue(0);
+
+        fetchTdsValue((newTdsValue) => {
+            setFlashUpdate(true);
+
+            setTimeout(() => {
+                setFlashUpdate(false);
+            }, 1000);
+
+            setTdsValue(newTdsValue);
+        }, systemName);
+
+    }, [systemName]);
+
+    /* Button State Fetching */ 
+    // For DP1
+    useEffect(() => {
+        const unsubscribeDP1 = pumpService.fetchDP1Status(setDP1Status, systemName);
+        return unsubscribeDP1;
+    }, [systemName]);
+
+    useEffect(() => {
+        const unsubscribeDP2 = pumpService.fetchDP2Status(setDP2Status, systemName);
+        return unsubscribeDP2;
+    }, [systemName]);
+
+    useEffect(() => {
+        const unsubscribeDP3 = pumpService.fetchDP3Status(setDP3Status, systemName);
+        return unsubscribeDP3;
+    }, [systemName]);
+
+    useEffect(() => {
+        const unsubscribeDP4 = pumpService.fetchDP4Status(setDP4Status, systemName);
+        return unsubscribeDP4;
+    }, [systemName]);
+
+    /* Live Feed Charts */
+    const initializeCharts = useCallback(() => {
+
+        setTimeout(() => {
+            const phCtx = document.getElementById('phChart');
+            const tdsCtx = document.getElementById('tdsChart');
+
+            if (recentSamples.pH.length > 0) {
+                phChartRef.current = createPhChart(phCtx.getContext('2d'), recentSamples, phChartRef);
+            } 
+            if (recentSamples.TDS.length > 0) {
+                TdsChartRef.current = createTdsChart(tdsCtx.getContext('2d'), recentSamples, TdsChartRef);
+            }
+
+        }, 0);
+    }, [recentSamples]);
+
+    useEffect(() => {
+        initializeCharts();
+    }, [recentSamples, initializeCharts]);
+
+    const resetChartData = () => {
+        // Destroy existing charts
+        if (phChartRef.current) phChartRef.current.destroy();
+        if (TdsChartRef.current) TdsChartRef.current.destroy();
+    
+        // Reset chart data
+        setRecentSamples({
+            TDS: [],
+            pH: [],
+            Times: []
+        });
+    };
+
+    useEffect(() => {
+
+        resetChartData();
+        fetchLastSevenSamples(setRecentSamples, systemName);
+
+    }, [systemName]);
+
     return (
         <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}> {/* css file in src/Components/Common */}
             <div className="systemControl">
+                <div className='system-Control-Live-Feed'>
+                    {/*pH*/}
+                    <div className="container ph-LiveFeed">
+                        <h3>pH</h3>
+                        <div className="control">
+                            <div>
+                                <p className={flashUpdate ? 'flash-animation' : ''}>{phValue}</p>
+                            </div>
+                            <div className="control auto">
+                                <div className="control buttons">
+                                    <button
+                                        className={`arrow-button ${dp1Status ? 'active' : ''}`}
+                                        onClick={() => pumpService.handleTogglePump('DP1', systemName)}
+                                    >
+                                        &#9650;
+                                    </button>
+                                    <button
+                                        className={`arrow-button ${dp2Status ? 'active' : ''}`}
+                                        onClick={() => pumpService.handleTogglePump('DP2', systemName)}
+                                    >
+                                        &#9660;
+                                    </button>
+                                </div>
+                                <h5 style={phAuto ? { color: '#52e000', fontSize: '16px' } : {}} >Auto</h5>
+                            </div>
+                        </div>
+                        <div className="chart">
+                            <canvas id="phChart"></canvas>
+                        </div>
+                    </div>
+
+                    {/*TDS*/}
+                    <div className="container TDS-LiveFeed">
+                        <h3>TDS</h3>
+                        <div className="control">
+                            <div>
+                                <p className={flashUpdate ? 'flash-animation' : ''}>{tdsValue} ppm</p>
+                            </div>
+                            <div className="control auto tds-buttons">
+                                <div className="control button">
+                                    <button
+                                        className={`arrow-button ${dp3Status ? 'active' : ''}`}
+                                        onClick={() => pumpService.handleTogglePump('DP3',systemName)}
+                                    >
+                                        A
+                                    </button>
+                                    <button
+                                        className={`arrow-button ${dp4Status ? 'active' : ''}`}
+                                        onClick={() => pumpService.handleTogglePump('DP4',systemName)}
+                                    >
+                                        B
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="chart">
+                            <canvas id="tdsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
                 <div className="table-container">
                     <table className="system-table">
                         <thead>

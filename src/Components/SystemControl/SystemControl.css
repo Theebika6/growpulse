@@ -27,7 +27,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding-top: 7rem;
+    padding-top: 1rem;
 }
 
 .system-table {
@@ -345,4 +345,20 @@
 
 .toggle-cell{
     width: 120px;
+}
+
+.system-Control-Live-Feed{
+    display: flex;
+    flex-direction: row;
+    margin-top: 7rem;
+    width: 100;
+}
+
+.ph-LiveFeed{
+    width: 48%;
+}
+
+.TDS-LiveFeed {
+    width: 48%;
+    margin-left: 1rem;
 }

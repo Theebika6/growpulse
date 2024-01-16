@@ -264,7 +264,6 @@ const Overview = ({ sidebarExpanded }) => {
     }, [loadImage]);
 
     /* Live Feed Charts */
-
     const initializeCharts = useCallback(() => {
 
         setTimeout(() => {
