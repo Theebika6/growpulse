@@ -3,6 +3,7 @@
     margin-top: 6rem;
     transition: margin-left 0.3s ease;
     margin-right: 10px;
+    margin-bottom: 1rem;
 }
 
 .sidebar-collapsed .allSystems {
@@ -60,6 +61,8 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 12px 15px;
+    font-size: 14px;
+    text-wrap: nowrap;
     text-align: center;
 }
 
@@ -112,6 +115,7 @@
 .indiv-costs{
     grid-row: 3;
     grid-column: 1 / span 2;
+    width: 60%;
     height: 15rem;
     margin-right: 16rem;
     transition: margin-right 0.3s ease;
@@ -127,40 +131,10 @@
     grid-row: 3;
     grid-column: 2;
     height: 15rem;
-    margin-left: 9rem;
-    transition: margin-left 0.3s ease;
+    width: 80%;
+    left: 20%;
 }
 
 .sidebar-collapsed .total-costs{
-    margin-left: 13.25rem;
     transition: margin-left 0.3s ease;
-}
-
-@media screen and (min-width: 1440px) {
-
-    .indiv-costs{
-        grid-row: 3;
-        grid-column: 1 / span 2;
-        height: 15rem;
-        margin-right: 19rem;
-        transition: margin-right 0.3s ease;
-    }
-
-    .sidebar-collapsed .indiv-costs{
-        margin-right: 24rem;
-        transition: margin-right 0.3s ease;
-    }
-
-    .total-costs {
-        grid-row: 3;
-        grid-column: 2;
-        height: 15rem;
-        margin-left: 17rem;
-        transition: margin-left 0.3s ease;
-    }
-
-    .sidebar-collapsed .total-costs {
-        margin-left: 18rem;
-        transition: margin-left 0.3s ease;
-    }
 }
