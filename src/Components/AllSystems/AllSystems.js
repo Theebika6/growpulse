@@ -180,7 +180,7 @@ const AllSystems = ({ sidebarExpanded }) => {
                             <table className="table-header">
                                 <thead>
                                     <tr>
-                                        <th>System Name</th>
+                                        <th>System</th>
                                         <th>Location</th>
                                         <th>Status</th>
                                     </tr>
@@ -212,35 +212,41 @@ const AllSystems = ({ sidebarExpanded }) => {
                     </div>
                     <div className="container Live-Feed-AllSystems">
                         <h3>Live Feed</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>System</th>
-                                    <th>pH</th>
-                                    <th>TDS</th>
-                                    <th>Water Temperature</th>
-                                    <th>Humidity</th>
-                                    <th>Air Temperature</th>
-                                    <th>Light</th>
-                                    <th>Main Pump</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {systemsData.map(system => (
-                                <tr key={system.systemName}>
-                                    <td>{system.systemName}</td>
-                                    <td>{liveFeedData[system.systemName]?.phValue ?? '-'}</td>
-                                    <td>{liveFeedData[system.systemName]?.tdsValue ?? '-'}</td>
-                                    <td>{liveFeedData[system.systemName]?.waterTemperature ?? '-'}</td>
-                                    <td>{liveFeedData[system.systemName]?.humidity ?? '-'}</td>
-                                    <td>{liveFeedData[system.systemName]?.airTemperature ?? '-'}</td>
-                                    <td>{liveFeedData[system.systemName]?.lightPower ?? '-'}</td>
-                                    <td>{liveFeedData[system.systemName]?.pumpPower ?? '-'}</td>
-                                </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                     </div>
+                        <div className="table-live-feed">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>System</th>
+                                        <th>pH</th>
+                                        <th>TDS</th>
+                                        <th>Water Temp.</th>
+                                        <th>Humidity</th>
+                                        <th>Air Temp.</th>
+                                        <th>Light</th>
+                                        <th>Main Pump</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {systemsData.map(system => (
+                                        <tr key={system.systemName}>
+                                            <td>{system.systemName}</td>
+                                            <td>{liveFeedData[system.systemName]?.phValue ?? '-'}</td>
+                                            <td>{liveFeedData[system.systemName]?.tdsValue ? `${liveFeedData[system.systemName].tdsValue} ppm` : '-'}</td>
+                                            <td>{liveFeedData[system.systemName]?.waterTemperature ? `${liveFeedData[system.systemName].waterTemperature} °C` : '-'}</td>
+                                            <td>{liveFeedData[system.systemName]?.humidity ? `${liveFeedData[system.systemName].humidity} %` : '-'}</td>
+                                            <td>{liveFeedData[system.systemName]?.airTemperature ? `${liveFeedData[system.systemName].airTemperature} °C` : '-'}</td>
+                                            <td className={liveFeedData[system.systemName]?.lightPower === 'ON' ? 'status-good' : 'status-bad'}>
+                                                {liveFeedData[system.systemName]?.lightPower ?? '-'}
+                                            </td>
+                                            <td className={liveFeedData[system.systemName]?.pumpPower === 'ON' ? 'status-good' : 'status-bad'}>
+                                                {liveFeedData[system.systemName]?.pumpPower ?? '-'}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <div className="container indiv-costs">
                         <h3>Solution Costs</h3>
                         {/* Add solution costs content here */}
