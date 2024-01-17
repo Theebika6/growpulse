@@ -200,6 +200,37 @@ const AllSystems = ({ sidebarExpanded }) => {
         });
     }, [systemsData]);    
 
+    const calculateTotalDispensed = () => {
+        let totalA = 0, totalB = 0, totalUp = 0, totalDown = 0;
+        let countA = 0, countB = 0, countUp = 0, countDown = 0;
+    
+        Object.values(dispensedData).forEach(system => {
+            if(system.A !== '-') {
+                totalA += parseFloat(system.A) || 0;
+                countA++;
+            }
+            if(system.B !== '-') {
+                totalB += parseFloat(system.B) || 0;
+                countB++;
+            }
+            if(system.Up !== '-') {
+                totalUp += parseFloat(system.Up) || 0;
+                countUp++;
+            }
+            if(system.Down !== '-') {
+                totalDown += parseFloat(system.Down) || 0;
+                countDown++;
+            }
+        });
+    
+        return { 
+            totalA: countA > 0 ? totalA + ' mL' : '-',
+            totalB: countB > 0 ? totalB + ' mL' : '-',
+            totalUp: countUp > 0 ? totalUp + ' mL' : '-',
+            totalDown: countDown > 0 ? totalDown + ' mL' : '-'
+        };
+    };     
+
     return (
         <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}>
             <div className="allSystems">
@@ -342,7 +373,25 @@ const AllSystems = ({ sidebarExpanded }) => {
                     </div>
                     <div className="container total-costs">
                         <h3>Total Amount Dispensed</h3>
-                        {/* Add total solution costs content here */}
+                        <h5>Total amount of solutions used: </h5>
+                        <div className="total-dispensed-grid">
+                            <div className="grid-item">
+                                <span className="amount">{calculateTotalDispensed().totalA}</span>
+                                <span className="label">of Sol. A</span>
+                            </div>
+                            <div className="grid-item">
+                                <span className="amount">{calculateTotalDispensed().totalB}</span>
+                                <span className="label">of Sol. B</span>
+                            </div>
+                            <div className="grid-item">
+                                <span className="amount">{calculateTotalDispensed().totalUp}</span>
+                                <span className="label">of pH Up</span>
+                            </div>
+                            <div className="grid-item">
+                                <span className="amount">{calculateTotalDispensed().totalDown}</span>
+                                <span className="label">of pH Down</span>
+                            </div>
+                        </div>
                     </div>
                 </main>
             </div>

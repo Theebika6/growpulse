@@ -186,6 +186,8 @@
     border-bottom: 1px solid #ddd;
 }
 
+.Live-Feed-AllSystems table tbody td:nth-child(1) { font-weight: bold; }
+
 /*Solution Costs*/
 
 .indiv-costs{
@@ -245,6 +247,8 @@
     border-bottom: 1px solid #ddd;
 }
 
+.amount-disp table tbody td:nth-child(1) { font-weight: bold; }
+
 /*Total Costs*/
 .total-costs{
     grid-row: 3;
@@ -257,6 +261,32 @@
 .sidebar-collapsed .total-costs{
     transition: margin-left 0.3s ease;
 }
+
+.total-dispensed-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.grid-item {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.amount {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.label {
+    font-size: 13px;
+    margin-left: 30px;
+    margin-top: 3px;
+    color: #585858;
+    text-wrap: nowrap;
+}
+
 
 @keyframes flash {
     0% { color: rgb(25, 200, 0);  }
