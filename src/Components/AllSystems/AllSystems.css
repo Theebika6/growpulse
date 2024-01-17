@@ -1,9 +1,6 @@
 .allSystems {
-    margin-left: 15rem;
-    margin-top: 6rem;
     transition: margin-left 0.3s ease;
-    margin-right: 10px;
-    margin-bottom: 1rem;
+    margin: 6rem 10px 1rem 15rem;
 }
 
 .sidebar-collapsed .allSystems {
@@ -11,7 +8,6 @@
 }
 
 /*Map*/
-
 .geography:focus {
     outline: none; 
 }
@@ -23,7 +19,6 @@
 }
 
 /*Current Systems*/
-
 .current-systems {
     grid-row: 1;
     grid-column: 2;

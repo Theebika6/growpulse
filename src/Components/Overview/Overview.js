@@ -719,30 +719,28 @@ const Overview = ({ sidebarExpanded }) => {
                     <div className="container log-container">
                         <h3>Disposal History</h3>
                         <div className="disposal-table">
-                            <table>
+                            <table className="table-header-disp">
                                 <thead>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Amount</th>
-                                    <th>Time</th>
-                                    <th>Date</th>
-                                </tr>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Time</th>
+                                        <th>Date</th>
+                                    </tr>
                                 </thead>
                             </table>
-                            <div className="table-body-wrapper">
-                                <table>
-                                    <tbody>
-                                    {logHistory.map((entry, index) => (
-                                        <tr key={index}>
-                                            <td>{entry.Type}</td>
-                                            <td>{entry.Amount}mL</td>
-                                            <td>{entry.time}</td>
-                                            <td>{entry.date}</td>
-                                        </tr>
-                                    ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                            <table className="table-body-disp">
+                                <tbody>
+                                {logHistory.map((entry, index) => (
+                                    <tr key={index}>
+                                        <td>{entry.Type}</td>
+                                        <td>{entry.Amount}mL</td>
+                                        <td>{entry.time}</td>
+                                        <td>{entry.date}</td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
