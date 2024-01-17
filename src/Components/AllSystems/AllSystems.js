@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { ComposableMap, Geographies, Geography, Marker } from "react-simple-maps";
 import './AllSystems.css';
 import '../Common/background.css';
@@ -6,9 +6,55 @@ import worldMap from './countries-110m.json';
 import countriesCoordinates from './countriesCoordinates.json';
 import { database, auth } from '../../firebaseConfig';
 import { ref, get, update, onValue } from 'firebase/database';
+import { fetchPhValue } from '../Services/phServices';
+import { fetchTdsValue } from '../Services/tdsServices';
+import { fetchAirTemperature } from '../Services/AirTempServices';
+import { fetchWaterTempValue } from '../Services/WaterTempServices';
+import { fetchHumidity } from '../Services/HumidityServices';
+import { fetchLigthPowerStatus } from '../Services/LightServices';
+import { fetchMainPumpStatus } from '../Services/MainPumpServices';
 
 const AllSystems = ({ sidebarExpanded }) => {
     const [systemsData, setSystemsData] = useState([]);
+    const [liveFeedData, setLiveFeedData] = useState({});
+    
+    const formatPowerStatus = (status) => status ? 'ON' : 'OFF';
+
+    const fetchSystemLiveFeed = useCallback((systemName) => {
+        const updateSensorData = (sensorName, value, isNumeric = false) => {
+
+            let formattedValue = '-';
+            if (isNumeric) {
+                if (value !== null && !isNaN(parseFloat(value))) {
+                    formattedValue = parseFloat(value).toFixed(2);
+                }
+            } else {
+                formattedValue = value !== null ? value : '-';
+            }
+
+            setLiveFeedData(prevState => ({
+                ...prevState,
+                [systemName]: {
+                    ...prevState[systemName],
+                    [sensorName]: formattedValue
+                }
+            }));
+        };
+
+        fetchPhValue(value => updateSensorData('phValue', value, true), systemName);
+        fetchTdsValue(value => updateSensorData('tdsValue', value, true), systemName);
+        fetchAirTemperature(value => updateSensorData('airTemperature', value, true), systemName);
+        fetchWaterTempValue(value => updateSensorData('waterTemperature', value, true), systemName);
+        fetchHumidity(value => updateSensorData('humidity', value), systemName);
+        fetchLigthPowerStatus(value => updateSensorData('lightPower', formatPowerStatus(value)), systemName);
+        fetchMainPumpStatus(value => updateSensorData('pumpPower', formatPowerStatus(value)), systemName);
+    }, []);
+
+    useEffect(() => {
+        systemsData.forEach(system => {
+            fetchSystemLiveFeed(system.systemName);
+        });
+    }, [systemsData, fetchSystemLiveFeed]);
     
 
     /*Map Locations*/
@@ -86,7 +132,7 @@ const AllSystems = ({ sidebarExpanded }) => {
             // Cleanup subscription on component unmount
             return () => unsubscribe();
         }
-    }, []);    
+    }, []);
 
     return (
         <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}>
@@ -166,8 +212,35 @@ const AllSystems = ({ sidebarExpanded }) => {
                     </div>
                     <div className="container Live-Feed-AllSystems">
                         <h3>Live Feed</h3>
-                        {/* Add live feed content here */}
-                    </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>System</th>
+                                    <th>pH</th>
+                                    <th>TDS</th>
+                                    <th>Water Temperature</th>
+                                    <th>Humidity</th>
+                                    <th>Air Temperature</th>
+                                    <th>Light</th>
+                                    <th>Main Pump</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {systemsData.map(system => (
+                                <tr key={system.systemName}>
+                                    <td>{system.systemName}</td>
+                                    <td>{liveFeedData[system.systemName]?.phValue ?? '-'}</td>
+                                    <td>{liveFeedData[system.systemName]?.tdsValue ?? '-'}</td>
+                                    <td>{liveFeedData[system.systemName]?.waterTemperature ?? '-'}</td>
+                                    <td>{liveFeedData[system.systemName]?.humidity ?? '-'}</td>
+                                    <td>{liveFeedData[system.systemName]?.airTemperature ?? '-'}</td>
+                                    <td>{liveFeedData[system.systemName]?.lightPower ?? '-'}</td>
+                                    <td>{liveFeedData[system.systemName]?.pumpPower ?? '-'}</td>
+                                </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                     </div>
                     <div className="container indiv-costs">
                         <h3>Solution Costs</h3>
                         {/* Add solution costs content here */}

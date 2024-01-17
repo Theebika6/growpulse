@@ -9,7 +9,7 @@ export const fetchAirTemperature = async (setAirTemperature, systemName) => {
         onValue(AirTemperatureRef, debounce((snapshot) => {
             const value = snapshot.val();
             if (value !== null) {
-                setAirTemperature(value.toFixed(2));
+                setAirTemperature(value.toFixed(1));
             }
         }, 1000));
     }

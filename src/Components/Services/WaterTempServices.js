@@ -9,7 +9,7 @@ export const fetchWaterTempValue = async (setWaterTempValue, systemName) => {
         onValue(waterTempRef, debounce((snapshot) => {
             const value = snapshot.val();
             if (value !== null) {
-                setWaterTempValue(value.toFixed(2));
+                setWaterTempValue(value.toFixed(1));
             }
         }, 1000));
     }
