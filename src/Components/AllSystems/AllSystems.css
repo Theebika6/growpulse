@@ -214,3 +214,13 @@
 .sidebar-collapsed .total-costs{
     transition: margin-left 0.3s ease;
 }
+
+@keyframes flash {
+    0% { color: rgb(25, 200, 0);  }
+    50% { color: rgb(25, 200, 0); }
+    100% { color: black; }
+}
+
+.flash-animation {
+    animation: flash 1s;
+}

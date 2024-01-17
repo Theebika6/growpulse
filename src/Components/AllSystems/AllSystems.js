@@ -17,6 +17,7 @@ import { fetchMainPumpStatus } from '../Services/MainPumpServices';
 const AllSystems = ({ sidebarExpanded }) => {
     const [systemsData, setSystemsData] = useState([]);
     const [liveFeedData, setLiveFeedData] = useState({});
+    const [flashUpdate, setFlashUpdate] = useState({});
     
     const formatPowerStatus = (status) => status ? 'ON' : 'OFF';
 
@@ -39,6 +40,18 @@ const AllSystems = ({ sidebarExpanded }) => {
                     [sensorName]: formattedValue
                 }
             }));
+
+            setFlashUpdate(prevState => ({
+                ...prevState,
+                [sensorName]: true
+            }));
+        
+            setTimeout(() => {
+                setFlashUpdate(prevState => ({
+                    ...prevState,
+                    [sensorName]: false
+                }));
+            }, 1000);
         };
 
         fetchPhValue(value => updateSensorData('phValue', value, true), systemName);
@@ -230,11 +243,11 @@ const AllSystems = ({ sidebarExpanded }) => {
                                     {systemsData.map(system => (
                                         <tr key={system.systemName}>
                                             <td>{system.systemName}</td>
-                                            <td>{liveFeedData[system.systemName]?.phValue ?? '-'}</td>
-                                            <td>{liveFeedData[system.systemName]?.tdsValue ? `${liveFeedData[system.systemName].tdsValue} ppm` : '-'}</td>
-                                            <td>{liveFeedData[system.systemName]?.waterTemperature ? `${liveFeedData[system.systemName].waterTemperature} °C` : '-'}</td>
-                                            <td>{liveFeedData[system.systemName]?.humidity ? `${liveFeedData[system.systemName].humidity} %` : '-'}</td>
-                                            <td>{liveFeedData[system.systemName]?.airTemperature ? `${liveFeedData[system.systemName].airTemperature} °C` : '-'}</td>
+                                            <td className={flashUpdate['phValue'] ? 'flash-animation' : ''}> {liveFeedData[system.systemName]?.phValue ?? '-'} </td>
+                                            <td className={flashUpdate['tdsValue'] ? 'flash-animation' : ''}>{liveFeedData[system.systemName]?.tdsValue ? `${liveFeedData[system.systemName].tdsValue} ppm` : '-'}</td>
+                                            <td className={flashUpdate['waterTemperature'] ? 'flash-animation' : ''}>{liveFeedData[system.systemName]?.waterTemperature ? `${liveFeedData[system.systemName].waterTemperature} °C` : '-'}</td>
+                                            <td className={flashUpdate['humidity'] ? 'flash-animation' : ''}>{liveFeedData[system.systemName]?.humidity ? `${liveFeedData[system.systemName].humidity} %` : '-'}</td>
+                                            <td className={flashUpdate['airTemperature'] ? 'flash-animation' : ''}>{liveFeedData[system.systemName]?.airTemperature ? `${liveFeedData[system.systemName].airTemperature} °C` : '-'}</td>
                                             <td className={liveFeedData[system.systemName]?.lightPower === 'ON' ? 'status-good' : 'status-bad'}>
                                                 {liveFeedData[system.systemName]?.lightPower ?? '-'}
                                             </td>
