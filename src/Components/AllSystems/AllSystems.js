@@ -19,11 +19,9 @@ const AllSystems = ({ sidebarExpanded }) => {
     const [liveFeedData, setLiveFeedData] = useState({});
     const [flashUpdate, setFlashUpdate] = useState({});
     
-    const formatPowerStatus = (status) => status ? 'ON' : 'OFF';
 
     const fetchSystemLiveFeed = useCallback((systemName) => {
         const updateSensorData = (sensorName, value, isNumeric = false) => {
-
             let formattedValue = '-';
             if (isNumeric) {
                 if (value !== null && !isNaN(parseFloat(value))) {
@@ -32,7 +30,7 @@ const AllSystems = ({ sidebarExpanded }) => {
             } else {
                 formattedValue = value !== null ? value : '-';
             }
-
+    
             setLiveFeedData(prevState => ({
                 ...prevState,
                 [systemName]: {
@@ -40,7 +38,7 @@ const AllSystems = ({ sidebarExpanded }) => {
                     [sensorName]: formattedValue
                 }
             }));
-
+    
             setFlashUpdate(prevState => ({
                 ...prevState,
                 [sensorName]: true
@@ -53,14 +51,38 @@ const AllSystems = ({ sidebarExpanded }) => {
                 }));
             }, 1000);
         };
+    
+        // Initialize light and pump status to OFF if not already set
+        setLiveFeedData(prevState => {
+            if (!prevState[systemName]) {
+                return {
+                    ...prevState,
+                    [systemName]: {
+                        lightPower: 'OFF',
+                        pumpPower: 'OFF'
+                    }
+                };
+            }
+            return prevState;
+        });
 
         fetchPhValue(value => updateSensorData('phValue', value, true), systemName);
         fetchTdsValue(value => updateSensorData('tdsValue', value, true), systemName);
         fetchAirTemperature(value => updateSensorData('airTemperature', value, true), systemName);
         fetchWaterTempValue(value => updateSensorData('waterTemperature', value, true), systemName);
         fetchHumidity(value => updateSensorData('humidity', value), systemName);
-        fetchLigthPowerStatus(value => updateSensorData('lightPower', formatPowerStatus(value)), systemName);
-        fetchMainPumpStatus(value => updateSensorData('pumpPower', formatPowerStatus(value)), systemName);
+
+        fetchLigthPowerStatus(value => {
+            if (value === true) {
+                updateSensorData('lightPower', 'ON');
+            }
+        }, systemName);
+        fetchMainPumpStatus(value => {
+            if (value === true) {
+                updateSensorData('pumpPower', 'ON');
+            }
+        }, systemName);
+
     }, []);
 
     useEffect(() => {
@@ -97,10 +119,10 @@ const AllSystems = ({ sidebarExpanded }) => {
         const fetchSystemsData = async () => {
             const currentUser = auth.currentUser;
             if (currentUser) {
-                const userRef = ref(database, `Registered Users/${currentUser.uid}`); // Updated for Firebase v9
+                const userRef = ref(database, `Registered Users/${currentUser.uid}`); 
 
                 try {
-                    const snapshot = await get(userRef); // Updated for Firebase v9
+                    const snapshot = await get(userRef); 
                     if (snapshot.exists()) {
                         const fetchedSystemsData = [];
                         snapshot.forEach(childSnapshot => {
@@ -142,7 +164,6 @@ const AllSystems = ({ sidebarExpanded }) => {
                 onlyOnce: false
             });
     
-            // Cleanup subscription on component unmount
             return () => unsubscribe();
         }
     }, []);
@@ -248,10 +269,10 @@ const AllSystems = ({ sidebarExpanded }) => {
                                             <td className={flashUpdate['waterTemperature'] ? 'flash-animation' : ''}>{liveFeedData[system.systemName]?.waterTemperature ? `${liveFeedData[system.systemName].waterTemperature} °C` : '-'}</td>
                                             <td className={flashUpdate['humidity'] ? 'flash-animation' : ''}>{liveFeedData[system.systemName]?.humidity ? `${liveFeedData[system.systemName].humidity} %` : '-'}</td>
                                             <td className={flashUpdate['airTemperature'] ? 'flash-animation' : ''}>{liveFeedData[system.systemName]?.airTemperature ? `${liveFeedData[system.systemName].airTemperature} °C` : '-'}</td>
-                                            <td className={liveFeedData[system.systemName]?.lightPower === 'ON' ? 'status-good' : 'status-bad'}>
+                                            <td className={liveFeedData[system.systemName]?.lightPower === 'OFF' ? 'status-bad' : 'status-good'}>
                                                 {liveFeedData[system.systemName]?.lightPower ?? '-'}
                                             </td>
-                                            <td className={liveFeedData[system.systemName]?.pumpPower === 'ON' ? 'status-good' : 'status-bad'}>
+                                            <td className={liveFeedData[system.systemName]?.pumpPower === 'OFF' ? 'status-bad' : 'status-good'}>
                                                 {liveFeedData[system.systemName]?.pumpPower ?? '-'}
                                             </td>
                                         </tr>
