@@ -1,5 +1,13 @@
 import { auth, firestore } from "../../firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+
+const updateTotalAmounts = async (logHistoryDocRef, totals) => {
+    try {
+        await updateDoc(logHistoryDocRef, totals);
+    } catch (error) {
+        console.error("Error updating totals: ", error);
+    }
+};
 
 export const fetchLogHistory = async (setLogHistory, systemName) => {
     const currentUser = auth.currentUser;
@@ -9,6 +17,7 @@ export const fetchLogHistory = async (setLogHistory, systemName) => {
         if (docSnapshot.exists()) {
             const data = docSnapshot.data();
             let formattedData = [];
+            let totals = { totalUp: 0, totalDown: 0, totalA: 0, totalB: 0 };
 
             for (const [date, timeEntries] of Object.entries(data)) {
                 for (const [time, logData] of Object.entries(timeEntries)) {
@@ -20,6 +29,17 @@ export const fetchLogHistory = async (setLogHistory, systemName) => {
                             Type: typeDisplayMapping[type] || type,
                             Amount: amount
                         });
+
+                        if (type.includes('Up')) {
+                            totals.totalUp += amount;
+                        } else if (type.includes('Down')) {
+                            totals.totalDown += amount;
+                        } else if (type.includes('A')) {
+                            totals.totalA += amount;
+                        } else if (type.includes('B')) {
+                            totals.totalB += amount;
+                        }
+
                     }
                 }
             }
@@ -35,11 +55,13 @@ export const fetchLogHistory = async (setLogHistory, systemName) => {
             formattedData = formattedData.map(({ rawDate, ...item }) => item);
 
             setLogHistory(formattedData);
+            await updateTotalAmounts(logHistoryDocRef, totals);
         } else {
             setLogHistory([]);
         }
     }
 };
+
 
 const formatDate = (date) => {
     // eslint-disable-next-line

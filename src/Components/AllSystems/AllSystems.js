@@ -4,8 +4,9 @@ import './AllSystems.css';
 import '../Common/background.css';
 import worldMap from './countries-110m.json';
 import countriesCoordinates from './countriesCoordinates.json';
-import { database, auth } from '../../firebaseConfig';
+import { database, auth, firestore } from '../../firebaseConfig';
 import { ref, get, update, onValue } from 'firebase/database';
+import { doc, getDoc } from "firebase/firestore";
 import { fetchPhValue } from '../Services/phServices';
 import { fetchTdsValue } from '../Services/tdsServices';
 import { fetchAirTemperature } from '../Services/AirTempServices';
@@ -13,7 +14,6 @@ import { fetchWaterTempValue } from '../Services/WaterTempServices';
 import { fetchHumidity } from '../Services/HumidityServices';
 import { fetchLigthPowerStatus } from '../Services/LightServices';
 import { fetchMainPumpStatus } from '../Services/MainPumpServices';
-import { fetchLogHistory } from '../Services/HistoryServices';
 
 
 const AllSystems = ({ sidebarExpanded }) => {
@@ -172,52 +172,33 @@ const AllSystems = ({ sidebarExpanded }) => {
     }, []);
 
     /*Dispense Amounts*/
-    const aggregateDispensedData = (logHistory) => {
-        const aggregatedData = {};
-        logHistory.forEach(entry => {
-            const { systemName, Type, Amount } = entry;
-            if (!aggregatedData[systemName]) {
-                aggregatedData[systemName] = { A: 0, B: 0, Up: 0, Down: 0 };
-            }
-            switch (Type) {
-                case 'Manual pH Up':
-                case 'Automatic pH Up':
-                    aggregatedData[systemName].Up += Amount;
-                    break;
-                case 'Manual pH Down':
-                case 'Automatic pH Down':
-                    aggregatedData[systemName].Down += Amount;
-                    break;
-                case 'Initial Dose Sol. A':
-                case 'Manual Dose Sol. A':
-                    aggregatedData[systemName].A += Amount;
-                    break;
-                case 'Initial Dose Sol. B':
-                case 'Manual Dose Sol. B':
-                    aggregatedData[systemName].B += Amount;
-                    break;
-            }
-        });
-        return aggregatedData;
-    };
-
     useEffect(() => {
-        const initialDispensedData = {};
+        const fetchDispensedTotals = async (systemName) => {
+            // Correct path for Firestore document
+            const dispensedDocRef = doc(firestore, `Registered Users/${auth.currentUser.uid}/${systemName}/DispenseHistory`);
+            try {
+                const docSnapshot = await getDoc(dispensedDocRef);
+                if (docSnapshot.exists()) {
+                    const dispensedTotals = docSnapshot.data();
+                    setDispensedData(prevState => ({
+                        ...prevState,
+                        [systemName]: {
+                            A: dispensedTotals.totalA !== null && dispensedTotals.totalA !== undefined ? dispensedTotals.totalA + ' mL' : '-',
+                            B: dispensedTotals.totalB !== null && dispensedTotals.totalB !== undefined ? dispensedTotals.totalB + ' mL' : '-',
+                            Up: dispensedTotals.totalUp !== null && dispensedTotals.totalUp !== undefined ? dispensedTotals.totalUp + ' mL' : '-',
+                            Down: dispensedTotals.totalDown !== null && dispensedTotals.totalDown !== undefined ? dispensedTotals.totalDown + ' mL' : '-',
+                        }
+                    }));
+                }
+            } catch (error) {
+                console.error("Error fetching dispensed totals:", error);
+            }
+        };
+    
         systemsData.forEach(system => {
-            initialDispensedData[system.systemName] = { A: 0, B: 0, Up: 0, Down: 0 };
+            fetchDispensedTotals(system.systemName);
         });
-        setDispensedData(initialDispensedData);
-    }, [systemsData]);
-
-    useEffect(() => {
-        // ... existing code for fetching and aggregating dispensed data
-        systemsData.forEach(system => {
-            fetchLogHistory((logHistory) => {
-                const aggregatedData = aggregateDispensedData(logHistory);
-                setDispensedData(prevData => ({ ...prevData, [system.systemName]: aggregatedData }));
-            }, system.systemName);
-        });
-    }, [systemsData]);
+    }, [systemsData]);    
 
     return (
         <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}>
@@ -339,10 +320,10 @@ const AllSystems = ({ sidebarExpanded }) => {
                                 <thead>
                                     <tr>
                                         <th>System</th>
-                                        <th>A (mL)</th>
-                                        <th>B (mL)</th>
-                                        <th>Up (mL)</th>
-                                        <th>Down (mL)</th>
+                                        <th>A</th>
+                                        <th>B</th>
+                                        <th>Up</th>
+                                        <th>Down</th>
                                     </tr>
                                 </thead>
                                 <tbody>
