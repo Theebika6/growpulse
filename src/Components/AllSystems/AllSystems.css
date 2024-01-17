@@ -51,7 +51,7 @@
 
 .table-header thead {
     background-color: #969696;
-    text-wrap: nowrap;
+    white-space: nowrap;
 }
 
 .current-systems table thead th:nth-child(1) { width: 30%; }
@@ -71,18 +71,16 @@
 .table-body {
     display: block;
     flex-grow: 1;
-    max-height: 240px;
+    height: 250px;
     overflow-y: auto;
     transition: max-height 0.3s ease;
 }
 
 .sidebar-collapsed .table-body{
-    max-height: 300px;
     transition: max-height 0.3s ease;
 }
 
 .table-body tbody {
-    height: 230px;
     display: table;
     margin-top: 10px;
     width: 100%;
@@ -108,12 +106,9 @@
     padding: 0.75rem;
     border-spacing: 0;
     border-collapse: separate;
+    text-align: center;
     font-size: 15px;
     color: #666;
-}
-
-.current-systems table tbody tr:last-child td {
-    border-bottom: none;
 }
 
 .status-good {
@@ -281,7 +276,7 @@
     margin-left: 30px;
     margin-top: 3px;
     color: #585858;
-    text-wrap: nowrap;
+    white-space: nowrap;
 }
 
 
