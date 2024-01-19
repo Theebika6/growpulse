@@ -324,6 +324,7 @@ const SystemControl = ({ sidebarExpanded }) => {
     return (
         <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}> {/* css file in src/Components/Common */}
             <div className="systemControl">
+                <h2>{systemName}'s Settings:</h2>
                 <div className='system-Control-Live-Feed'>
                     {/*pH*/}
                     <div className="container ph-LiveFeed">

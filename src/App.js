@@ -8,6 +8,7 @@ import TopbarController from './Components/Header/HeaderController';
 import AllSystems from "./Components/AllSystems/AllSystems";
 import Overview from "./Components/Overview/Overview";
 import SystemControl from './Components/SystemControl/SystemControl';
+import SystemAlerts from "./Components/SystemAlerts/systemAlerts";
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -42,6 +43,7 @@ const App = () => {
                         <Route path="/allSystems" element={<AllSystems key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
                         <Route path="/Overview/:systemName" element={<Overview key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
                         <Route path="/systemControl/:systemName" element={<SystemControl key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
+                        <Route path="/systemAlerts" element={<SystemAlerts key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
                     </Routes>
                 ) : (
                     <Routes>
