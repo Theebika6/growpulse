@@ -10,7 +10,8 @@ import {
   togglePhAlert,
   toggleTdsAlert,
   toggleWaterTempAlert
-} from '../Services/AlertsServices'; // Adjust the path as needed
+} from '../Services/AlertsServices';
+import scroll from '../Images/HeaderIcons/scroll-grey.png'
 
 const SystemAlerts = ({ sidebarExpanded }) => {
   const [systems, setSystems] = useState([]);
@@ -92,7 +93,7 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                   <td>{system.systemName}</td>
                   <td>
                     <div className='min-max-alerts'>
-                        <div>
+                        <div className='thresholds-alerts'>
                             <span className='min-max-style'>Min:</span> {phMin?.toFixed(2) || '-'}
                             <span className='min-max-style'>Max:</span> {phMax?.toFixed(2) || '-'}
                         </div>
@@ -105,8 +106,8 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                   {/*TDS*/}
                   <td>
                     <div className='min-max-alerts'>
-                      <div>
-                        <span className='min-max-style'>Min:</span> {tdsMin?.toFixed(2) || '-'}
+                      <div className='thresholds-alerts'>
+                        <span className='min-max-style'>Min:</span> {tdsMin ? `${tdsMin.toFixed(2)} ppm` : '-'}
                       </div>
                       <button className="toggle-button alerts-buttons" onClick={() => toggleTdsAlert(tdsAlert, () => {}, system.systemName)}>
                         <img src={tdsAlert ? on : off_icon} alt="Toggle" />
@@ -118,22 +119,22 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                   {/*Water Temp*/}
                   <td>
                     <div className='min-max-alerts'>
-                      <div>
-                        <span className='min-max-style'>Min:</span> {waterTempMin?.toFixed(2) || '-'}
-                        <span className='min-max-style'>Max:</span> {waterTempMax?.toFixed(2) || '-'}
-                      </div>
-                      <button className="toggle-button alerts-buttons" onClick={() => toggleWaterTempAlert(waterTempAlert, () => {}, system.systemName)}>
-                        <img src={waterTempAlert ? on : off_icon} alt="Toggle" />
-                        <span className="auto-label alert-label" style={{ color: waterTempAlert ? '#0096ff' : 'grey' }}>Alert</span>
-                      </button>
+                      < div className='thresholds-alerts'>
+                            <span className='min-max-style'>Min:</span> {waterTempMin ? `${waterTempMin.toFixed(2)} °C` : '-'}
+                            <span className='min-max-style'>Max:</span> {waterTempMax ? `${waterTempMax.toFixed(2)} °C` : '-'}
+                        </div>
+                        <button className="toggle-button alerts-buttons" onClick={() => toggleWaterTempAlert(waterTempAlert, () => {}, system.systemName)}>
+                            <img src={waterTempAlert ? on : off_icon} alt="Toggle" />
+                            <span className="auto-label alert-label" style={{ color: waterTempAlert ? '#0096ff' : 'grey' }}>Alert</span>
+                        </button>
                     </div>
                   </td>
 
                   {/*Humidity*/}
                   <td>
                     <div className='min-max-alerts'>
-                      <div>
-                        <span className='min-max-style'>Offset:</span> {humidityOffset?.toFixed(2) || '-'}
+                      <div className='thresholds-alerts'>
+                      <span className='min-max-style'>Offset:</span> {humidityOffset ? `${humidityOffset.toFixed(2)}%` : '-'}
                       </div>
                       <button className="toggle-button alerts-buttons" onClick={() => toggleHumidityAlert(humidityAlert, () => {}, system.systemName)}>
                         <img src={humidityAlert ? on : off_icon} alt="Toggle" />
@@ -145,9 +146,9 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                   {/*Air Temp*/}
                   <td>
                     <div className='min-max-alerts'>
-                      <div>
-                        <span className='min-max-style'>Min:</span> {airTempMin?.toFixed(2) || '-'}
-                        <span className='min-max-style'>Max:</span> {airTempMax?.toFixed(2) || '-'}
+                      <div className='thresholds-alerts'>
+                        <span className='min-max-style'>Min:</span> {airTempMin ? `${airTempMin.toFixed(2)} °C` : '-'}
+                        <span className='min-max-style'>Max:</span> {airTempMax ? `${airTempMax.toFixed(2)} °C` : '-'}
                       </div>
                       <button className="toggle-button alerts-buttons" onClick={() => toggleAirTempAlert(airTempAlert, () => {}, system.systemName)}>
                         <img src={airTempAlert ? on : off_icon} alt="Toggle" />
@@ -160,7 +161,7 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                   <td>
                     <div className='min-max-alerts'>
                       <div>
-                        <span className='min-max-style'>Malfunction alert:</span>
+                        <span className='min-max-style'>Malfunction Alert:</span>
                       </div>
                       <button className="toggle-button alerts-buttons" onClick={() => toggleDpAlert(pumpsAlert, () => {}, system.systemName)}>
                         <img src={pumpsAlert ? on : off_icon} alt="Toggle" />
@@ -173,7 +174,7 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                   <td>
                     <div className='min-max-alerts'>
                       <div>
-                        <span className='min-max-style'>Malfunction alert:</span>
+                        <span className='min-max-style'>Malfunction Alert:</span>
                       </div>
                       <button className="toggle-button alerts-buttons" onClick={() => toggleCamAlert(camAlert, () => {}, system.systemName)}>
                         <img src={camAlert ? on : off_icon} alt="Toggle" />
@@ -181,13 +182,17 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                       </button>
                     </div>
                   </td>
-
-
                 </tr>
               );
             })}
           </tbody>
         </table>
+        <div className="scroll-indicator">
+          <span>Scroll for more</span>
+          <div>
+            <img src={scroll} alt="Scroll" className='scroll'/>
+          </div>
+        </div>
       </div>
     </div>
   );
