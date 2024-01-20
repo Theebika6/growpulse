@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './systemAlerts.css';
 import on from '../Images/Dashboard/ON.png';
 import off_icon from '../Images/Dashboard/OFF.png';
+import settingsIcon from '../Images/SidebarIcons/settings.png';
 import { auth, database } from "../../firebaseConfig";
 import { ref, onValue } from "firebase/database";
 import {
@@ -90,7 +91,12 @@ const SystemAlerts = ({ sidebarExpanded }) => {
 
               return (
                 <tr key={system.systemName}>
-                  <td>{system.systemName}</td>
+                  <td>
+                    <div className="system-name-container">
+                      {system.systemName}
+                      <img src={settingsIcon} alt="Settings" className="settings-icon" />
+                    </div>
+                  </td>
                   <td>
                     <div className='min-max-alerts'>
                         <div className='thresholds-alerts'>

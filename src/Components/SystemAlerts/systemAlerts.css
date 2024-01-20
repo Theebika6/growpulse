@@ -55,3 +55,22 @@
     width: 16px;
     margin-left: 1px
 }
+
+.system-name-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.settings-icon {
+    opacity: 0;
+    width: 20px;
+    margin-left: 10px;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.system-alerts tr:hover .settings-icon {
+    opacity: 1;
+}
