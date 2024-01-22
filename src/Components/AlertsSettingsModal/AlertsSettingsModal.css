@@ -1,23 +1,25 @@
 .alerts-modal-container {
-    position: fixed; /* Fixed position to cover the whole screen */
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    background-color: rgba(0, 0, 0, 0.5); 
     display: flex;
-    align-items: center; /* Aligns modal vertically */
-    justify-content: center; /* Aligns modal horizontally */
-    z-index: 1000; /* Ensure it's above other content */
+    align-items: center; 
+    justify-content: center; 
+    z-index: 1000; 
 }
 
 .alerts-modal {
     background: white;
     border-radius: 10px;
     padding: 20px;
+    align-content: center;
+    text-align: center;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    width: 500px;
-    z-index: 1001; /* Ensures modal is above the overlay */
+    width: 50%;
+    z-index: 1001; 
 }
 
 .alerts-modal h2 {
@@ -39,6 +41,12 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 5px;
+}
+
+.alerts-modal input[type='number']{
+    width: 23%;
+    text-align: center;
+    margin-right: 20px;
 }
 
 .alerts-modal button {
