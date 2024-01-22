@@ -12,10 +12,18 @@ import {
   toggleTdsAlert,
   toggleWaterTempAlert
 } from '../Services/AlertsServices';
-import scroll from '../Images/HeaderIcons/scroll-grey.png'
+import scroll from '../Images/HeaderIcons/scroll-grey.png';
+import AlertsSettingsModal from '../AlertsSettingsModal/AlertsSettingsModal';
 
 const SystemAlerts = ({ sidebarExpanded }) => {
   const [systems, setSystems] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedSystem, setSelectedSystem] = useState(null);
+
+  const openModal = (systemName) => {
+    setSelectedSystem(systemName);
+    setIsModalOpen(true);
+  };
 
   useEffect(() => {
     const fetchSystems = () => {
@@ -94,7 +102,7 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                   <td>
                     <div className="system-name-container">
                       {system.systemName}
-                      <img src={settingsIcon} alt="Settings" className="settings-icon" />
+                      <img src={settingsIcon} alt="Settings" className="settings-icon" onClick={() => openModal(system.systemName)} />
                     </div>
                   </td>
                   <td>
@@ -200,6 +208,9 @@ const SystemAlerts = ({ sidebarExpanded }) => {
           </div>
         </div>
       </div>
+      {isModalOpen && (
+          <AlertsSettingsModal systemName={selectedSystem} onClose={() => setIsModalOpen(false)} />
+      )}
     </div>
   );
 };

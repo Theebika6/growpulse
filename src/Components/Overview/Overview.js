@@ -324,6 +324,7 @@ const Overview = ({ sidebarExpanded }) => {
 
     /*Daily Avg Chart*/
     useEffect(() => {
+        setDayAverages([]);
         fetchDayAverages(setDayAverages, systemName);
     }, [systemName]);
 
@@ -426,6 +427,7 @@ const Overview = ({ sidebarExpanded }) => {
     const [selectedDay, setSelectedDay] = useState(getCurrentFormattedDate());
 
     useEffect(() => {
+        setLiveData([]);
         const fetchAndSetLiveData = async () => {
             await fetchLiveData(setLiveData, systemName);
         };

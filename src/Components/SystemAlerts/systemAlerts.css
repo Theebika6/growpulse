@@ -71,6 +71,10 @@
     cursor: pointer;
 }
 
+.alerts-table thead {
+    white-space: nowrap;
+}
+
 .system-alerts tr:hover .settings-icon {
     opacity: 1;
 }
