@@ -24,6 +24,7 @@
 
 .alerts-modal h2 {
     margin-top: 0;
+    margin-bottom: 2rem;
 }
 
 .alerts-modal table {
@@ -32,19 +33,16 @@
 }
 
 .alerts-modal table td {
-    padding: 8px;
+    padding: 2rem;
     border-bottom: 1px solid #ddd;
 }
 
-.alerts-modal input[type='number'], .alerts-modal input[type='range'] {
+.alerts-modal input[type='number']{
     margin-left: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 5px;
-}
-
-.alerts-modal input[type='number']{
-    width: 23%;
+    width: 50%;
     text-align: center;
     margin-right: 20px;
 }
@@ -61,4 +59,9 @@
 
 .alerts-modal button:hover {
     background-color: #0077cc;
+}
+
+.slider-text span{
+    margin-left: 20px;
+    margin-bottom: 10px;
 }
