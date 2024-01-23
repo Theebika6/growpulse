@@ -25,6 +25,13 @@ const SystemAlerts = ({ sidebarExpanded }) => {
     setIsModalOpen(true);
   };
 
+  const scrollToRight = () => {
+    window.scrollTo({
+      left: document.body.scrollWidth,
+      behavior: 'smooth'
+    });
+  };
+
   useEffect(() => {
     const fetchSystems = () => {
       const currentUser = auth.currentUser;
@@ -206,10 +213,10 @@ const SystemAlerts = ({ sidebarExpanded }) => {
             })}
           </tbody>
         </table>
-        <div className="scroll-indicator">
-          <span>Scroll for more</span>
+        <div className="scroll-indicator" onClick={scrollToRight}>
+          <h5>Scroll for more</h5>
           <div>
-            <img src={scroll} alt="Scroll" className='scroll'/>
+            <img src={scroll} alt="Scroll" className='scroll' />
           </div>
         </div>
       </div>
