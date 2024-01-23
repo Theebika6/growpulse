@@ -33,10 +33,9 @@ const SystemAlerts = ({ sidebarExpanded }) => {
         onValue(systemsRef, (snapshot) => {
           const systemsData = [];
           snapshot.forEach((childSnapshot) => {
-            // Check if the key includes 'System'
             if (childSnapshot.key.includes('System')) {
               const systemName = childSnapshot.key;
-              const alerts = childSnapshot.val().Alerts || {}; // Provide a default empty object
+              const alerts = childSnapshot.val().Alerts || {};
               systemsData.push({
                 systemName,
                 alerts
@@ -54,6 +53,12 @@ const SystemAlerts = ({ sidebarExpanded }) => {
   // Function to safely access nested properties
   const safelyGetNestedProperty = (object, ...keys) => {
     return keys.reduce((obj, key) => (obj && obj[key] != null) ? obj[key] : null, object);
+  };
+
+  // Function to format number or return default value
+  const formatNumber = (number, defaultValue = '-') => {
+    const num = parseFloat(number);
+    return isNaN(num) ? defaultValue : num.toFixed(2);
   };
 
   return (
@@ -74,22 +79,22 @@ const SystemAlerts = ({ sidebarExpanded }) => {
           </thead>
           <tbody>
             {systems.map((system) => {
-              const phMin = safelyGetNestedProperty(system, 'alerts', 'pH', 'phMin');
-              const phMax = safelyGetNestedProperty(system, 'alerts', 'pH', 'phMax');
+              const phMin = formatNumber(safelyGetNestedProperty(system, 'alerts', 'pH', 'phMin'));
+              const phMax = formatNumber(safelyGetNestedProperty(system, 'alerts', 'pH', 'phMax'));
               const phAlert = safelyGetNestedProperty(system, 'alerts', 'pH', 'phAlert');
 
-              const tdsMin = safelyGetNestedProperty(system, 'alerts', 'TDS', 'tdsMin');
+              const tdsMin = formatNumber(safelyGetNestedProperty(system, 'alerts', 'TDS', 'tdsMin'));
               const tdsAlert = safelyGetNestedProperty(system, 'alerts', 'TDS', 'tdsAlert');
 
-              const waterTempMin = safelyGetNestedProperty(system, 'alerts', 'WaterTemperature', 'waterTempMin');
-              const waterTempMax = safelyGetNestedProperty(system, 'alerts', 'WaterTemperature', 'waterTempMax');
+              const waterTempMin = formatNumber(safelyGetNestedProperty(system, 'alerts', 'WaterTemperature', 'waterTempMin'));
+              const waterTempMax = formatNumber(safelyGetNestedProperty(system, 'alerts', 'WaterTemperature', 'waterTempMax'));
               const waterTempAlert = safelyGetNestedProperty(system, 'alerts', 'WaterTemperature', 'waterTempAlert');
 
-              const humidityOffset = safelyGetNestedProperty(system, 'alerts', 'Humidity', 'humidityOffset');
+              const humidityOffset = formatNumber(safelyGetNestedProperty(system, 'alerts', 'Humidity', 'humidityOffset'));
               const humidityAlert = safelyGetNestedProperty(system, 'alerts', 'Humidity', 'humidityAlert');
 
-              const airTempMin = safelyGetNestedProperty(system, 'alerts', 'AirTemperature', 'airTempMin');
-              const airTempMax = safelyGetNestedProperty(system, 'alerts', 'AirTemperature', 'airTempMax');
+              const airTempMin = formatNumber(safelyGetNestedProperty(system, 'alerts', 'AirTemperature', 'airTempMin'));
+              const airTempMax = formatNumber(safelyGetNestedProperty(system, 'alerts', 'AirTemperature', 'airTempMax'));
               const airTempAlert = safelyGetNestedProperty(system, 'alerts', 'AirTemperature', 'airTempAlert');
 
               const pumpsAlert = safelyGetNestedProperty(system, 'alerts', 'DP', 'dpAlert');
@@ -107,21 +112,21 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                   </td>
                   <td>
                     <div className='min-max-alerts'>
-                        <div className='thresholds-alerts'>
-                            <span className='min-max-style'>Min:</span> {phMin?.toFixed(2) || '-'}
-                            <span className='min-max-style'>Max:</span> {phMax?.toFixed(2) || '-'}
-                        </div>
-                        <button className="toggle-button alerts-buttons" onClick={() => togglePhAlert(phAlert, () => {}, system.systemName)}>
-                            <img src={phAlert ? on : off_icon} alt="Toggle" />
-                            <span className="auto-label alert-label" style={{ color: phAlert ? '#0096ff' : 'grey' }}>Alert</span>
-                        </button>
+                      <div className='thresholds-alerts'>
+                        <span className='min-max-style'>Min:</span> {phMin}
+                        <span className='min-max-style'>Max:</span> {phMax}
+                      </div>
+                      <button className="toggle-button alerts-buttons" onClick={() => togglePhAlert(phAlert, () => {}, system.systemName)}>
+                          <img src={phAlert ? on : off_icon} alt="Toggle" />
+                          <span className="auto-label alert-label" style={{ color: phAlert ? '#0096ff' : 'grey' }}>Alert</span>
+                      </button>
                     </div>
                   </td>
                   {/*TDS*/}
                   <td>
                     <div className='min-max-alerts'>
                       <div className='thresholds-alerts'>
-                        <span className='min-max-style'>Min:</span> {tdsMin ? `${tdsMin.toFixed(2)} ppm` : '-'}
+                        <span className='min-max-style'>Min:</span> {tdsMin ? `${tdsMin} ppm` : '-'}
                       </div>
                       <button className="toggle-button alerts-buttons" onClick={() => toggleTdsAlert(tdsAlert, () => {}, system.systemName)}>
                         <img src={tdsAlert ? on : off_icon} alt="Toggle" />
@@ -134,8 +139,8 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                   <td>
                     <div className='min-max-alerts'>
                       < div className='thresholds-alerts'>
-                            <span className='min-max-style'>Min:</span> {waterTempMin ? `${waterTempMin.toFixed(2)} °C` : '-'}
-                            <span className='min-max-style'>Max:</span> {waterTempMax ? `${waterTempMax.toFixed(2)} °C` : '-'}
+                            <span className='min-max-style'>Min:</span> {waterTempMin ? `${waterTempMin} °C` : '-'}
+                            <span className='min-max-style'>Max:</span> {waterTempMax ? `${waterTempMax} °C` : '-'}
                         </div>
                         <button className="toggle-button alerts-buttons" onClick={() => toggleWaterTempAlert(waterTempAlert, () => {}, system.systemName)}>
                             <img src={waterTempAlert ? on : off_icon} alt="Toggle" />
@@ -148,7 +153,7 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                   <td>
                     <div className='min-max-alerts'>
                       <div className='thresholds-alerts'>
-                      <span className='min-max-style'>Offset:</span> {humidityOffset ? `${humidityOffset.toFixed(2)}%` : '-'}
+                      <span className='min-max-style'>Offset:</span> {humidityOffset ? `${humidityOffset}%` : '-'}
                       </div>
                       <button className="toggle-button alerts-buttons" onClick={() => toggleHumidityAlert(humidityAlert, () => {}, system.systemName)}>
                         <img src={humidityAlert ? on : off_icon} alt="Toggle" />
@@ -161,8 +166,8 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                   <td>
                     <div className='min-max-alerts'>
                       <div className='thresholds-alerts'>
-                        <span className='min-max-style'>Min:</span> {airTempMin ? `${airTempMin.toFixed(2)} °C` : '-'}
-                        <span className='min-max-style'>Max:</span> {airTempMax ? `${airTempMax.toFixed(2)} °C` : '-'}
+                        <span className='min-max-style'>Min:</span> {airTempMin ? `${airTempMin} °C` : '-'}
+                        <span className='min-max-style'>Max:</span> {airTempMax ? `${airTempMax} °C` : '-'}
                       </div>
                       <button className="toggle-button alerts-buttons" onClick={() => toggleAirTempAlert(airTempAlert, () => {}, system.systemName)}>
                         <img src={airTempAlert ? on : off_icon} alt="Toggle" />

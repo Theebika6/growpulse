@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import './AlertsSettingsModal.css';
 import {
-    fetchPhMin, fetchPhMax,
-    fetchTdsMin,
-    fetchWaterTempMin, fetchWaterTempMax,
-    fetchAirTempMin, fetchAirTempMax,
-    fetchHumidityOffset
+    fetchPhMin, fetchPhMax, updatePhValues,
+    fetchTdsMin, updateTdsMin,
+    fetchWaterTempMin, fetchWaterTempMax, updateWaterTempMin, updateWaterTempMax,
+    fetchAirTempMin, fetchAirTempMax, updateAirTempMin, updateAirTempMax,
+    fetchHumidityOffset, updateHumidityOffset,
 } from '../Services/AlertsServices';
 
 const AlertsSettingsModal = ({ systemName, onClose }) => {
-    const formatValue = (value) => parseFloat(value).toFixed(2);
+    const formatValue = (value) => {
+        const numericValue = parseFloat(value);
+        return isNaN(numericValue) ? '0.00' : numericValue.toFixed(2);
+    };
 
-    const [phMin, setPhMin] = useState('');
-    const [phMax, setPhMax] = useState('');
-    const [tdsMin, setTdsMin] = useState('');
-    const [waterTempMin, setWaterTempMin] = useState('');
-    const [waterTempMax, setWaterTempMax] = useState('');
-    const [airTempMin, setAirTempMin] = useState('');
-    const [airTempMax, setAirTempMax] = useState('');
-    const [humidityOffset, setHumidityOffset] = useState('');
+    const [phMin, setPhMin] = useState('0.00');
+    const [phMax, setPhMax] = useState('0.00');
+    const [tdsMin, setTdsMin] = useState('0.00');
+    const [waterTempMin, setWaterTempMin] = useState('0.00');
+    const [waterTempMax, setWaterTempMax] = useState('0.00');
+    const [airTempMin, setAirTempMin] = useState('0.00');
+    const [airTempMax, setAirTempMax] = useState('0.00');
+    const [humidityOffset, setHumidityOffset] = useState('0.00');
 
     useEffect(() => {
         fetchPhMin(setPhMin, systemName);
@@ -33,16 +36,20 @@ const AlertsSettingsModal = ({ systemName, onClose }) => {
 
     const handleChange = (currentValue, operation, setValue, limitMin, limitMax) => {
         let newValue = parseFloat(currentValue);
-
-        if (operation === 'increment') {
-            newValue = newValue + 1;
-            if (newValue > limitMax) {
-                newValue = limitMax;
-            }
-        } else if (operation === 'decrement') {
-            newValue = newValue - 1;
-            if (newValue < limitMin) {
-                newValue = limitMin;
+    
+        if (isNaN(newValue)) {
+            newValue = limitMin;
+        } else {
+            if (operation === 'increment') {
+                newValue = newValue + 1;
+                if (newValue > limitMax) {
+                    newValue = limitMax;
+                }
+            } else if (operation === 'decrement') {
+                newValue = newValue - 1;
+                if (newValue < limitMin) {
+                    newValue = limitMin;
+                }
             }
         }
         newValue = Math.min(Math.max(newValue, limitMin), limitMax);
@@ -58,6 +65,47 @@ const AlertsSettingsModal = ({ systemName, onClose }) => {
             onClose();
         }
     };
+
+    const saveSettings = async () => {
+        try {
+            // Validate and convert state values to numbers
+            const validatedPhMin = parseFloat(phMin);
+            const validatedPhMax = parseFloat(phMax);
+            const validatedTdsMin = parseFloat(tdsMin);
+            const validatedWaterTempMin = parseFloat(waterTempMin);
+            const validatedWaterTempMax = parseFloat(waterTempMax);
+            const validatedAirTempMin = parseFloat(airTempMin);
+            const validatedAirTempMax = parseFloat(airTempMax);
+            const validatedHumidityOffset = parseFloat(humidityOffset);
+    
+            // Check for invalid numbers (NaN) and out-of-range values
+            if (isNaN(validatedPhMin) || validatedPhMin < 0 || validatedPhMin > validatedPhMax) {
+                throw new Error("Invalid pH minimum value");
+            }
+            if (isNaN(validatedPhMax) || validatedPhMax > 14 || validatedPhMax < validatedPhMin) {
+                throw new Error("Invalid pH maximum value");
+            }
+            // Add similar validation checks for other parameters (TDS, Water Temp, etc.)
+    
+            // Update settings using the validated and converted values
+            await Promise.all([
+                updatePhValues(validatedPhMin, validatedPhMax, systemName),
+                updateTdsMin(validatedTdsMin, systemName),
+                updateWaterTempMin(validatedWaterTempMin, systemName),
+                updateWaterTempMax(validatedWaterTempMax, systemName),
+                updateAirTempMin(validatedAirTempMin, systemName),
+                updateAirTempMax(validatedAirTempMax, systemName),
+                updateHumidityOffset(validatedHumidityOffset, systemName),
+                // Include other update functions as needed
+            ]);
+    
+            console.log('Settings updated successfully');
+            onClose(); // Close the modal or perform other UI updates as necessary
+        } catch (error) {
+            console.error('Error updating settings:', error);
+            // Handle the error in the UI, such as showing an error message to the user
+        }
+    };    
 
     return (
         <div className="alerts-modal-container" onClick={handleOutsideClick}>
@@ -150,6 +198,9 @@ const AlertsSettingsModal = ({ systemName, onClose }) => {
                     </tr>
                     </tbody>
                 </table>
+                <div className='save-button-div'>
+                    <button className="save-button" onClick={saveSettings}>Save</button>
+                </div>
             </div>
         </div>
     );

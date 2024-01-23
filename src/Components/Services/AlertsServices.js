@@ -1,5 +1,5 @@
 import { auth, database } from "../../firebaseConfig";
-import { ref, onValue, set} from "firebase/database";
+import { ref, onValue, set, get} from "firebase/database";
 import { debounce } from "lodash";
 
 /*TDS*/
@@ -11,13 +11,21 @@ export const fetchTdsMin = async (setTdsMin, systemName) => {
         onValue(tdsMinRef, debounce((snapshot) => {
             const value = snapshot.val();
             if (value !== null) {
-                setTdsMin(value.toFixed(2));
+                setTdsMin(parseFloat(value).toFixed(2));
             }
         }, 1000));
     }
 };
 
-export const toggleTdsAlert = (tdsAlert, setTdsAlert, systemName) => {
+export const updateTdsMin = async (tdsMin, systemName) => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+        const tdsMinRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/TDS/tdsMin`);
+        return set(tdsMinRef, parseFloat(tdsMin));
+    }
+};
+
+export const toggleTdsAlert = async (tdsAlert, setTdsAlert, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
         const tdsAlertRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/TDS/tdsAlert`);
@@ -29,7 +37,7 @@ export const toggleTdsAlert = (tdsAlert, setTdsAlert, systemName) => {
     }
 };
 
-export const fetchTdsAlert = (setTdsAlertStatus, systemName) => {
+export const fetchTdsAlert = async (setTdsAlertStatus, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
         const tdsAlertStatusRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/TDS/tdsAlert`);
@@ -55,9 +63,31 @@ export const fetchPhMin = async (setPhMin, systemName) => {
         onValue(phMinRef, debounce((snapshot) => {
             const value = snapshot.val();
             if (value !== null) {
-                setPhMin(value.toFixed(2));
+                setPhMin(parseFloat(value).toFixed(2));
             }
         }, 1000));
+    }
+};
+
+export const updatePhValues = async (phMin, phMax, systemName) => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+        const phMinRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/pH/phMin`);
+        const phMaxRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/pH/phMax`);
+
+        const currentPhMinSnapshot = await get(phMinRef);
+        const currentPhMaxSnapshot = await get(phMaxRef);
+
+        const currentPhMin = parseFloat(currentPhMinSnapshot.val());
+        const currentPhMax = parseFloat(currentPhMaxSnapshot.val());
+
+        if (parseFloat(phMin) > currentPhMax || parseFloat(phMax) < currentPhMin) {
+            console.error("Invalid pH range provided");
+            return;
+        }
+
+        await set(phMinRef, parseFloat(phMin));
+        await set(phMaxRef, parseFloat(phMax));
     }
 };
 
@@ -68,13 +98,13 @@ export const fetchPhMax = async (setPhMax, systemName) => {
         onValue(phMaxRef, debounce((snapshot) => {
             const value = snapshot.val();
             if (value !== null) {
-                setPhMax(value.toFixed(2));
+                setPhMax(parseFloat(value).toFixed(2));
             }
         }, 1000));
     }
 };
 
-export const togglePhAlert = (phAlert, setPhAlert, systemName) => {
+export const togglePhAlert = async (phAlert, setPhAlert, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
         const phAlertRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/pH/phAlert`);
@@ -86,7 +116,7 @@ export const togglePhAlert = (phAlert, setPhAlert, systemName) => {
     }
 };
 
-export const fetchPhAlert = (setPhAlertStatus, systemName) => {
+export const fetchPhAlert = async (setPhAlertStatus, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
         const phAlertStatusRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/pH/phAlert`);
@@ -112,9 +142,17 @@ export const fetchWaterTempMin = async (setWaterTempMin, systemName) => {
         onValue(WaterTempMinRef, debounce((snapshot) => {
             const value = snapshot.val();
             if (value !== null) {
-                setWaterTempMin(value.toFixed(2));
+                setWaterTempMin(parseFloat(value).toFixed(2));
             }
         }, 1000));
+    }
+};
+
+export const updateWaterTempMin = async (WaterTempMin, systemName) => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+        const WaterTempMinRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/WaterTemperature/waterTempMin`);
+        return set(WaterTempMinRef, WaterTempMin);
     }
 };
 
@@ -125,13 +163,21 @@ export const fetchWaterTempMax = async (setWaterTempMax, systemName) => {
         onValue(WaterTempMaxRef, debounce((snapshot) => {
             const value = snapshot.val();
             if (value !== null) {
-                setWaterTempMax(value.toFixed(2));
+                setWaterTempMax(parseFloat(value).toFixed(2));
             }
         }, 1000));
     }
 };
 
-export const toggleWaterTempAlert = (WaterTempAlert, setWaterTempAlert, systemName) => {
+export const updateWaterTempMax = async (WaterTempMax, systemName) => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+        const WaterTempMaxRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/WaterTemperature/waterTempMax`);
+        return set(WaterTempMaxRef, WaterTempMax);
+    }
+};
+
+export const toggleWaterTempAlert = async (WaterTempAlert, setWaterTempAlert, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
         const WaterTempAlertRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/WaterTemperature/waterTempAlert`);
@@ -143,7 +189,7 @@ export const toggleWaterTempAlert = (WaterTempAlert, setWaterTempAlert, systemNa
     }
 };
 
-export const fetchWaterTempAlert = (setWaterTempAlertStatus, systemName) => {
+export const fetchWaterTempAlert = async (setWaterTempAlertStatus, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
         const waterTempAlertStatusRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/WaterTemperature/waterTempAlert`);
@@ -169,9 +215,17 @@ export const fetchAirTempMin = async (setAirTempMin, systemName) => {
         onValue(WaterAirMinRef, debounce((snapshot) => {
             const value = snapshot.val();
             if (value !== null) {
-                setAirTempMin(value.toFixed(2));
+                setAirTempMin(parseFloat(value).toFixed(2));
             }
         }, 1000));
+    }
+};
+
+export const updateAirTempMin = async (AirTempMin, systemName) => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+        const AirTempMinRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/AirTemperature/airTempMin`);
+        return set(AirTempMinRef, AirTempMin);
     }
 };
 
@@ -182,13 +236,21 @@ export const fetchAirTempMax = async (setAirTempMax, systemName) => {
         onValue(AirTempMaxRef, debounce((snapshot) => {
             const value = snapshot.val();
             if (value !== null) {
-                setAirTempMax(value.toFixed(2));
+                setAirTempMax(parseFloat(value).toFixed(2));
             }
         }, 1000));
     }
 };
 
-export const toggleAirTempAlert = (AirTempAlert, setAirTempAlert, systemName) => {
+export const updateAirTempMax = async (AirTempMax, systemName) => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+        const AirTempMaxRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/AirTemperature/airTempMax`);
+        return set(AirTempMaxRef, AirTempMax);
+    }
+};
+
+export const toggleAirTempAlert = async (AirTempAlert, setAirTempAlert, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
         const AirTempAlertRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/AirTemperature/airTempAlert`);
@@ -200,7 +262,7 @@ export const toggleAirTempAlert = (AirTempAlert, setAirTempAlert, systemName) =>
     }
 };
 
-export const fetchAirTempAlert = (setAirTempAlertStatus, systemName) => {
+export const fetchAirTempAlert = async (setAirTempAlertStatus, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
         const AirTempAlertStatusRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/AirTemperature/airTempAlert`);
@@ -227,13 +289,21 @@ export const fetchHumidityOffset = async (setHumidityOffset, systemName) => {
         onValue(HumidityOffsetRef, debounce((snapshot) => {
             const value = snapshot.val();
             if (value !== null) {
-                setHumidityOffset(value.toFixed(2));
+                setHumidityOffset(parseFloat(value).toFixed(2));
             }
         }, 1000));
     }
 };
 
-export const toggleHumidityAlert = (HumidityAlert, setHumidityAlert, systemName) => {
+export const updateHumidityOffset = async (humidityOffset, systemName) => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+        const humidityOffsetRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/Humidity/humidityOffset`);
+        return set(humidityOffsetRef, humidityOffset);
+    }
+};
+
+export const toggleHumidityAlert = async (HumidityAlert, setHumidityAlert, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
         const HumidityAlertRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/Humidity/humidityAlert`);
@@ -245,7 +315,7 @@ export const toggleHumidityAlert = (HumidityAlert, setHumidityAlert, systemName)
     }
 };
 
-export const fetchHumidityAlert = (setHumidityAlertStatus, systemName) => {
+export const fetchHumidityAlert = async (setHumidityAlertStatus, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
         const HumidityAlertStatusRef = ref(database, `Registered Users/${currentUser.uid}/${systemName}/Alerts/Humidity/humidityAlert`);

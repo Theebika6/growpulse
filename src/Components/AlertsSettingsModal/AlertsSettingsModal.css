@@ -18,7 +18,7 @@
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     width: 35rem;
     padding: 30px;
-    padding-bottom: 80px;
+    padding-bottom: 30px;
 }
 
 .alerts-modal h2 {
@@ -113,7 +113,7 @@
     justify-content: center;
 }
 
-.alerts-modal input[type="range"] {
+.alerts-modal input[type="range"]  {
     -webkit-appearance: none;
     width: 200px; 
     margin: 10px 0;
@@ -165,9 +165,15 @@
     margin-bottom: 10px;
 }
 
-
 .slider-value {
     font-size: 0.9em;
     margin-left: 20px;
     padding: 10px;
+}
+
+.save-button-div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4rem;
 }
