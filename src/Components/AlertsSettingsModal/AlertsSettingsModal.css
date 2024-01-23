@@ -114,6 +114,7 @@
 }
 
 .alerts-modal input[type="range"]  {
+    appearance: none;
     -webkit-appearance: none;
     width: 200px; 
     margin: 10px 0;
