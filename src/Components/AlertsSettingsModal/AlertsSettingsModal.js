@@ -9,6 +9,8 @@ import {
 } from '../Services/AlertsServices';
 
 const AlertsSettingsModal = ({ systemName, onClose }) => {
+    const formatValue = (value) => parseFloat(value).toFixed(2);
+
     const [phMin, setPhMin] = useState('');
     const [phMax, setPhMax] = useState('');
     const [tdsMin, setTdsMin] = useState('');
@@ -43,107 +45,111 @@ const AlertsSettingsModal = ({ systemName, onClose }) => {
                 newValue = limitMin;
             }
         }
-        setValue(newValue.toString());
+        newValue = Math.min(Math.max(newValue, limitMin), limitMax);
+        setValue(formatValue(newValue));
     };
 
-    const handleChangeTDS = (currentValue, operation, setValue, limitMin, limitMax) => {
-        let newValue = parseFloat(currentValue);
+    const handleSliderChange = (e, setValue) => {
+        setValue(formatValue(e.target.value));
+    };
 
-        if (operation === 'increment') {
-            newValue = newValue + 10;
-            if (newValue > limitMax) {
-                newValue = limitMax;
-            }
-        } else if (operation === 'decrement') {
-            newValue = newValue - 10;
-            if (newValue < limitMin) {
-                newValue = limitMin;
-            }
+    const handleOutsideClick = (e) => {
+        if (e.target.className === "alerts-modal-container") {
+            onClose();
         }
-        setValue(newValue.toString());
     };
 
     return (
-        <div className="alerts-modal-container">
+        <div className="alerts-modal-container" onClick={handleOutsideClick}>
             <div className="alerts-modal">
-                <h2>Alerts Settings for {systemName}</h2>
+                <div className='modal-header'>
+                    <h2>Alerts Settings for {systemName}</h2>
+                    <button className="close-button" onClick={onClose}>X</button>
+                </div>
                 <table>
                     <tbody>
                     <tr>
-                        <td>pH</td>
+                        <h4>pH:</h4>
                         <td>
-                            Min:
+                            <span>Min:</span>
                             <div className="input-container">
                                 <button onClick={() => handleChange(phMin, 'decrement', setPhMin, 0, phMax)}> - </button>
-                                <input type="number" value={phMin} onChange={(e) => setPhMin(e.target.value)} />
+                                <input className='input-text' type="text" value={phMin} onChange={(e) => setPhMin(e.target.value)} readOnly/>
                                 <button onClick={() => handleChange(phMin, 'increment', setPhMin, 0, phMax)}> + </button>
                             </div>
-                            Max:
+                            <span>Max:</span>
                             <div className="input-container">
                                 <button onClick={() => handleChange(phMax, 'decrement', setPhMax, phMin, 14)}> - </button>
-                                <input type="number" value={phMax} onChange={(e) => setPhMax(e.target.value)} />
+                                <input className='input-text' type="text" value={phMax} onChange={(e) => setPhMax(e.target.value)}  readOnly/>
                                 <button onClick={() => handleChange(phMax, 'increment', setPhMax, phMin, 14)}> + </button>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td>TDS</td>
+                        <h4>TDS:</h4>
                         <td>
-                            Min: <input type="range" min="0" max="2000" value={tdsMin} onChange={(e) => setTdsMin(e.target.value)} />
-                            <span>{tdsMin} ppm</span>
+                            <span className='slider-text'>Min:</span> 
+                            <input 
+                                type="range" 
+                                min="0" 
+                                max="2000" 
+                                value={tdsMin} 
+                                step="10" 
+                                onChange={(e) => handleSliderChange(e, setTdsMin)} 
+                            />
+                            <h5 className='slider-value'>{tdsMin} ppm</h5>
                         </td>
                     </tr>
                     <tr>
-                        <td>Water Temp</td>
+                        <h4>Water Temperature:</h4>
                         <td>
-                            Min:
+                            <span>Min:</span>
                             <div className="input-container">
                                 <button onClick={() => handleChange(waterTempMin, 'decrement', setWaterTempMin, 0, waterTempMax)}> - </button>
-                                <input type="number" value={waterTempMin} onChange={(e) => setWaterTempMin(e.target.value)} />
+                                <input className='input-text' type="text" value={waterTempMin} onChange={(e) => setWaterTempMin(e.target.value)} readOnly/>
                                 <button onClick={() => handleChange(waterTempMin, 'increment', setWaterTempMin, 0, waterTempMax)}> + </button>
                             </div>
-                            Max:
+                            <span>Max:</span>
                             <div className="input-container">
                                 <button onClick={() => handleChange(waterTempMax, 'decrement', setWaterTempMax, waterTempMin, 24)}> - </button>
-                                <input type="number" value={waterTempMax} onChange={(e) => setWaterTempMax(e.target.value)} />
+                                <input className='input-text' type="text" value={waterTempMax} onChange={(e) => setWaterTempMax(e.target.value)} readOnly/>
                                 <button onClick={() => handleChange(waterTempMax, 'increment', setWaterTempMax, waterTempMin, 24)}> + </button>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td>Humidity</td>
-                        <td className="slider-text">
-                            <span>Offset:</span>
+                        <h4>Humidity:</h4>
+                        <td>
+                            <span className='slider-text'>Offset:</span>
                             <input
                                 type="range"
                                 min="5"
                                 max="100"
                                 value={humidityOffset}
-                                onChange={(e) => setHumidityOffset(e.target.value)}
+                                onChange={(e) => handleSliderChange(e, setHumidityOffset)}
                             />
-                            <span>{humidityOffset}%</span>
+                            <h5 className='slider-value'>{humidityOffset}%</h5>
                         </td>
                     </tr>
                     <tr>
-                        <td>Air Temp</td>
+                        <h4>Air Temperature:</h4>
                         <td>
-                            Min:
+                            <span>Min:</span>
                             <div className="input-container">
                                 <button onClick={() => handleChange(airTempMin, 'decrement', setAirTempMin, 0, airTempMax)}> - </button>
-                                <input type="number" value={airTempMin} onChange={(e) => setAirTempMin(e.target.value)} />
+                                <input className='input-text' type="text" value={airTempMin} onChange={(e) => setAirTempMin(e.target.value)} readOnly/>
                                 <button onClick={() => handleChange(airTempMin, 'increment', setAirTempMin, 0, airTempMax)}> + </button>
                             </div>
-                            Max:
+                            <span>Max:</span>
                             <div className="input-container">
                                 <button onClick={() => handleChange(airTempMax, 'decrement', setAirTempMax, airTempMin, 30)}> - </button>
-                                <input type="number" value={airTempMax} onChange={(e) => setAirTempMax(e.target.value)} />
+                                <input className='input-text' type="text" value={airTempMax} onChange={(e) => setAirTempMax(e.target.value)} readOnly/>
                                 <button onClick={() => handleChange(airTempMax, 'increment', setAirTempMax, airTempMin, 30)}> + </button>
                             </div>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <button onClick={onClose}>Close</button>
             </div>
         </div>
     );
