@@ -157,14 +157,14 @@ const AlertsSettingsModal = ({ systemName, onClose }) => {
                                 <input className='input-text' type="text" value={waterTempMin} onChange={(e) => setWaterTempMin(e.target.value)} readOnly/>
                                 <button onClick={() => handleChange(waterTempMin, 'increment', setWaterTempMin, 0, waterTempMax)}> + </button>
                             </div>
-                            <h5>°C</h5>
+                            <h6>°C</h6>
                             <span>Max:</span>
                             <div className="input-container">
                                 <button onClick={() => handleChange(waterTempMax, 'decrement', setWaterTempMax, waterTempMin, 24)}> - </button>
                                 <input className='input-text' type="text" value={waterTempMax} onChange={(e) => setWaterTempMax(e.target.value)} readOnly/>
                                 <button onClick={() => handleChange(waterTempMax, 'increment', setWaterTempMax, waterTempMin, 24)}> + </button>
                             </div>
-                            <h5>°C</h5>
+                            <h6>°C</h6>
                         </td>
                     </tr>
                     <tr>
@@ -178,7 +178,7 @@ const AlertsSettingsModal = ({ systemName, onClose }) => {
                                 value={humidityOffset}
                                 onChange={(e) => handleSliderChange(e, setHumidityOffset)}
                             />
-                            <h5 className='slider-value'>{humidityOffset}%</h5>
+                            <h5 className='slider-value'>{humidityOffset} %</h5>
                         </td>
                     </tr>
                     <tr>
@@ -190,14 +190,14 @@ const AlertsSettingsModal = ({ systemName, onClose }) => {
                                 <input className='input-text' type="text" value={airTempMin} onChange={(e) => setAirTempMin(e.target.value)} readOnly/>
                                 <button onClick={() => handleChange(airTempMin, 'increment', setAirTempMin, 0, airTempMax)}> + </button>
                             </div>
-                            <h5>°C</h5>
+                            <h6>°C</h6>
                             <span>Max:</span>
                             <div className="input-container">
                                 <button onClick={() => handleChange(airTempMax, 'decrement', setAirTempMax, airTempMin, 30)}> - </button>
                                 <input className='input-text' type="text" value={airTempMax} onChange={(e) => setAirTempMax(e.target.value)} readOnly/>
                                 <button onClick={() => handleChange(airTempMax, 'increment', setAirTempMax, airTempMin, 30)}> + </button>
                             </div>
-                            <h5>°C</h5>
+                            <h6>°C</h6>
                         </td>
                     </tr>
                     </tbody>

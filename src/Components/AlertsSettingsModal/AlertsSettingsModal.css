@@ -183,6 +183,11 @@
 }
 
 .alerts-modal h5{
-    margin-top: 15px;
     margin-left: 15px;
+}
+
+.alerts-modal h6{
+    margin-top: 13px;
+    margin-left: 15px;
+    font-size: 14px;
 }
