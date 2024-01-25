@@ -45,10 +45,13 @@
 
 .collapse-toggle {
     width: 25px;
+    padding-right: 1px;
 }
 
 .collapse-toggle:hover{
     cursor: pointer;
+    background-color: rgba(213, 213, 213, 0.53);
+    border-radius: 10px;
 }
 
 .icons{

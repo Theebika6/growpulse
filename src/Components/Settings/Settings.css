@@ -1,7 +1,7 @@
 .settings{
     margin-left: 14rem;
     margin-right: 10px;
-    transition: margin-left 0.3s ease;
+    transition: all 0.3s ease;
     margin-top: 6rem;
     font-family: 'Raleway', sans-serif;
 }

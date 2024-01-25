@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Settings.css';
-import { auth, firestore, database } from '../../firebaseConfig';
+import { auth } from '../../firebaseConfig';
 import { updateProfile, updateEmail, updatePassword } from 'firebase/auth';
-import { doc, updateDoc } from 'firebase/firestore';
-import { getDatabase, ref, onValue } from 'firebase/database';
+import { getDatabase, ref, onValue, set } from 'firebase/database';
 
 const Settings = ({ sidebarExpanded }) => {
     const [newName, setNewName] = useState('');
@@ -42,20 +41,24 @@ const Settings = ({ sidebarExpanded }) => {
 
     const updateUserProfile = async () => {
         try {
-            if (newName) {
-                await updateProfile(auth.currentUser, { displayName: newName });
-                // Update in Firestore if needed
-                const userDoc = doc(firestore, 'users', auth.currentUser.uid);
-                await updateDoc(userDoc, { name: newName });
+            const currentUser = auth.currentUser;
+            const db = getDatabase();
+
+            if (newName && currentUser) {
+                await updateProfile(currentUser, { displayName: newName });
+                // Update in Realtime Database
+                const userRef = ref(db, 'Registered Users/' + currentUser.uid + '/fullName');
+                await set(userRef, newName);
                 setCurrentName(newName);
             }
-            if (newEmail) {
-                await updateEmail(auth.currentUser, newEmail);
+            if (newEmail && currentUser) {
+                await updateEmail(currentUser, newEmail);
                 setCurrentEmail(newEmail);
             }
-            if (newPassword) {
-                await updatePassword(auth.currentUser, newPassword);
+            if (newPassword && currentUser) {
+                await updatePassword(currentUser, newPassword);
             }
+
             alert('Profile updated successfully!');
         } catch (error) {
             setError(error.message);

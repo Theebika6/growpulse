@@ -26,6 +26,7 @@
 
 .min-max-style{
     font-weight: bold;
+    white-space: nowrap;
 }
 
 .thresholds-alerts{
