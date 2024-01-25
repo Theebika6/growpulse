@@ -70,3 +70,10 @@
     margin-left: -15px;
     font-family: 'Raleway', sans-serif;
 }
+
+.dark-mode-icon {
+    width: 30px;
+    margin-top: 3px;
+    transition: opacity 1s ease;
+    cursor: pointer;
+}

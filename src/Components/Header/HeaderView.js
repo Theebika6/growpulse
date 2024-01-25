@@ -5,8 +5,8 @@ import expandRight from '../Images/HeaderIcons/double-right.png';
 import fullScreen from '../Images/HeaderIcons/full_screen.png';
 import notificationIcon from '../Images/HeaderIcons/notification.png';
 import tasks from '../Images/HeaderIcons/tasks.png';
-import settingsIcon from '../Images/SidebarIcons/settings.png'
-import { Link } from 'react-router-dom';
+import darkMode from '../Images/HeaderIcons/night-mode.png';
+import lightMode from '../Images/HeaderIcons/light-mode.png';
 
 const HeaderView = ({ toggleSidebar, sidebarExpanded, fullName, handleLogout }) => {
     const formatDate = () => {
@@ -28,6 +28,11 @@ const HeaderView = ({ toggleSidebar, sidebarExpanded, fullName, handleLogout }) 
 
     const [currentDateTime, setCurrentDateTime] = useState(formatDate());
     const topbarClass = sidebarExpanded ? "" : "topbar-expanded";
+    const [isDarkMode, setIsDarkMode] = useState(false);
+
+    const toggleTheme = () => {
+        setIsDarkMode(!isDarkMode);
+    };
 
     const toggleFullScreen = () => {
         if (!document.fullscreenElement) {
@@ -74,9 +79,12 @@ const HeaderView = ({ toggleSidebar, sidebarExpanded, fullName, handleLogout }) 
                 <div className='current-date'>{currentDateTime}</div>
             </div>
             <div className="right-side">
-                <Link to="/settings">
-                    <img src={settingsIcon} alt={"settings-icon"} className={"icons"}/>
-                </Link>
+                <img
+                    src={isDarkMode ? lightMode : darkMode}
+                    alt={isDarkMode ? "light-mode-icon" : "dark-mode-icon"}
+                    className={"dark-mode-icon"}
+                    onClick={toggleTheme}
+                />
                 <img src={tasks} alt={"task-icon"} className={"icons"}/>
                 <img src={notificationIcon} alt={"notification-icon"} className={"icons"}/>
                 <img src={fullScreen} alt={"full-screen"} className={"icons"} onClick={toggleFullScreen}/>
