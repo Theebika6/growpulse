@@ -10,6 +10,8 @@ import Overview from "./Components/Overview/Overview";
 import SystemControl from './Components/SystemControl/SystemControl';
 import SystemAlerts from "./Components/SystemAlerts/systemAlerts";
 import Settings from "./Components/Settings/Settings";
+import Help from "./Components/Help/Help";
+import Schedule from "./Components/Schedule/Schedule";
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -44,8 +46,10 @@ const App = () => {
                         <Route path="/allSystems" element={<AllSystems key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
                         <Route path="/Overview/:systemName" element={<Overview key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
                         <Route path="/systemControl/:systemName" element={<SystemControl key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
+                        <Route path="/schedule/:systemName" element={<Schedule key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
                         <Route path="/systemAlerts" element={<SystemAlerts key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
                         <Route path="/settings" element={<Settings key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
+                        <Route path="/help" element={<Help key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
                     </Routes>
                 ) : (
                     <Routes>

@@ -1,0 +1,12 @@
+.help{
+    margin-left: 14rem;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+    margin-top: 6rem;
+    font-family: 'Raleway', sans-serif;
+}
+
+.sidebar-collapsed .help {
+    margin-left: 2rem;
+}
+
