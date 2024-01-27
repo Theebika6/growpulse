@@ -11,6 +11,7 @@
     z-index: 2;
     font-family: 'Raleway', sans-serif;
     transition: left 0.3s ease;
+    overflow-y: auto;
 }
 
 .sidebar-collapsed {
@@ -36,7 +37,6 @@
 .sidebar ul {
     list-style-type: none;
     font-size: 14px;
-    overflow-y: auto;
 }
 
 .systems-number{

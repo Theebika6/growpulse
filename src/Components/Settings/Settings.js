@@ -75,17 +75,21 @@ const Settings = ({ sidebarExpanded }) => {
                             <span>{currentName}</span>
                         </div>
                     </div>
-                    <input type="text" placeholder="New Name" value={newName} onChange={handleNameChange} />
+                    <div className='user-input-settings username-input'>
+                        <input type="text" placeholder="New Name" value={newName} onChange={handleNameChange} />
+                    </div>
                 </div>
-                <div className="account-settings">
+                <div className="account-settings email-settings">
                     <div className="account-detail">
                         <h4>Account Email:</h4>
                         <div className="current-value">
                             <span>{currentEmail}</span>
                         </div>
                     </div>
-                    <input type="email" placeholder="New Email" value={newEmail} onChange={handleEmailChange} />
-                    <input type="email" placeholder="Confirm Email" value={newPassword} onChange={handleEmailChange} />
+                    <div className='user-input-settings'>
+                        <input type="email" placeholder="New Email" value={newEmail} onChange={handleEmailChange} />
+                        <input type="email" placeholder="Confirm Email" value={newPassword} onChange={handleEmailChange} />
+                    </div>
                 </div>
                 <div className="account-settings">
                     <div className="account-detail">
@@ -94,8 +98,10 @@ const Settings = ({ sidebarExpanded }) => {
                             <span>*************</span>
                         </div>
                     </div>
-                    <input type="password" placeholder="New Password" value={newPassword} onChange={handlePasswordChange} />
-                    <input type="password" placeholder="Confirm Password" value={newPassword} onChange={handlePasswordChange} />
+                    <div className='user-input-settings'>
+                        <input type="password" placeholder="New Password" value={newPassword} onChange={handlePasswordChange} />
+                        <input type="password" placeholder="Confirm Password" value={newPassword} onChange={handlePasswordChange} />
+                    </div>
                 </div>
                 <div className="account-settings">
                     <div className="account-detail">

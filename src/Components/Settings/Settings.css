@@ -24,21 +24,30 @@
 .current-value{
     display: flex;
     flex-basis: 20%;
-    margin-left: 20%;
+    margin-left: 15%;
     align-content: center;
     justify-content: center;
 }
 
 .account-settings input{
-    flex-basis: 35%;
-    margin-left: 5%;
     border: 1px solid #ddd;
     border-radius: 5px;
+    margin-bottom: 10px;
+    width: 80%;
     overflow: hidden;
     padding: 10px;
     text-align: left;
     font-family: 'Raleway', sans-serif;
     background-color: rgba(30, 30, 30, 0);
+}
+
+.user-input-settings{
+   flex-basis: 50%; 
+   width: 100%;
+}
+
+.username-input{
+    margin-bottom: -10px;
 }
 
 .account-settings span{
@@ -54,7 +63,7 @@
 .update-button{
     background-color: #818181;
     color: #ffffff;
-    margin-left: 35%;
+    margin-left: 33%;
     margin-top: 50px;
     position: fixed;
     border: rgba(204, 204, 204, 0);
@@ -71,9 +80,6 @@
     transition: margin-left 0.3s ease;
 }
 
-.update-button:hover{
-    background-color: #bb0000;
-}
 
 .account-info-id{
     margin-right: 5rem;
@@ -88,3 +94,6 @@
 }
 
 
+.update-button:hover{
+    background-color: #bb0000;
+}
