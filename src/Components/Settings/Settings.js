@@ -8,6 +8,8 @@ const Settings = ({ sidebarExpanded }) => {
     const [newName, setNewName] = useState('');
     const [newEmail, setNewEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
+    const [confirmEmail, setConfirmEmail] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [currentName, setCurrentName] = useState('');
     const [currentEmail, setCurrentEmail] = useState('');
     const [error, setError] = useState('');
@@ -38,36 +40,51 @@ const Settings = ({ sidebarExpanded }) => {
     const handleNameChange = (e) => setNewName(e.target.value);
     const handleEmailChange = (e) => setNewEmail(e.target.value);
     const handlePasswordChange = (e) => setNewPassword(e.target.value);
+    const handleConfirmEmailChange = (e) => setConfirmEmail(e.target.value);
+    const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
 
     const updateUserProfile = async () => {
         try {
             const currentUser = auth.currentUser;
             const db = getDatabase();
-
+    
+            if (newEmail !== confirmEmail) {
+                throw new Error("Emails do not match");
+            }
+            if (newPassword !== confirmPassword) {
+                throw new Error("Passwords do not match");
+            }
+    
+    
             if (newName && currentUser) {
                 await updateProfile(currentUser, { displayName: newName });
-                // Update in Realtime Database
                 const userRef = ref(db, 'Registered Users/' + currentUser.uid + '/fullName');
                 await set(userRef, newName);
                 setCurrentName(newName);
             }
-            if (newEmail && currentUser) {
+            if (newEmail && currentUser && newEmail !== currentEmail) {
                 await updateEmail(currentUser, newEmail);
                 setCurrentEmail(newEmail);
+    
+                // Update email in Firebase Realtime Database
+                const emailRef = ref(db, 'Registered Users/' + currentUser.uid + '/email');
+                await set(emailRef, newEmail);
             }
+
             if (newPassword && currentUser) {
                 await updatePassword(currentUser, newPassword);
             }
-
+    
             alert('Profile updated successfully!');
         } catch (error) {
             setError(error.message);
         }
-    };
+    };    
 
     return (
         <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}>
             <div className="settings">
+            {error && <p className="error-message">{error}</p>}
                 <div className="account-settings">
                     <div className="account-detail">
                         <h4>Account Username:</h4>
@@ -88,7 +105,7 @@ const Settings = ({ sidebarExpanded }) => {
                     </div>
                     <div className='user-input-settings'>
                         <input type="email" placeholder="New Email" value={newEmail} onChange={handleEmailChange} />
-                        <input type="email" placeholder="Confirm Email" value={newPassword} onChange={handleEmailChange} />
+                        <input type="email" placeholder="Confirm Email" value={confirmEmail} onChange={handleConfirmEmailChange} />
                     </div>
                 </div>
                 <div className="account-settings">
@@ -100,7 +117,7 @@ const Settings = ({ sidebarExpanded }) => {
                     </div>
                     <div className='user-input-settings'>
                         <input type="password" placeholder="New Password" value={newPassword} onChange={handlePasswordChange} />
-                        <input type="password" placeholder="Confirm Password" value={newPassword} onChange={handlePasswordChange} />
+                        <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={handleConfirmPasswordChange} />
                     </div>
                 </div>
                 <div className="account-settings">
@@ -120,7 +137,6 @@ const Settings = ({ sidebarExpanded }) => {
                     </div>
                 </div>
                 <button className={"update-button"} onClick={updateUserProfile}>Update Profile</button>
-                {error && <p className="error-message">{error}</p>}
             </div>
         </div>
     );
