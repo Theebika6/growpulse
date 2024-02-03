@@ -4,7 +4,7 @@ import { fetchPhMinMax, updatePhMinMax, togglePhAuto } from '../Services/phServi
 import {fetchLightTimes, updateLightStart, updateLightEnd, toggleLightScheduleAuto} from '../Services/LightServices';
 import {fetchHumidityData, updateHumidityLevel, toggleAutomationHumidity} from '../Services/HumidityServices';
 import {fetchInitialDosingValues, updateInitialDosingValues, toggleStartInitialDosing} from '../Services/InitialDosingServices'
-import './SystemControl.css';
+import './SystemSettingsl.css';
 import {createPhChart, createTdsChart, fetchLastSevenSamples} from "../Services/chartsServices";
 import { ref, onValue, off } from 'firebase/database';
 import {fetchPhAutoStatus, fetchPhValue} from "../Services/phServices";
@@ -14,7 +14,7 @@ import on from '../Images/Dashboard/ON.png';
 import off_icon from '../Images/Dashboard/OFF.png';
 import {useParams} from "react-router-dom";
 
-const SystemControl = ({ sidebarExpanded }) => {
+const SystemSettings = ({ sidebarExpanded }) => {
     const [phBalanceAuto, setPhBalanceAuto] = useState(false);
     const [lightScheduleAuto, setLightScheduleAuto] = useState(false);
     const [humidityControlAuto, setHumidityControlAuto] = useState(false);
@@ -735,4 +735,4 @@ const SystemControl = ({ sidebarExpanded }) => {
     );
 };
 
-export default SystemControl;
+export default SystemSettings;

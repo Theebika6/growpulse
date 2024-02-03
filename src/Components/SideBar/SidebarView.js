@@ -165,10 +165,10 @@ const SidebarView = ({ sidebarClass }) => {
                                             • Overview
                                         </Link>
                                         <Link
-                                            to={`/systemControl/${system}`}
-                                            onClick={() => handleLinkClick(`SystemControl-${system}`)}
-                                            className={activeLink === `SystemControl-${system}` ? "active" : ""}>
-                                            • System Control
+                                            to={`/systemSettings/${system}`}
+                                            onClick={() => handleLinkClick(`SystemSettings-${system}`)}
+                                            className={activeLink === `SystemSettings-${system}` ? "active" : ""}>
+                                            • System Settings
                                         </Link>
                                         <Link
                                             to={`/schedule/${system}`}
