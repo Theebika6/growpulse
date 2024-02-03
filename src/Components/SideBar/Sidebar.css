@@ -37,6 +37,10 @@
 .sidebar ul {
     list-style-type: none;
     font-size: 14px;
+    width: 105%;
+    margin-left: -5px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .systems-number{

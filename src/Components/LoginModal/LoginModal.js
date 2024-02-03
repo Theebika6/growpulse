@@ -46,7 +46,7 @@ const LoginModal = ({ isOpen, onRequestClose }) => {
             console.log('Logged in successfully');
             showSuccessMessage();
             onRequestClose();
-            navigate('/dashboard');
+            navigate('/allSystems');
         } catch (error) {
             console.error('Error logging in:', error.message);
             setErrorMessage(error.message);
