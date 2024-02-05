@@ -20,7 +20,7 @@ const AllSystems = ({ sidebarExpanded }) => {
     const [systemsData, setSystemsData] = useState([]);
     const [liveFeedData, setLiveFeedData] = useState({});
     const [dispensedData, setDispensedData] = useState({});
-    const [flashUpdate, setFlashUpdate] = useState({});
+    const [flashingSensors, setFlashingSensors] = useState({});
     
 
     const fetchSystemLiveFeed = useCallback((systemName) => {
@@ -33,27 +33,35 @@ const AllSystems = ({ sidebarExpanded }) => {
             } else {
                 formattedValue = value !== null ? value : '-';
             }
-    
-            setLiveFeedData(prevState => ({
-                ...prevState,
-                [systemName]: {
-                    ...prevState[systemName],
-                    [sensorName]: formattedValue
-                }
-            }));
-    
-            setFlashUpdate(prevState => ({
-                ...prevState,
-                [sensorName]: true
-            }));
         
-            setTimeout(() => {
-                setFlashUpdate(prevState => ({
+            setLiveFeedData(prevState => {
+                // Check if the value has changed
+                const hasChanged = prevState[systemName] && prevState[systemName][sensorName] !== formattedValue;
+                if (hasChanged) {
+                    // Set the flashing state for this sensor
+                    setFlashingSensors(prevFlashing => ({
+                        ...prevFlashing,
+                        [`${systemName}-${sensorName}`]: true
+                    }));
+        
+                    // Remove the flashing state after 1 second
+                    setTimeout(() => {
+                        setFlashingSensors(prevFlashing => ({
+                            ...prevFlashing,
+                            [`${systemName}-${sensorName}`]: false
+                        }));
+                    }, 1000);
+                }
+                return {
                     ...prevState,
-                    [sensorName]: false
-                }));
-            }, 1000);
+                    [systemName]: {
+                        ...prevState[systemName],
+                        [sensorName]: formattedValue
+                    }
+                };
+            });
         };
+        
     
         // Initialize light and pump status to OFF if not already set
         setLiveFeedData(prevState => {
@@ -326,12 +334,22 @@ const AllSystems = ({ sidebarExpanded }) => {
                                 <tbody>
                                     {systemsData.map(system => (
                                         <tr key={system.systemName}>
-                                            <td>{system.systemName}</td>
-                                            <td className={flashUpdate['phValue'] ? 'flash-animation' : ''}> {liveFeedData[system.systemName]?.phValue ?? '-'} </td>
-                                            <td className={flashUpdate['tdsValue'] ? 'flash-animation' : ''}>{liveFeedData[system.systemName]?.tdsValue ? `${liveFeedData[system.systemName].tdsValue} ppm` : '-'}</td>
-                                            <td className={flashUpdate['waterTemperature'] ? 'flash-animation' : ''}>{liveFeedData[system.systemName]?.waterTemperature ? `${liveFeedData[system.systemName].waterTemperature} °C` : '-'}</td>
-                                            <td className={flashUpdate['humidity'] ? 'flash-animation' : ''}>{liveFeedData[system.systemName]?.humidity ? `${liveFeedData[system.systemName].humidity} %` : '-'}</td>
-                                            <td className={flashUpdate['airTemperature'] ? 'flash-animation' : ''}>{liveFeedData[system.systemName]?.airTemperature ? `${liveFeedData[system.systemName].airTemperature} °C` : '-'}</td>
+                                            <td> {system.systemName} </td>
+                                            <td className={flashingSensors[`${system.systemName}-phValue`] ? 'flash' : ''}>
+                                                {liveFeedData[system.systemName]?.phValue ?? '-'}
+                                            </td>
+                                            <td className={flashingSensors[`${system.systemName}-tdsValue`] ? 'flash' : ''}>
+                                                {liveFeedData[system.systemName]?.tdsValue ? `${liveFeedData[system.systemName].tdsValue} ppm` : '-'}
+                                            </td>
+                                            <td className={flashingSensors[`${system.systemName}-waterTemperature`] ? 'flash' : ''}>
+                                                {liveFeedData[system.systemName]?.waterTemperature ? `${liveFeedData[system.systemName].waterTemperature} °C` : '-'}
+                                            </td>
+                                            <td className={flashingSensors[`${system.systemName}-humidity`] ? 'flash' : ''}>
+                                                {liveFeedData[system.systemName]?.humidity ? `${liveFeedData[system.systemName].humidity} %` : '-'}
+                                            </td>
+                                            <td className={flashingSensors[`${system.systemName}-airTemperature`] ? 'flash' : ''}>
+                                                {liveFeedData[system.systemName]?.airTemperature ? `${liveFeedData[system.systemName].airTemperature} °C` : '-'}
+                                            </td>
                                             <td className={liveFeedData[system.systemName]?.lightPower === 'OFF' ? 'status-bad' : 'status-good'}>
                                                 {liveFeedData[system.systemName]?.lightPower ?? '-'}
                                             </td>

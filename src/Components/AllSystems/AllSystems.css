@@ -279,13 +279,12 @@
     white-space: nowrap;
 }
 
-
-@keyframes flash {
-    0% { color: rgb(25, 200, 0);  }
+@keyframes flashAnimation {
+    0% { color: rgb(25, 200, 0); }
     50% { color: rgb(25, 200, 0); }
     100% { color: black; }
 }
 
-.flash-animation {
-    animation: flash 1s;
+.flash {
+    animation: flashAnimation 1s;
 }

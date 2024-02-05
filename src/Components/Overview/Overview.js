@@ -351,9 +351,7 @@ const Overview = ({ sidebarExpanded }) => {
                 type: 'bar',
                 data: avgChartData,
                 options: {
-                    animation: {
-                        duration: 500, // Increase duration for smoother animation
-                    },
+                    animation: false,
                     scales: {
                         x: {
                             title: {
@@ -449,9 +447,7 @@ const Overview = ({ sidebarExpanded }) => {
                 type: 'line',
                 data: dailyChartData,
                 options: {
-                    animation: {
-                        duration: 0,
-                    },
+                    animation: false,
                     scales: {
                         x: {
                             type: 'time',
