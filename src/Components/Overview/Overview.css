@@ -501,7 +501,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    height: 32rem;
+    height: 100%;
 }
 
 .log-container table thead th:nth-child(1) { width: 35%; }
@@ -521,7 +521,7 @@
     align-items: stretch;
     margin-right: 10px;
     transition: margin-top 0.3s ease;
-    height: 29rem;
+    height: 100%;
 }
 
 .sidebar-collapsed .disposal-table{
