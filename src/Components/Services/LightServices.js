@@ -127,6 +127,13 @@ export const createLightScheduleGanttChart = (containerId, lightON, lightOFF) =>
     const currentMinutes = currentTime.getMinutes();
     const currentTimeInMs = Date.UTC(2024, 0, 1, currentHours, currentMinutes);
 
+    const padZero = (number) => {
+        return number < 10 ? `0${number}` : number.toString();
+    };
+
+    const formattedCurrentHours = padZero(currentHours);
+    const formattedCurrentMinutes = padZero(currentMinutes);
+
     Highcharts.ganttChart(containerId, {
         chart: {
             backgroundColor: null,
@@ -149,7 +156,7 @@ export const createLightScheduleGanttChart = (containerId, lightON, lightOFF) =>
                 value: currentTimeInMs,
                 zIndex: 5,
                 label: {
-                    text: `Curr. Time: ${currentHours}:${currentMinutes}`,
+                    text: `Curr. Time: ${formattedCurrentHours}:${formattedCurrentMinutes}`,
                     x: -55, 
                     y: 120, 
                     rotation : 0,
@@ -196,7 +203,7 @@ export const createLightScheduleGanttChart = (containerId, lightON, lightOFF) =>
                 const start = Highcharts.dateFormat('%H:%M', this.point.options.start);
                 const end = Highcharts.dateFormat('%H:%M', this.point.options.end);
                 const seriesName = this.point.y === 0 ? 'Day' : 'Night';
-                return `<b>${seriesName}</b><br/>Start: ${start}</b><br/>End: ${end}<br/> Current Time: ${currentHours}:${currentMinutes} `;
+                return `<b>${seriesName}</b><br/>Start: ${start}</b><br/>End: ${end}<br/> Current Time: ${formattedCurrentHours}:${formattedCurrentMinutes} `;
             }
         },
         credits: {
