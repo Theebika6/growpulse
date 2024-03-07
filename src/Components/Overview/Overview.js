@@ -16,11 +16,12 @@ import { handleToggleMainPump, fetchMainPumpStatus } from '../Services/MainPumpS
 import { calculateDayNightDurations, handleToggleLight, fetchLightTimes, fetchLigthPowerStatus, createLightScheduleGanttChart } from '../Services/LightServices';
 
 import on from "../Images/Dashboard/ON.png";
+import offWhite from "../Images/Dashboard/ON-white.png";
 import off from "../Images/Dashboard/OFF.png";
 
 import './Overview.css';
 
-const Overview = ({ sidebarExpanded }) => {
+const Overview = ({ sidebarExpanded, isDarkMode}) => {
     const {systemName } = useParams();
     const [imageUrl, setImageUrl] = useState('');
     
@@ -274,23 +275,23 @@ const Overview = ({ sidebarExpanded }) => {
             const humidityCtx = document.getElementById('HumidityChart');
 
             if (recentSamples.pH.length > 0) {
-                phChartRef.current = createPhChart(phCtx.getContext('2d'), recentSamples, phChartRef);
+                phChartRef.current = createPhChart(phCtx.getContext('2d'), recentSamples, phChartRef, isDarkMode);
             } 
             if (recentSamples.TDS.length > 0) {
-                TdsChartRef.current = createTdsChart(tdsCtx.getContext('2d'), recentSamples, TdsChartRef);
+                TdsChartRef.current = createTdsChart(tdsCtx.getContext('2d'), recentSamples, TdsChartRef, isDarkMode);
             }
             if (recentSamples.WaterTemperature.length > 0) {
-                waterTempChartRef.current = createWaterTemperatureChart(waterTempCtx.getContext('2d'), recentSamples, waterTempChartRef);
+                waterTempChartRef.current = createWaterTemperatureChart(waterTempCtx.getContext('2d'), recentSamples, waterTempChartRef, isDarkMode);
             }
             if (recentSamples.AirTemperature.length > 0) {
-                airTempChartRef.current = createAirTemperatureChart(airTempCtx.getContext('2d'), recentSamples, airTempChartRef);
+                airTempChartRef.current = createAirTemperatureChart(airTempCtx.getContext('2d'), recentSamples, airTempChartRef, isDarkMode);
             }
             if (recentSamples.Humidity.length > 0) {
-                HumidityChartRef.current = createHumidityChart(humidityCtx.getContext('2d'), recentSamples, HumidityChartRef);
+                HumidityChartRef.current = createHumidityChart(humidityCtx.getContext('2d'), recentSamples, HumidityChartRef, isDarkMode);
             }
 
         }, 0);
-    }, [recentSamples]);
+    }, [recentSamples, isDarkMode]);
 
     useEffect(() => {
         initializeCharts();
@@ -345,7 +346,9 @@ const Overview = ({ sidebarExpanded }) => {
                 window.myAvgChart.destroy();
             }
 
-            const avgChartData = getChartData(dayAverages);
+            const avgChartData = getChartData(dayAverages, isDarkMode);
+
+            const textColor = isDarkMode ? 'white' : 'black';
 
             window.myAvgChart = new Chart(avgChartRef.current, {
                 type: 'bar',
@@ -357,26 +360,40 @@ const Overview = ({ sidebarExpanded }) => {
                             title: {
                                 display: false,
                                 text: 'Date',
+                                color: textColor
                             },
+                            ticks: {
+                                color: textColor
+                            }
                         },
                         y: {
                             title: {
                                 display: false,
                                 text: 'Sensor Values',
                             },
+                            ticks: {
+                                color: textColor
+                            }
                         },
                         'y-axis-tds': {
                             position: 'right',
                             title: {
                                 display: true,
                                 text: 'TDS',
+                                color: textColor
                             },
+                            ticks: {
+                                color: textColor
+                            }
                         },
                     },
                     plugins: {
                         legend: {
                             position: 'top',
-                        },
+                            labels: {
+                                color: textColor
+                            }
+                        }
                     },
                 }
             });
@@ -411,7 +428,7 @@ const Overview = ({ sidebarExpanded }) => {
                 window.myAvgChart.destroy();
             }
         };
-    }, [dayAverages]);
+    }, [dayAverages, isDarkMode]);
 
     /* Samples Data Chart */
     const getCurrentFormattedDate = () => {
@@ -439,6 +456,8 @@ const Overview = ({ sidebarExpanded }) => {
             window.myDailyChart.destroy(); // Destroy the previous instance of the chart
         }
 
+        const textColor = isDarkMode ? 'white' : 'black';
+
         if (liveData.length > 0 && dailyChartRef.current) {
             const dailyChartData = getDailyChartData(selectedDay, liveData);
 
@@ -463,6 +482,7 @@ const Overview = ({ sidebarExpanded }) => {
                                 text: 'Time',
                             },
                             ticks: {
+                                color: textColor,
                                 source: 'data',
                                 maxTicksLimit: 5,
                                 maxRotation: 45,
@@ -473,17 +493,23 @@ const Overview = ({ sidebarExpanded }) => {
                             title: {
                                 display: true,
                                 text: 'Values',
+                                color: textColor,
                             },
+                            ticks: {
+                                color: textColor
+                            }
                         },
                         'y-axis-tds': {
                             position: 'right',
                             title: {
                                 display: true,
                                 text: 'TDS',
+                                color: textColor,
                             },
                             min: 0,
                             max: 1500,
                             ticks: {
+                                color: textColor,
                                 beginAtZero: true,
                                 stepSize: 100
                             },
@@ -493,6 +519,9 @@ const Overview = ({ sidebarExpanded }) => {
                         legend: {
                             display: true,
                             position: 'top',
+                            labels: {
+                                color: textColor
+                            }
                         },
                         zoom: {
                             pan: {
@@ -515,7 +544,7 @@ const Overview = ({ sidebarExpanded }) => {
                 }
             });
         }
-    }, [selectedDay, liveData]);
+    }, [selectedDay, liveData, isDarkMode]);
 
     const sortedUniqueDates = useMemo(() => {
         const uniqueDates = Array.from(new Set(liveData.map((data) => data.date)));
@@ -532,8 +561,8 @@ const Overview = ({ sidebarExpanded }) => {
     }, [liveData]);
 
     return (
-        <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}> {/* css file in src/Components/Common */}
-            <div className="overview">
+        <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'} ${isDarkMode ? 'dark-mode' : ''}`}>
+        <div className={`overview ${isDarkMode ? 'dark-mode' : ''}`}>
                 <header className="header-text">
                     <h2>Here is the overview of your {systemName}:</h2>
                 </header>
@@ -629,18 +658,18 @@ const Overview = ({ sidebarExpanded }) => {
                         <div className="control">
                             <div className="control auto main-pump-button">
                                 <div className="control button">
-                                    <button
-                                        className={`on-off-button ${MainPumpOn ? 'on' : 'off'}`}
-                                        onClick={toggleMainPump}
-                                        >
-                                        <img
-                                            src={MainPumpOn ? on : off}
-                                            alt={MainPumpOn ? "Main Pump On" : "Main Pump Off"}
-                                        />
-                                        <span style={{ color: MainPumpOn ? '#0096ff' : 'grey' }}>
-                                            {MainPumpOn ? 'On' : 'Off'}
-                                        </span>
-                                    </button>
+                                <button
+                                    className={`on-off-button ${MainPumpOn ? 'on' : 'off'}`}
+                                    onClick={toggleMainPump}
+                                >
+                                    <img
+                                        src={MainPumpOn ? on : (isDarkMode ? offWhite : off)}
+                                        alt={MainPumpOn ? "Main Pump On" : "Main Pump Off"}
+                                    />
+                                    <span style={{ color: MainPumpOn ? '#0096ff' : 'grey' }}>
+                                        {MainPumpOn ? 'On' : 'Off'}
+                                    </span>
+                                </button>
                                 </div>
                             </div>
                         </div>
@@ -698,7 +727,7 @@ const Overview = ({ sidebarExpanded }) => {
                                         onClick={toggleLight}
                                         >
                                         <img
-                                            src={lightPwrOn ? on : off}
+                                            src={lightPwrOn ? on : (isDarkMode ? offWhite : off)}
                                             alt={lightPwrOn ? "light Power On" : "light Power Off"}
                                         />
                                         <span style={{ color: lightPwrOn ? '#0096ff' : 'grey' }}>

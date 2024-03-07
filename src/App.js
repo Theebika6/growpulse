@@ -47,12 +47,12 @@ const App = () => {
                     <Routes>
                         <Route path="/" element={<Navigate to="/allSystems" />} />
                         <Route path="/allSystems" element={<AllSystems key={window.location.pathname} sidebarExpanded={sidebarExpanded} isDarkMode={isDarkMode}/>} />
-                        <Route path="/Overview/:systemName" element={<Overview key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
-                        <Route path="/systemSettings/:systemName" element={<SystemSettings key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
-                        <Route path="/schedule/:systemName" element={<Schedule key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
-                        <Route path="/systemAlerts" element={<SystemAlerts key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
-                        <Route path="/settings" element={<Settings key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
-                        <Route path="/help" element={<Help key={window.location.pathname} sidebarExpanded={sidebarExpanded}/>} />
+                        <Route path="/Overview/:systemName" element={<Overview key={window.location.pathname} sidebarExpanded={sidebarExpanded} isDarkMode={isDarkMode}/>} />
+                        <Route path="/systemSettings/:systemName" element={<SystemSettings key={window.location.pathname} sidebarExpanded={sidebarExpanded} isDarkMode={isDarkMode}/>} />
+                        <Route path="/schedule/:systemName" element={<Schedule key={window.location.pathname} sidebarExpanded={sidebarExpanded} isDarkMode={isDarkMode}/>} />
+                        <Route path="/systemAlerts" element={<SystemAlerts key={window.location.pathname} sidebarExpanded={sidebarExpanded} isDarkMode={isDarkMode}/>} />
+                        <Route path="/settings" element={<Settings key={window.location.pathname} sidebarExpanded={sidebarExpanded} isDarkMode={isDarkMode}/>} />
+                        <Route path="/help" element={<Help key={window.location.pathname} sidebarExpanded={sidebarExpanded} isDarkMode={isDarkMode}/>} />
                     </Routes>
                 ) : (
                     <Routes>

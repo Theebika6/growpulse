@@ -683,3 +683,51 @@
 .flash-animation {
     animation: flash 1s;
 }
+
+
+/* DARK MODE */
+
+.overview.dark-mode {
+    color: #ffffff; 
+}
+
+.overview.dark-mode .container {
+    border-color: #ffffff; 
+    color: #ffffff; 
+}
+
+.overview.dark-mode .container h3 {
+    background-color: #094277;
+    color: #ffffff; 
+}
+
+.overview.dark-mode .arrow-button {
+    color: #ffffff; 
+    border-color: #ffffff; 
+}
+
+.overview.dark-mode th {
+    border-color: #ffffff00; 
+}
+
+.overview.dark-mode td {
+    color: #ffffff !important; 
+}
+
+.overview.dark-mode tr:hover {
+    background-color: #001f5834 !important; 
+}
+
+.overview.dark-mode .arrow-button.active {
+    color: #0099ff; 
+    border-color: #0099ff; 
+}
+
+.overview.dark-mode span {
+    color: #ffffff ! important; 
+}
+
+.overview.dark-mode .custom-select {
+    color: #ffffff ; 
+    background-color: #094277;
+}

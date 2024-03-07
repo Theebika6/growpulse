@@ -3,11 +3,13 @@ import { auth, firestore } from "../../firebaseConfig";
 import {doc, getDoc } from "firebase/firestore";
 import moment from 'moment';
 
-export const createPhChart = (phCtx, recentSamples, phChartRef) => {
+export const createPhChart = (phCtx, recentSamples, phChartRef, isDarkMode) => {
     
     if (phChartRef.current) {
         phChartRef.current.destroy();
     }
+
+    const textColor = isDarkMode ? 'white' : 'black';
 
     if (recentSamples.pH.length > 0) {
         phChartRef.current = new Chart(phCtx, {
@@ -27,6 +29,7 @@ export const createPhChart = (phCtx, recentSamples, phChartRef) => {
                 scales: {
                     x: {
                         ticks: {
+                            color: textColor,
                             autoSkip: false,
                             maxRotation: 45,
                             minRotation: 45
@@ -40,12 +43,16 @@ export const createPhChart = (phCtx, recentSamples, phChartRef) => {
                             display: false
                         },
                         ticks: {
+                            color: textColor,
                             display: true
                         }
                     }
                 },
                 plugins: {
                     legend: {
+                        labels: {
+                            color: textColor
+                        },
                         display: false
                     }
                 }
@@ -55,11 +62,13 @@ export const createPhChart = (phCtx, recentSamples, phChartRef) => {
     } 
 };
 
-export const createTdsChart = (tdsCtx, recentSamples, TdsChartRef) => {
+export const createTdsChart = (tdsCtx, recentSamples, TdsChartRef, isDarkMode) => {
 
     if (TdsChartRef.current) {
         TdsChartRef.current.destroy();
     }
+    
+    const textColor = isDarkMode ? 'white' : 'black';
 
     if (recentSamples.TDS.length > 0) {
         TdsChartRef.current = new Chart(tdsCtx, {
@@ -79,6 +88,7 @@ export const createTdsChart = (tdsCtx, recentSamples, TdsChartRef) => {
                 scales: {
                     x: {
                         ticks: {
+                            color: textColor,
                             autoSkip: false,
                             maxRotation: 45,
                             minRotation: 45
@@ -92,11 +102,15 @@ export const createTdsChart = (tdsCtx, recentSamples, TdsChartRef) => {
                             display: false
                         },
                         ticks: {
+                            color: textColor,
                             display: true
                         }
                     }
                 },
                 plugins: {
+                    labels: {
+                        color: textColor 
+                    },
                     legend: {
                         display: false
                     }
@@ -107,11 +121,13 @@ export const createTdsChart = (tdsCtx, recentSamples, TdsChartRef) => {
     } 
 };
 
-export const createWaterTemperatureChart = (waterTempCtx, recentSamples, waterTempChartRef) => {
+export const createWaterTemperatureChart = (waterTempCtx, recentSamples, waterTempChartRef, isDarkMode) => {
     
     if (waterTempChartRef.current) {
         waterTempChartRef.current.destroy();
     }
+    
+    const textColor = isDarkMode ? 'white' : 'black';
 
     if (recentSamples.WaterTemperature.length > 0) {
         waterTempChartRef.current = new Chart(waterTempCtx, {
@@ -131,6 +147,7 @@ export const createWaterTemperatureChart = (waterTempCtx, recentSamples, waterTe
                 scales: {
                     x: {
                         ticks: {
+                            color: textColor,
                             autoSkip: false,
                             maxRotation: 45,
                             minRotation: 45
@@ -144,11 +161,15 @@ export const createWaterTemperatureChart = (waterTempCtx, recentSamples, waterTe
                             display: false
                         },
                         ticks: {
+                            color: textColor,
                             display: true
                         }
                     }
                 },
                 plugins: {
+                    labels: {
+                        color: textColor 
+                    },
                     legend: {
                         display: false
                     }
@@ -159,11 +180,13 @@ export const createWaterTemperatureChart = (waterTempCtx, recentSamples, waterTe
     } 
 };
 
-export const createHumidityChart = (humidityCtx, recentSamples, humidityChartRef) => {
+export const createHumidityChart = (humidityCtx, recentSamples, humidityChartRef, isDarkMode) => {
 
     if (humidityChartRef.current) {
         humidityChartRef.current.destroy();
     }
+
+    const textColor = isDarkMode ? 'white' : 'black';
 
     if (recentSamples.Humidity.length > 0) {
         humidityChartRef.current = new Chart(humidityCtx, {
@@ -183,6 +206,7 @@ export const createHumidityChart = (humidityCtx, recentSamples, humidityChartRef
                 scales: {
                     x: {
                         ticks: {
+                            color: textColor,
                             autoSkip: false,
                             maxRotation: 45,
                             minRotation: 45
@@ -196,11 +220,15 @@ export const createHumidityChart = (humidityCtx, recentSamples, humidityChartRef
                             display: false
                         },
                         ticks: {
+                            color: textColor,
                             display: true
                         }
                     }
                 },
                 plugins: {
+                    labels: {
+                        color: textColor 
+                    },
                     legend: {
                         display: false
                     }
@@ -211,11 +239,13 @@ export const createHumidityChart = (humidityCtx, recentSamples, humidityChartRef
     } 
 };
 
-export const createAirTemperatureChart = (airTempCtx, recentSamples, airTempChartRef) => {
+export const createAirTemperatureChart = (airTempCtx, recentSamples, airTempChartRef, isDarkMode) => {
 
     if (airTempChartRef.current) {
         airTempChartRef.current.destroy();
     }
+
+    const textColor = isDarkMode ? 'white' : 'black';
 
     if (recentSamples.AirTemperature.length > 0) {
         airTempChartRef.current = new Chart(airTempCtx, {
@@ -235,6 +265,7 @@ export const createAirTemperatureChart = (airTempCtx, recentSamples, airTempChar
                 scales: {
                     x: {
                         ticks: {
+                            color: textColor,
                             autoSkip: false,
                             maxRotation: 45,
                             minRotation: 45
@@ -248,12 +279,16 @@ export const createAirTemperatureChart = (airTempCtx, recentSamples, airTempChar
                             display: false
                         },
                         ticks: {
+                            color: textColor,
                             display: true
                         }
                     }
                 },
                 plugins: {
                     legend: {
+                        labels: {
+                            color: textColor 
+                        },
                         display: false
                     }
                 }
@@ -356,6 +391,7 @@ export const fetchDayAverages = async (setDayAverages, systemName) => {
 };
 
 export const getChartData = (dayAverages) => {
+    
     const sortedDayAverages = dayAverages.sort((a, b) => 
         moment(a.date, "YYYY-MM-DD").diff(moment(b.date, "YYYY-MM-DD"))
     );
