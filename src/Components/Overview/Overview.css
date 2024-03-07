@@ -708,6 +708,7 @@
 
 .overview.dark-mode th {
     border-color: #ffffff00; 
+    background-color: #012e58;
 }
 
 .overview.dark-mode td {
