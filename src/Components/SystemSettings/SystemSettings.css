@@ -349,3 +349,39 @@
     width: 49%;
     margin-left: 1rem;
 }
+
+/*DARK MODE*/
+
+.systemControl.dark-mode h2{
+    color: #ffffff; 
+}
+
+.systemControl.dark-mode h3{
+    background-color: #094277;
+    color: #ffffff; 
+}
+
+.systemControl.dark-mode .container{
+    color: #ffffff; 
+    border-color: #ddd;
+}
+
+.systemControl.dark-mode .arrow-button {
+    color: #ffffff; 
+    border-color: #ffffff; 
+}
+
+.systemControl.dark-mode .arrow-button.active {
+    color: #0099ff; 
+    border-color: #0099ff; 
+}
+
+.systemControl.dark-mode th {
+    border-color: #ffffff80; 
+    background-color: #012e58;
+}
+
+.systemControl.dark-mode .dropdown {
+    color: #ffffff;
+    background-color: #003464;
+}

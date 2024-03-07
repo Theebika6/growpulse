@@ -4,7 +4,7 @@ import { fetchPhMinMax, updatePhMinMax, togglePhAuto } from '../Services/phServi
 import {fetchLightTimes, updateLightStart, updateLightEnd, toggleLightScheduleAuto} from '../Services/LightServices';
 import {fetchHumidityData, updateHumidityLevel, toggleAutomationHumidity} from '../Services/HumidityServices';
 import {fetchInitialDosingValues, updateInitialDosingValues, toggleStartInitialDosing} from '../Services/InitialDosingServices'
-import './SystemSettingsl.css';
+import './SystemSettings.css';
 import {createPhChart, createTdsChart, fetchLastSevenSamples} from "../Services/chartsServices";
 import { ref, onValue, off } from 'firebase/database';
 import {fetchPhAutoStatus, fetchPhValue} from "../Services/phServices";
@@ -14,7 +14,7 @@ import on from '../Images/Dashboard/ON.png';
 import off_icon from '../Images/Dashboard/OFF.png';
 import {useParams} from "react-router-dom";
 
-const SystemSettings = ({ sidebarExpanded }) => {
+const SystemSettings = ({ sidebarExpanded, isDarkMode }) => {
     const [phBalanceAuto, setPhBalanceAuto] = useState(false);
     const [lightScheduleAuto, setLightScheduleAuto] = useState(false);
     const [humidityControlAuto, setHumidityControlAuto] = useState(false);
@@ -288,14 +288,14 @@ const SystemSettings = ({ sidebarExpanded }) => {
             const tdsCtx = document.getElementById('tdsChart');
 
             if (recentSamples.pH.length > 0) {
-                phChartRef.current = createPhChart(phCtx.getContext('2d'), recentSamples, phChartRef);
+                phChartRef.current = createPhChart(phCtx.getContext('2d'), recentSamples, phChartRef, isDarkMode);
             } 
             if (recentSamples.TDS.length > 0) {
-                TdsChartRef.current = createTdsChart(tdsCtx.getContext('2d'), recentSamples, TdsChartRef);
+                TdsChartRef.current = createTdsChart(tdsCtx.getContext('2d'), recentSamples, TdsChartRef, isDarkMode);
             }
 
         }, 0);
-    }, [recentSamples]);
+    }, [recentSamples, isDarkMode]);
 
     useEffect(() => {
         initializeCharts();
@@ -322,8 +322,8 @@ const SystemSettings = ({ sidebarExpanded }) => {
     }, [systemName]);
 
     return (
-        <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}> {/* css file in src/Components/Common */}
-            <div className="systemControl">
+        <div className={`background-overlay ${isDarkMode ? 'dark-mode' : ''} ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}> {/* css file in src/Components/Common */}
+            <div className={`systemControl ${isDarkMode ? 'dark-mode' : ''}`}>
                 <h2>{systemName}'s Settings:</h2>
                 <div className='system-Control-Live-Feed'>
                     {/*pH*/}
