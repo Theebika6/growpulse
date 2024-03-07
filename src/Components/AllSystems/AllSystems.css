@@ -288,3 +288,41 @@
 .flash {
     animation: flashAnimation 1s;
 }
+
+/*DARK MODE */
+
+.allSystems.dark-mode h2{
+    color: #ffffff; 
+}
+
+.allSystems.dark-mode h3{
+    background-color: #0b5091;
+    color: #ffffff; 
+}
+
+.allSystems.dark-mode .container{
+    color: #ffffff; 
+    border-color: #ddd;
+}
+
+.allSystems.dark-mode th{
+    border-color: #dddddd00;
+    background-color: #012e58;
+}
+
+.allSystems.dark-mode tr:hover{
+    background-color: #012e582f;
+}
+
+.allSystems.dark-mode td, .allSystems.dark-mode .location, .allSystems.dark-mode .label{
+    color: #ffffff;
+}
+
+.allSystems.dark-mode .geography {
+    stroke: #fff !important;
+}
+
+.allSystems.dark-mode .geography:hover {
+    fill: #fff !important;
+}
+

@@ -16,7 +16,7 @@ import { fetchLigthPowerStatus } from '../Services/LightServices';
 import { fetchMainPumpStatus } from '../Services/MainPumpServices';
 
 
-const AllSystems = ({ sidebarExpanded }) => {
+const AllSystems = ({ sidebarExpanded, isDarkMode}) => {
     const [systemsData, setSystemsData] = useState([]);
     const [liveFeedData, setLiveFeedData] = useState({});
     const [dispensedData, setDispensedData] = useState({});
@@ -240,8 +240,8 @@ const AllSystems = ({ sidebarExpanded }) => {
     };     
 
     return (
-        <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}>
-            <div className="allSystems">
+        <div className={`background-overlay ${isDarkMode ? 'dark-mode' : ''} ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}>
+            <div className={`allSystems ${isDarkMode ? 'dark-mode' : ''}`}>
                 <header>
                     <h2 className="Header">Quick view of all of your systems:</h2>
                 </header>

@@ -19,7 +19,7 @@
 }
 
 .topbar.dark-mode {
-    background: rgba(0, 0, 0, 0.432);
+    background: #002f5ab6;
     transition: all 0.3s ease;
     color: #fff; 
 }
