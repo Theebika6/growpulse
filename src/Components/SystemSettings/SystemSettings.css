@@ -396,6 +396,10 @@
     color: #ffffff;
 }
 
+.systemControl.dark-mode .auto-label{
+    color: #ffffff!important;
+}
+
 .systemControl.dark-mode .amount-txt, .systemControl.dark-mode input{
     color: #ffffff;
 }

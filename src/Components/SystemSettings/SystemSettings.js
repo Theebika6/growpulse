@@ -12,6 +12,7 @@ import {fetchTdsValue} from "../Services/tdsServices";
 import * as pumpService from "../Services/DosingPumpsServices";
 import on from '../Images/Dashboard/ON.png';
 import off_icon from '../Images/Dashboard/OFF.png';
+import off_white from '../Images/Dashboard/ON-white.png';
 import {useParams} from "react-router-dom";
 
 const SystemSettings = ({ sidebarExpanded, isDarkMode }) => {
@@ -457,7 +458,7 @@ const SystemSettings = ({ sidebarExpanded, isDarkMode }) => {
                                     className="toggle-button"
                                     onClick={() => togglePhAuto(phBalanceAuto, setPhBalanceAuto, systemName)}
                                 >
-                                    <img src={phBalanceAuto ? on : off_icon} alt="Toggle" />
+                                    <img src={phBalanceAuto ? on : (isDarkMode ? off_white : off_icon)} alt="Toggle" />
                                     <span className="auto-label" style={{ color: phBalanceAuto ? '#0096ff' : "grey" }}>A</span>
                                 </button>
                             </td>
@@ -498,7 +499,7 @@ const SystemSettings = ({ sidebarExpanded, isDarkMode }) => {
                                     className="toggle-button"
                                     onClick={() => toggleLightScheduleAuto(lightScheduleAuto, setLightScheduleAuto, systemName)}
                                 >
-                                    <img src={lightScheduleAuto ? on : off_icon} alt="Toggle" />
+                                    <img src={lightScheduleAuto ? on : (isDarkMode ? off_white : off_icon)} alt="Toggle" />
                                     <span className="auto-label" style={{ color: lightScheduleAuto ? '#0096ff' : 'grey' }}>A</span>
                                 </button>
                             </td>
@@ -540,7 +541,7 @@ const SystemSettings = ({ sidebarExpanded, isDarkMode }) => {
                             </td>
                             <td className="toggle-cell">
                                 <button className="toggle-button" onClick={() => toggleAutomationHumidity(humidityControlAuto, setHumidityControlAuto, systemName)}>
-                                    <img src={humidityControlAuto ? on : off_icon} alt="Toggle" />
+                                    <img src={humidityControlAuto ? on : (isDarkMode ? off_white : off_icon)} alt="Toggle" />
                                     <span className="auto-label" style={{ color: humidityControlAuto ? '#0096ff' : 'grey' }}>A</span>
                                 </button>
                             </td>
@@ -599,7 +600,7 @@ const SystemSettings = ({ sidebarExpanded, isDarkMode }) => {
                             </td>
                             <td className="toggle-cell">
                                 <button className="toggle-button-Init-Dosing" onClick={() => toggleStartInitialDosing(startInitialDosing, setStartInitialDosing, systemName)}>
-                                    <img src={startInitialDosing ? on : off_icon} alt="Toggle" />
+                                    <img src={startInitialDosing ? on : (isDarkMode ? off_white : off_icon)} alt="Toggle" />
                                     <span className="auto-label" style={{ color: startInitialDosing ? '#0096ff' : 'grey' }}>Start</span>
                                 </button>
                             </td>
@@ -647,7 +648,7 @@ const SystemSettings = ({ sidebarExpanded, isDarkMode }) => {
                             </td>
                             <td className="toggle-cell">
                                 <button className="toggle-button" onClick={() => setDispensePumpA(!dispensePumpA)}>
-                                    <img src={dispensePumpA ? on : off_icon} alt="Toggle" />
+                                    <img src={dispensePumpA ? on : (isDarkMode ? off_white : off_icon)} alt="Toggle" />
                                     <span className="auto-label" style={{ color: dispensePumpA ? '#0096ff' : 'grey' }}>Run</span>
                                 </button>
                             </td>
@@ -672,7 +673,7 @@ const SystemSettings = ({ sidebarExpanded, isDarkMode }) => {
                             </td>
                             <td className="toggle-cell">
                                 <button className="toggle-button" onClick={() => setDispensePumpB(!dispensePumpB)}>
-                                    <img src={dispensePumpB ? on : off_icon} alt="Toggle" />
+                                    <img src={dispensePumpB ? on : (isDarkMode ? off_white : off_icon)} alt="Toggle" />
                                     <span className="auto-label" style={{ color: dispensePumpB ? '#0096ff' : 'grey' }}>Run</span>
                                 </button>
                             </td>
@@ -697,7 +698,7 @@ const SystemSettings = ({ sidebarExpanded, isDarkMode }) => {
                             </td>
                             <td className="toggle-cell">
                                 <button className="toggle-button" onClick={() => setDispensePumpC(!dispensePumpC)}>
-                                    <img src={dispensePumpC ? on : off_icon} alt="Toggle" />
+                                    <img src={dispensePumpC ? on : (isDarkMode ? off_white : off_icon)} alt="Toggle" />
                                     <span className="auto-label" style={{ color: dispensePumpC ? '#0096ff' : 'grey' }}>Run</span>
                                 </button>
                             </td>
@@ -722,7 +723,7 @@ const SystemSettings = ({ sidebarExpanded, isDarkMode }) => {
                             </td>
                             <td className="toggle-cell">
                                 <button className="toggle-button" onClick={() => setDispensePumpD(!dispensePumpD)}>
-                                    <img src={dispensePumpD ? on : off_icon} alt="Toggle" />
+                                    <img src={dispensePumpD ? on : (isDarkMode ? off_white : off_icon)} alt="Toggle" />
                                     <span className="auto-label" style={{ color: dispensePumpD ? '#0096ff' : 'grey' }}>Run</span>
                                 </button>
                             </td>
