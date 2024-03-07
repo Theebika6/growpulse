@@ -249,9 +249,9 @@ const Overview = ({ sidebarExpanded, isDarkMode}) => {
 
     useEffect(() => {
         if (lightON && lightOFF) {
-            createLightScheduleGanttChart('lightScheduleGanttChartContainer', lightON, lightOFF);
+            createLightScheduleGanttChart('lightScheduleGanttChartContainer', lightON, lightOFF, isDarkMode);
         }
-    }, [lightON, lightOFF]);
+    }, [lightON, lightOFF, isDarkMode]);
 
     /* Dispense History */
     /* Fetching and displaying */

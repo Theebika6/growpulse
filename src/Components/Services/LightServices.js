@@ -121,7 +121,7 @@ export const fetchLigthPowerStatus = (setLightPowerOn, systemName) => {
     }
 };
 
-export const createLightScheduleGanttChart = (containerId, lightON, lightOFF) => {
+export const createLightScheduleGanttChart = (containerId, lightON, lightOFF, isDarkMode) => {
     const currentTime = new Date();
     const currentHours = currentTime.getHours();
     const currentMinutes = currentTime.getMinutes();
@@ -134,6 +134,9 @@ export const createLightScheduleGanttChart = (containerId, lightON, lightOFF) =>
     const formattedCurrentHours = padZero(currentHours);
     const formattedCurrentMinutes = padZero(currentMinutes);
 
+    const textColor = isDarkMode ? 'white' : 'grey';
+    const plotLineColor = isDarkMode ? 'white' : 'black';
+
     Highcharts.ganttChart(containerId, {
         chart: {
             backgroundColor: null,
@@ -142,7 +145,10 @@ export const createLightScheduleGanttChart = (containerId, lightON, lightOFF) =>
             marginRight: 0, // Space on the right
             marginBottom: 45, // Space at the bottom
             marginLeft: 0, // Space on the left
-            spacing: [0, 0, 0, 0] // Spacing between the outer edge of the chart and the plot area
+            spacing: [0, 0, 0, 0],
+            style: {
+                color: textColor, // Set text color for the chart
+            },
         },
         title: {
             text: ''
@@ -151,7 +157,7 @@ export const createLightScheduleGanttChart = (containerId, lightON, lightOFF) =>
             visible: true,
             type: 'datetime',
             plotLines: [{
-                color: 'black',
+                color: plotLineColor,
                 width: 2,
                 value: currentTimeInMs,
                 zIndex: 5,
@@ -161,7 +167,7 @@ export const createLightScheduleGanttChart = (containerId, lightON, lightOFF) =>
                     y: 120, 
                     rotation : 0,
                     style: {
-                        color: 'grey', 
+                        color: textColor,
                         fontSize: 'smaller',
                     }
                 }
@@ -178,7 +184,10 @@ export const createLightScheduleGanttChart = (containerId, lightON, lightOFF) =>
             visible: true,
             gridLineWidth: 1,
             labels: {
-                enabled: true
+                enabled: true,
+                style: {
+                    color: textColor, // Adjust axis labels color based on dark mode
+                }
             }
         },
         series: [{
