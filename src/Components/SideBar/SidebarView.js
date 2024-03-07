@@ -14,7 +14,7 @@ import trashIcon from '../Images/SidebarIcons/trash.png';
 import { addNewSystem } from './addNewSystem';
 import { ref, remove, get } from 'firebase/database';
 
-const SidebarView = ({ sidebarClass }) => {
+const SidebarView = ({ sidebarClass, isDarkMode}) => {
     const [expandedSystem, setExpandedSystem] = useState(null);
     const [systems, setSystems] = useState([]);
     const [activeLink, setActiveLink] = useState(null);
@@ -25,11 +25,8 @@ const SidebarView = ({ sidebarClass }) => {
         if (currentUser) {
             try {
                 const newSystemId = await addNewSystem(currentUser.uid);
-                // You may want to update your local state to include the new system
-                // For example, if you have a state variable that tracks system IDs:
                 setSystems([...systems, newSystemId]);
             } catch (error) {
-                // Handle the error (e.g., show an error message to the user)
                 console.error(error);
             }
         }
@@ -112,7 +109,7 @@ const SidebarView = ({ sidebarClass }) => {
     };
 
     return (
-        <div className={`sidebar ${sidebarClass}`}>
+        <div className={`sidebar ${sidebarClass} ${isDarkMode ? 'dark-mode' : ''}`}>
             <img src={GrowPulseLogo} alt="Header Icon" className="sidebar-icon"/>
             <ul>
                 <li>

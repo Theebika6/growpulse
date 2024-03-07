@@ -11,7 +11,7 @@
     padding: 0 20px;
     z-index: 3;
     margin-left: 210px;
-    transition: color 0.3s ease, background-color 0.3s ease, margin-left 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .topbar-expanded {
@@ -19,8 +19,8 @@
 }
 
 .topbar.dark-mode {
-    background: rgba(0, 0, 0, 0.705);
-    transition: color 0.3s ease, background-color 0.3s ease;
+    background: rgba(0, 0, 0, 0.432);
+    transition: all 0.3s ease;
     color: #fff; 
 }
 

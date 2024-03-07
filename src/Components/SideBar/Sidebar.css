@@ -215,3 +215,35 @@
     display: flex; 
     gap: 10px;
 }
+
+
+
+/* Dark Mode*/
+.sidebar.dark-mode {
+    background: #333333c5; 
+    color: #fff; 
+    transition: all 0.3s ease;
+}
+
+.sidebar.dark-mode .sidebar-icon,.sidebar.dark-mode .system-icon,.sidebar.dark-mode .subtitle-icon,.sidebar.dark-mode .expand,.sidebar.dark-mode .trash {
+    filter: brightness(0) invert(1); 
+}
+
+.sidebar.dark-mode a {
+    color: #ccc; 
+}
+
+.sidebar.dark-mode .highlight,
+.sidebar.dark-mode .system-letter,
+.sidebar.dark-mode .addSystem h2,
+.sidebar.dark-mode .add-system-button {
+    color: #ddd; 
+}
+
+.sidebar.dark-mode a:hover {
+    color: #fff; 
+}
+
+.sidebar.dark-mode .system-container:hover .trash {
+    opacity: 1; 
+}

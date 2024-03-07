@@ -36,7 +36,7 @@ const App = () => {
     return (
         <Router>
             <div className="App">
-            {isLoggedIn && isEmailVerified && <SidebarController show={sidebarExpanded} />}
+            {isLoggedIn && isEmailVerified && <SidebarController show={sidebarExpanded} isDarkMode={isDarkMode} />}
                 {isLoggedIn && isEmailVerified && <TopbarController 
                     toggleSidebar={() => setSidebarExpanded(prev => !prev)}
                     toggleTheme={() => setIsDarkMode(prev => !prev)} 
