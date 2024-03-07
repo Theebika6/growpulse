@@ -11,11 +11,17 @@
     padding: 0 20px;
     z-index: 3;
     margin-left: 210px;
-    transition: margin-left 0.3s ease;
+    transition: color 0.3s ease, background-color 0.3s ease, margin-left 0.3s ease;
 }
 
 .topbar-expanded {
     margin-left: 0;
+}
+
+.topbar.dark-mode {
+    background: rgba(0, 0, 0, 0.705);
+    transition: color 0.3s ease, background-color 0.3s ease;
+    color: #fff; 
 }
 
 .logout-button {
@@ -27,8 +33,13 @@
     font-size: 14px;
     font-family: 'Raleway', sans-serif;
     cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    transition: background-color 0.3s ease, box-shadow 0.4s ease;
     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.topbar.dark-mode .logout-button {
+    transition: box-shadow 0.4s ease;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.582);
 }
 
 .logout-button:hover {
@@ -41,6 +52,11 @@
     margin-bottom: 0;
     color: #1e1e1e;
     font-family: 'Raleway', sans-serif;
+}
+
+.topbar.dark-mode h1{
+    color: #fff;
+    transition: color 0.3s ease;
 }
 
 .collapse-toggle {
@@ -56,6 +72,10 @@
 
 .icons{
     width: 27px;
+}
+
+.tasks{
+    width: 30px;
 }
 
 .icons:hover{

@@ -17,6 +17,7 @@ const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isEmailVerified, setIsEmailVerified] = useState(false);
     const [sidebarExpanded, setSidebarExpanded] = useState(true);
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -37,9 +38,11 @@ const App = () => {
             <div className="App">
             {isLoggedIn && isEmailVerified && <SidebarController show={sidebarExpanded} />}
                 {isLoggedIn && isEmailVerified && <TopbarController 
-                          toggleSidebar={() => setSidebarExpanded(prev => !prev)} 
-                          sidebarExpanded={sidebarExpanded} 
-                        />}
+                    toggleSidebar={() => setSidebarExpanded(prev => !prev)}
+                    toggleTheme={() => setIsDarkMode(prev => !prev)} 
+                    sidebarExpanded={sidebarExpanded}
+                    isDarkMode={isDarkMode}
+                />}
                 {isLoggedIn && isEmailVerified ? (
                     <Routes>
                         <Route path="/" element={<Navigate to="/allSystems" />} />

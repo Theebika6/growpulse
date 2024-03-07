@@ -6,9 +6,15 @@ import fullScreen from '../Images/HeaderIcons/full_screen.png';
 import notificationIcon from '../Images/HeaderIcons/notification.png';
 import tasks from '../Images/HeaderIcons/tasks.png';
 import darkMode from '../Images/HeaderIcons/night-mode.png';
-import lightMode from '../Images/HeaderIcons/light-mode.png';
+import lightMode from '../Images/HeaderIcons/sun-white.png';
+import extendWhite from '../Images/HeaderIcons/extend-white.png';
+import collapseWhite from '../Images/HeaderIcons/collapse-white.png';
+import fullScreenWhite from '../Images/HeaderIcons/full-screen-white.png';
+import notificationWhite from '../Images/HeaderIcons/notification-white.png';
+import taskWhite from '../Images/HeaderIcons/task-list-white.png';
 
-const HeaderView = ({ toggleSidebar, sidebarExpanded, fullName, handleLogout }) => {
+
+const HeaderView = ({ toggleSidebar, sidebarExpanded, toggleTheme, isDarkMode, fullName, handleLogout }) => {
     const formatDate = () => {
         const currentDate = new Date();
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -28,11 +34,6 @@ const HeaderView = ({ toggleSidebar, sidebarExpanded, fullName, handleLogout }) 
 
     const [currentDateTime, setCurrentDateTime] = useState(formatDate());
     const topbarClass = sidebarExpanded ? "" : "topbar-expanded";
-    const [isDarkMode, setIsDarkMode] = useState(false);
-
-    const toggleTheme = () => {
-        setIsDarkMode(!isDarkMode);
-    };
 
     const toggleFullScreen = () => {
         if (!document.fullscreenElement) {
@@ -69,25 +70,26 @@ const HeaderView = ({ toggleSidebar, sidebarExpanded, fullName, handleLogout }) 
     }, []);
 
     return (
-        <div className={`topbar ${topbarClass}`}>
-        <div className="left-side">
-        <img src={sidebarExpanded ? collapseLeft : expandRight}
-                 alt={sidebarExpanded ? "collapse-left" : "expand-right"}
-                 className="collapse-toggle"
-                 onClick={toggleSidebar} />
+        <div className={`topbar ${topbarClass} ${isDarkMode ? 'dark-mode' : ''}`}>
+            <div className="left-side">
+                <img
+                    src={sidebarExpanded ? (isDarkMode ? collapseWhite : collapseLeft) : (isDarkMode ? extendWhite : expandRight)}
+                    alt={sidebarExpanded ? "Collapse" : "Expand"}
+                    className="collapse-toggle"
+                    onClick={toggleSidebar} />
                 <h1>Hello, {fullName}</h1>
                 <div className='current-date'>{currentDateTime}</div>
             </div>
             <div className="right-side">
                 <img
                     src={isDarkMode ? lightMode : darkMode}
-                    alt={isDarkMode ? "light-mode-icon" : "dark-mode-icon"}
-                    className={"dark-mode-icon"}
+                    alt="Theme Toggle"
+                    className="icons dark-mode-icon"
                     onClick={toggleTheme}
                 />
-                <img src={tasks} alt={"task-icon"} className={"icons"}/>
-                <img src={notificationIcon} alt={"notification-icon"} className={"icons"}/>
-                <img src={fullScreen} alt={"full-screen"} className={"icons"} onClick={toggleFullScreen}/>
+                <img src={isDarkMode ? taskWhite : tasks} alt="Tasks" className="icons tasks" />
+                <img src={isDarkMode ? notificationWhite : notificationIcon} alt="Notifications" className="icons" />
+                <img src={isDarkMode ? fullScreenWhite : fullScreen} alt="Full Screen" className="icons" onClick={toggleFullScreen} />
                 <button className="logout-button" onClick={handleLogout}>Logout</button>
             </div>
         </div>

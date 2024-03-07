@@ -4,7 +4,7 @@ import {auth, database} from '../../firebaseConfig';
 import HeaderView from './HeaderView';
 import { ref, get } from 'firebase/database';
 
-const HeaderController = ({ toggleSidebar, sidebarExpanded }) => {
+const HeaderController = ({ toggleSidebar, sidebarExpanded, toggleTheme, isDarkMode }) => {
 
     const currentUser = auth.currentUser;
     const [fullName, setFullName] = useState('');
@@ -52,6 +52,8 @@ const HeaderController = ({ toggleSidebar, sidebarExpanded }) => {
         <HeaderView
             toggleSidebar={toggleSidebar}
             sidebarExpanded={sidebarExpanded}
+            toggleTheme={toggleTheme}
+            isDarkMode={isDarkMode}
             fullName={fullName}
             handleLogout={handleLogout}
         />
