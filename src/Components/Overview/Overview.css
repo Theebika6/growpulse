@@ -680,6 +680,12 @@
     100% { color: black; }
 }
 
+@keyframes flash-white {
+    0% { color: rgb(25, 200, 0);  }
+    50% { color: rgb(25, 200, 0); }
+    100% { color: rgb(255, 255, 255); }
+}
+
 .flash-animation {
     animation: flash 1s;
 }
@@ -731,4 +737,8 @@
 .overview.dark-mode .custom-select {
     color: #ffffff ; 
     background-color: #094277;
+}
+
+.overview.dark-mode .flash-animation {
+    animation: flash-white 1s;
 }

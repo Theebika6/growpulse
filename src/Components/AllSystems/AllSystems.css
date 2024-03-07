@@ -326,3 +326,6 @@
     fill: #fff !important;
 }
 
+.allSystems.dark-mode .flash {
+    animation: flash-white 1s;
+}

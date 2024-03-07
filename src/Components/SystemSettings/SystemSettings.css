@@ -400,3 +400,6 @@
     color: #ffffff;
 }
 
+.systemControl.dark-mode .flash-animation {
+    animation: flash-white 1s;
+}
