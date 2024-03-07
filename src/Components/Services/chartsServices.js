@@ -137,9 +137,9 @@ export const createWaterTemperatureChart = (waterTempCtx, recentSamples, waterTe
                 datasets: [{
                     label: 'Water Temperature Samples',
                     data: [...recentSamples.WaterTemperature].reverse(),
-                    borderColor: 'rgba(1, 1, 122, 1)',
+                    borderColor: 'rgba(255, 87, 60, 1)',
                     fill: false,
-                    backgroundColor: 'rgba(1, 1, 122, 0.2)',
+                    backgroundColor: 'rgba(255, 87, 60, 0.2)',
                 }]
             },
             options: {
@@ -435,8 +435,8 @@ export const getChartData = (dayAverages) => {
             {
                 label: 'Water Temperature',
                 data: chartData.map((data) => data[4]),
-                backgroundColor: 'rgba(1, 1, 122, 0.3)',
-                borderColor: 'rgba(1, 1, 122, 1)',
+                backgroundColor: 'rgba(255, 87, 60, 0.3)',
+                borderColor: 'rgba(255, 87, 60, 1)',
                 borderWidth: 1,
             },
         ],
@@ -542,8 +542,8 @@ export const getDailyChartData = (selectedDay, liveData) => {
             {
                 label: 'Water Temperature',
                 data: chartData.map((data) => data[4]),
-                backgroundColor: 'rgba(1, 1, 122, 0.3)',
-                borderColor: 'rgba(1, 1, 122, 1)',
+                backgroundColor: 'rgba(255, 87, 60, 0.3)',
+                borderColor: 'rgba(255, 87, 60, 1)',
                 borderWidth: 1,
                 fill: true,
                 pointRadius: 0,

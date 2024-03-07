@@ -17,7 +17,7 @@
 }
 
 .background-overlay.dark-mode:before {
-    background: linear-gradient(to top right, #003a70e3, #004483d5),
+    background: linear-gradient(to top right, #002547e3, #002b53d5),
                 linear-gradient(to bottom, #001d38d5, #001d38d5);
     
     transition: all 0.3s ease;

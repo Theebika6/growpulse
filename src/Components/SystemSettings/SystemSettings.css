@@ -357,7 +357,7 @@
 }
 
 .systemControl.dark-mode h3{
-    background-color: #094277;
+    background-color: #062d52;
     color: #ffffff; 
 }
 
@@ -385,3 +385,18 @@
     color: #ffffff;
     background-color: #003464;
 }
+
+.systemControl.dark-mode .save-cell {
+    color: #ffffff;
+    background-color: #003464;
+}
+
+.systemControl.dark-mode tr {
+    background-color: #003261c5;
+    color: #ffffff;
+}
+
+.systemControl.dark-mode .amount-txt, .systemControl.dark-mode input{
+    color: #ffffff;
+}
+
