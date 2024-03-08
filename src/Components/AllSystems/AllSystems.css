@@ -445,7 +445,7 @@
 
 .allSystems.dark-mode th{
     border-color: #dddddd00;
-    background-color: #012e58;
+    background-color: #003e77;
 }
 
 .allSystems.dark-mode tr:hover{
@@ -467,3 +467,27 @@
 .allSystems.dark-mode .flash {
     animation: flash-white 1s;
 }
+
+.allSystems.dark-mode input{
+    color: #ffffff;
+}
+
+.allSystems.dark-mode .task-name{
+    background-color: #ffffff00;
+}
+
+.allSystems.dark-mode .add-task{
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
+.allSystems.dark-mode .delete-task-button{
+    filter: brightness(0) invert(1); 
+}
+
+.allSystems.dark-mode input[type="date"] {
+    filter: brightness(0) invert(1);
+}
+
+
+

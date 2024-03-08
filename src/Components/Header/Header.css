@@ -145,6 +145,14 @@
     position: relative; 
 }
 
+.topbar.dark-mode .tasks-dropdown{
+    background: #136bbd;
+}
+
+.topbar.dark-mode .taskName, .topbar.dark-mode .taskDate{
+    color: #000a66;
+}
+
 .tasks-dropdown {
     position: absolute;
     top: 40px;
@@ -180,11 +188,18 @@
     position: relative;
 }
 
-/* Add these new styles */
 .completed-task .taskName,
 .completed-task .taskDate,
 .completed-task .priority,
 .completed-task .due {
     text-decoration: line-through;
-    color: grey; /* Change the text color to grey */
+    color: grey; 
+}
+
+.topbar.dark-mode .completed-task .taskName,
+.topbar.dark-mode .completed-task .taskDate,
+.topbar.dark-mode .completed-task .priority,
+.topbar.dark-mode .completed-task .due {
+    text-decoration: line-through;
+    color: grey; 
 }
