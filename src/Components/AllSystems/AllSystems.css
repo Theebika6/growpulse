@@ -357,6 +357,7 @@
 .task-name{
     width: 20rem;
     font-family: 'Raleway', sans-serif;
+    cursor: pointer;
 }
 
 .task-priority{
@@ -387,7 +388,13 @@
 
 .task-item.completed .task-name, .task-item.completed .task-due-date, .task-item.completed .task-priority {
     border-color: #ced4da00;
+    background-color: #ffffff00;
     font-family: 'Raleway', sans-serif;
+    cursor: auto;
+}
+
+.checkbox{
+    cursor: pointer;
 }
 
 .delete-task-button {
@@ -415,6 +422,9 @@
     color: rgb(255, 0, 0);
 }
 
+.days{
+    font-size: 12px;
+}
 
 
 /*DARK MODE */

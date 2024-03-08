@@ -110,11 +110,17 @@ const AllSystems = ({ sidebarExpanded, isDarkMode}) => {
         const unsubscribe = onSnapshot(tasksColRef, (snapshot) => {
             const fetchedTasks = [];
             snapshot.forEach(doc => fetchedTasks.push({ id: doc.id, ...doc.data() }));
+            // Sort tasks by due date, from most recent to latest
+            fetchedTasks.sort((a, b) => {
+                const dateA = new Date(a.dueDate);
+                const dateB = new Date(b.dueDate);
+                return dateA - dateB; // Sorts ascending; swap `dateA` and `dateB` to sort descending
+            });
             setTasks(fetchedTasks);
         });
     
         return () => unsubscribe(); // Detach listener when the component unmounts
-    }, []);
+    }, []);    
     
     const addTask = (newTask) => {
         const tasksColRef = collection(firestore, `Registered Users/${auth.currentUser.uid}/Tasks`);
@@ -463,6 +469,7 @@ const AllSystems = ({ sidebarExpanded, isDarkMode}) => {
                                 <li key={task.id} className={`task-item ${task.completed ? 'completed' : ''}`}>
                                     <div className="task-details">
                                         <input
+                                            className="checkbox"
                                             type="checkbox"
                                             checked={task.completed}
                                             onChange={() => toggleTaskCompleted(task.id, task.completed)}
