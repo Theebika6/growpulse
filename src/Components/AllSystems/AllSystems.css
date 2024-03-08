@@ -1,6 +1,7 @@
 .allSystems {
     transition: margin-left 0.3s ease;
     margin: 6rem 10px 1rem 15rem;
+    font-family: 'Raleway', sans-serif;
 }
 
 .sidebar-collapsed .allSystems {
@@ -279,6 +280,11 @@
     white-space: nowrap;
 }
 
+.task-list-container{
+    grid-column: 1 / span 2;
+    height: 15rem;
+}
+
 @keyframes flashAnimation {
     0% { color: rgb(25, 200, 0); }
     50% { color: rgb(25, 200, 0); }
@@ -288,6 +294,115 @@
 .flash {
     animation: flashAnimation 1s;
 }
+
+/*TASK LIST*/
+
+.task-list-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-task{
+    background-color: #a8a8a894;
+    padding: 1rem;
+    width: 75%;
+    border-style: dashed;
+    border-color: #333;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'Raleway', sans-serif;
+}
+
+.add-task:hover{
+    background-color: #66666694;
+    transition: background-color 0.3s ease;
+}
+
+.task-list-container .task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.task-list-container .task-details {
+    display: flex;
+    align-items: center;
+    gap: 2rem; 
+}
+
+.task-name, .task-due-date, .task-priority {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px 10px;
+    font-family: 'Raleway', sans-serif;
+}
+
+.task-name{
+    width: 20rem;
+    font-family: 'Raleway', sans-serif;
+}
+
+.task-priority{
+    width: 100px;
+    background-color: #ffffff00;
+    border-color: #ffffff00;
+    cursor: pointer;
+}
+
+.task-due-date{
+    background-color: #ffffff00;
+    border-color: #ffffff00;
+    cursor: pointer;
+}
+
+.task-due-date:hover, .task-priority:hover{
+    border-color: #8f8f8f;
+}
+
+.task-priority option[value="Low"] { color: rgb(0, 0, 0); }
+.task-priority option[value="Medium"] { color: rgb(0, 0, 0); }
+.task-priority option[value="High"] { color: rgb(0, 0, 0); }
+
+.task-item.completed .task-details, .task-item.completed .task-priority {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.task-item.completed .task-name, .task-item.completed .task-due-date, .task-item.completed .task-priority {
+    border-color: #ced4da00;
+    font-family: 'Raleway', sans-serif;
+}
+
+.delete-task-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.delete-task-button img {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+}
+
+/* Additional styles for coloring priority */
+.priority-Low {
+    color: rgb(0, 170, 0);
+}
+
+.priority-Medium {
+    color: rgb(235, 168, 0);
+}
+
+.priority-High {
+    color: rgb(255, 0, 0);
+}
+
+
 
 /*DARK MODE */
 

@@ -6,7 +6,7 @@ import worldMap from './countries-110m.json';
 import countriesCoordinates from './countriesCoordinates.json';
 import { database, auth, firestore } from '../../firebaseConfig';
 import { ref, get, update, onValue } from 'firebase/database';
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, onSnapshot, addDoc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { fetchPhValue } from '../Services/phServices';
 import { fetchTdsValue } from '../Services/tdsServices';
 import { fetchAirTemperature } from '../Services/AirTempServices';
@@ -14,6 +14,7 @@ import { fetchWaterTempValue } from '../Services/WaterTempServices';
 import { fetchHumidity } from '../Services/HumidityServices';
 import { fetchLigthPowerStatus } from '../Services/LightServices';
 import { fetchMainPumpStatus } from '../Services/MainPumpServices';
+import trashIcon from '../Images/SidebarIcons/trash.png';
 
 
 const AllSystems = ({ sidebarExpanded, isDarkMode}) => {
@@ -21,6 +22,7 @@ const AllSystems = ({ sidebarExpanded, isDarkMode}) => {
     const [liveFeedData, setLiveFeedData] = useState({});
     const [dispensedData, setDispensedData] = useState({});
     const [flashingSensors, setFlashingSensors] = useState({});
+    const [tasks, setTasks] = useState([]);
     
 
     const fetchSystemLiveFeed = useCallback((systemName) => {
@@ -101,8 +103,50 @@ const AllSystems = ({ sidebarExpanded, isDarkMode}) => {
             fetchSystemLiveFeed(system.systemName);
         });
     }, [systemsData, fetchSystemLiveFeed]);
-    
 
+    useEffect(() => {
+        // Assuming the current user is authenticated
+        const tasksColRef = collection(firestore, `Registered Users/${auth.currentUser.uid}/Tasks`);
+        const unsubscribe = onSnapshot(tasksColRef, (snapshot) => {
+            const fetchedTasks = [];
+            snapshot.forEach(doc => fetchedTasks.push({ id: doc.id, ...doc.data() }));
+            setTasks(fetchedTasks);
+        });
+    
+        return () => unsubscribe(); // Detach listener when the component unmounts
+    }, []);
+    
+    const addTask = (newTask) => {
+        const tasksColRef = collection(firestore, `Registered Users/${auth.currentUser.uid}/Tasks`);
+        addDoc(tasksColRef, newTask);
+    };
+
+    const updateTaskName = (taskId, newName) => {
+        const taskDocRef = doc(firestore, `Registered Users/${auth.currentUser.uid}/Tasks/${taskId}`);
+        updateDoc(taskDocRef, { name: newName });
+    };
+    
+    const updateTaskDueDate = (taskId, newDueDate) => {
+        const taskDocRef = doc(firestore, `Registered Users/${auth.currentUser.uid}/Tasks/${taskId}`);
+        updateDoc(taskDocRef, { dueDate: newDueDate });
+    };
+    
+    const deleteTask = (taskId) => {
+        const taskDocRef = doc(firestore, `Registered Users/${auth.currentUser.uid}/Tasks/${taskId}`);
+        deleteDoc(taskDocRef);
+    };
+    
+    const toggleTaskCompleted = (taskId, completed) => {
+        const taskDocRef = doc(firestore, `Registered Users/${auth.currentUser.uid}/Tasks/${taskId}`);
+        updateDoc(taskDocRef, { completed: !completed });
+    };        
+
+    const updateTaskPriority = (taskId, newPriority) => {
+        const taskDocRef = doc(firestore, `Registered Users/${auth.currentUser.uid}/Tasks/${taskId}`);
+        updateDoc(taskDocRef, { priority: newPriority });
+    };
+    
+    
     /*Map Locations*/
     const systemsCountPerCountry = systemsData.reduce((acc, system) => {
         acc[system.Location] = (acc[system.Location] || 0) + 1;
@@ -410,6 +454,49 @@ const AllSystems = ({ sidebarExpanded, isDarkMode}) => {
                                 <span className="label">of pH Down</span>
                             </div>
                         </div>
+                    </div>
+                    <div className="container task-list-container">
+                        <h3>Task List</h3>
+                        <button className = "add-task" onClick={() => addTask({ name: 'New Task', completed: false, dueDate: '', priority: 'Low' })}>Add New Task</button>
+                        <ul className="task-list">
+                            {tasks.map(task => (
+                                <li key={task.id} className={`task-item ${task.completed ? 'completed' : ''}`}>
+                                    <div className="task-details">
+                                        <input
+                                            type="checkbox"
+                                            checked={task.completed}
+                                            onChange={() => toggleTaskCompleted(task.id, task.completed)}
+                                        />
+                                        <input
+                                            type="text"
+                                            value={task.name}
+                                            onChange={(e) => updateTaskName(task.id, e.target.value)}
+                                            className="task-name"
+                                            disabled={task.completed}
+                                        />
+                                        <input
+                                            type="date"
+                                            value={task.dueDate || ''}
+                                            onChange={(e) => updateTaskDueDate(task.id, e.target.value)}
+                                            className="task-due-date"
+                                            disabled={task.completed}
+                                        />
+                                        <select
+                                            value={task.priority}
+                                            onChange={(e) => updateTaskPriority(task.id, e.target.value)}
+                                            className={`task-priority priority-${task.priority}`}
+                                            disabled={task.completed}>
+                                            <option value="Low">Low</option>
+                                            <option value="Medium">Medium</option>
+                                            <option value="High">High</option>
+                                        </select>
+                                    </div>
+                                    <button onClick={() => deleteTask(task.id)} className="delete-task-button">
+                                        <img src={trashIcon} alt="Delete" />
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </main>
             </div>
