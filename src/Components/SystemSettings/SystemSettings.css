@@ -383,12 +383,12 @@
 
 .systemControl.dark-mode .dropdown {
     color: #ffffff;
-    background-color: #003464;
+    background-color: #063c6e;
 }
 
 .systemControl.dark-mode .save-cell {
     color: #ffffff;
-    background-color: #003464;
+    background-color: #063c6e;
 }
 
 .systemControl.dark-mode tr {
@@ -409,5 +409,5 @@
 }
 
 .systemControl.dark-mode .time-container input[type="time"]::-webkit-calendar-picker-indicator {
-    filter: invert(1); /* Invert the colors of the calendar icon */
+    filter: invert(1); 
 }

@@ -83,8 +83,34 @@
 
 .alerts-table thead {
     white-space: nowrap;
+    border-radius: 10px;
 }
 
 .system-alerts tr:hover .settings-icon {
     opacity: 1;
 }
+
+/*DARK MODE*/
+
+.system-alerts.dark-mode th {
+    border-color: #ffffffa2; 
+    background-color: #012e58;
+}
+
+.system-alerts.dark-mode tbody,  .system-alerts.dark-mode .alerts-table{
+    background-color: #003261c5;
+    color: #ffffff;
+}
+
+.system-alerts.dark-mode .scroll-indicator h5 {
+    color: #ffffff;
+}
+
+.system-alerts.dark-mode .scroll, .system-alerts.dark-mode .settings-icon{
+    filter: brightness(0) invert(1); 
+}
+
+.system-alerts.dark-mode .alert-label{
+    color: #ffffff !important;
+}
+

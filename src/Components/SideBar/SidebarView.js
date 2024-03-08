@@ -167,12 +167,12 @@ const SidebarView = ({ sidebarClass, isDarkMode}) => {
                                             className={activeLink === `SystemSettings-${system}` ? "active" : ""}>
                                             • System Settings
                                         </Link>
-                                        <Link
+                                        {/*<Link
                                             to={`/schedule/${system}`}
                                             onClick={() => handleLinkClick(`Schedule-${system}`)}
                                             className={activeLink === `Schedule-${system}` ? "active" : ""}>
                                             • Schedule
-                                        </Link>
+                                        </Link>*/}
                                     </div>
                                 )}
                             </div>

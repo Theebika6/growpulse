@@ -191,3 +191,14 @@
     margin-left: 15px;
     font-size: 14px;
 }
+
+/*DARK MODE*/
+
+.alerts-modal.dark-mode {
+    background-color: #012e58;
+}
+
+.alerts-modal.dark-mode h2, .alerts-modal.dark-mode h4, .alerts-modal.dark-mode input, .alerts-modal.dark-mode span, .alerts-modal.dark-mode h5, .alerts-modal.dark-mode h6, .alerts-modal.dark-mode .close-button{
+    color: #ffffff;
+}
+

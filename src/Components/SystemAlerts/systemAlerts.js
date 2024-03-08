@@ -14,8 +14,9 @@ import {
 } from '../Services/AlertsServices';
 import scroll from '../Images/HeaderIcons/scroll-grey.png';
 import AlertsSettingsModal from '../AlertsSettingsModal/AlertsSettingsModal';
+import off_white from '../Images/Dashboard/ON-white.png';
 
-const SystemAlerts = ({ sidebarExpanded }) => {
+const SystemAlerts = ({ sidebarExpanded, isDarkMode }) => {
   const [systems, setSystems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSystem, setSelectedSystem] = useState(null);
@@ -69,8 +70,8 @@ const SystemAlerts = ({ sidebarExpanded }) => {
   };
 
   return (
-    <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}>
-      <div className="system-alerts">
+    <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'} ${isDarkMode ? 'dark-mode' : ''}`}>
+      <div className={`system-alerts ${isDarkMode ? 'dark-mode' : ''}`}>
         <table className="system-table alerts-table">
           <thead>
             <tr>
@@ -124,7 +125,7 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                         <span className='min-max-style'>Max:</span> {phMax}
                       </div>
                       <button className="toggle-button alerts-buttons" onClick={() => togglePhAlert(phAlert, () => {}, system.systemName)}>
-                          <img src={phAlert ? on : off_icon} alt="Toggle" />
+                          <img src={phAlert ? on : (isDarkMode ? off_white : off_icon)} alt="Toggle" />
                           <span className="auto-label alert-label" style={{ color: phAlert ? '#0096ff' : 'grey' }}>Alert</span>
                       </button>
                     </div>
@@ -136,7 +137,7 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                         <span className='min-max-style'>Min:</span> {tdsMin ? `${tdsMin} ppm` : '-'}
                       </div>
                       <button className="toggle-button alerts-buttons" onClick={() => toggleTdsAlert(tdsAlert, () => {}, system.systemName)}>
-                        <img src={tdsAlert ? on : off_icon} alt="Toggle" />
+                        <img src={tdsAlert ? on : (isDarkMode ? off_white : off_icon)} alt="Toggle" />
                         <span className="auto-label alert-label" style={{ color: tdsAlert ? '#0096ff' : 'grey' }}>Alert</span>
                       </button>
                     </div>
@@ -150,7 +151,7 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                             <span className='min-max-style'>Max:</span> {waterTempMax ? `${waterTempMax} °C` : '-'}
                         </div>
                         <button className="toggle-button alerts-buttons" onClick={() => toggleWaterTempAlert(waterTempAlert, () => {}, system.systemName)}>
-                            <img src={waterTempAlert ? on : off_icon} alt="Toggle" />
+                            <img src={waterTempAlert ? on : (isDarkMode ? off_white : off_icon)} alt="Toggle" />
                             <span className="auto-label alert-label" style={{ color: waterTempAlert ? '#0096ff' : 'grey' }}>Alert</span>
                         </button>
                     </div>
@@ -163,7 +164,7 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                       <span className='min-max-style'>Offset:</span> {humidityOffset ? `${humidityOffset}%` : '-'}
                       </div>
                       <button className="toggle-button alerts-buttons" onClick={() => toggleHumidityAlert(humidityAlert, () => {}, system.systemName)}>
-                        <img src={humidityAlert ? on : off_icon} alt="Toggle" />
+                        <img src={humidityAlert ? on : (isDarkMode ? off_white : off_icon)} alt="Toggle" />
                         <span className="auto-label alert-label" style={{ color: humidityAlert ? '#0096ff' : 'grey' }}>Alert</span>
                       </button>
                     </div>
@@ -177,7 +178,7 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                         <span className='min-max-style'>Max:</span> {airTempMax ? `${airTempMax} °C` : '-'}
                       </div>
                       <button className="toggle-button alerts-buttons" onClick={() => toggleAirTempAlert(airTempAlert, () => {}, system.systemName)}>
-                        <img src={airTempAlert ? on : off_icon} alt="Toggle" />
+                        <img src={airTempAlert ? on : (isDarkMode ? off_white : off_icon)} alt="Toggle" />
                         <span className="auto-label alert-label" style={{ color: airTempAlert ? '#0096ff' : 'grey' }}>Alert</span>
                       </button>
                     </div>
@@ -190,7 +191,7 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                         <span className='min-max-style'>Malfunction Alert:</span>
                       </div>
                       <button className="toggle-button alerts-buttons" onClick={() => toggleDpAlert(pumpsAlert, () => {}, system.systemName)}>
-                        <img src={pumpsAlert ? on : off_icon} alt="Toggle" />
+                        <img src={pumpsAlert ? on : (isDarkMode ? off_white : off_icon)} alt="Toggle" />
                         <span className="auto-label alert-label" style={{ color: pumpsAlert ? '#0096ff' : 'grey' }}>Alert</span>
                       </button>
                     </div>
@@ -203,7 +204,7 @@ const SystemAlerts = ({ sidebarExpanded }) => {
                         <span className='min-max-style'>Malfunction Alert:</span>
                       </div>
                       <button className="toggle-button alerts-buttons" onClick={() => toggleCamAlert(camAlert, () => {}, system.systemName)}>
-                        <img src={camAlert ? on : off_icon} alt="Toggle" />
+                        <img src={camAlert ? on : (isDarkMode ? off_white : off_icon)} alt="Toggle" />
                         <span className="auto-label alert-label" style={{ color: camAlert ? '#0096ff' : 'grey' }}>Alert</span>
                       </button>
                     </div>
@@ -221,7 +222,11 @@ const SystemAlerts = ({ sidebarExpanded }) => {
         </div>
       </div>
       {isModalOpen && (
-          <AlertsSettingsModal systemName={selectedSystem} onClose={() => setIsModalOpen(false)} />
+          <AlertsSettingsModal 
+              systemName={selectedSystem} 
+              onClose={() => setIsModalOpen(false)} 
+              isDarkMode={isDarkMode} // Pass isDarkMode as a prop
+          />
       )}
     </div>
   );

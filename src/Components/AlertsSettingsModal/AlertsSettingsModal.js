@@ -8,7 +8,7 @@ import {
     fetchHumidityOffset, updateHumidityOffset,
 } from '../Services/AlertsServices';
 
-const AlertsSettingsModal = ({ systemName, onClose }) => {
+const AlertsSettingsModal = ({ systemName, onClose, isDarkMode }) => {
     const formatValue = (value) => {
         const numericValue = parseFloat(value);
         return isNaN(numericValue) ? '0.00' : numericValue.toFixed(2);
@@ -108,8 +108,8 @@ const AlertsSettingsModal = ({ systemName, onClose }) => {
     };    
 
     return (
-        <div className="alerts-modal-container" onClick={handleOutsideClick}>
-            <div className="alerts-modal">
+        <div className={`alerts-modal-container ${isDarkMode ? 'dark-mode' : ''}`} onClick={handleOutsideClick}>
+            <div className={`alerts-modal ${isDarkMode ? 'dark-mode' : ''}`}>
                 <div className='modal-header'>
                     <h2>Alerts Settings for {systemName}</h2>
                     <button className="close-button" onClick={onClose}>X</button>
