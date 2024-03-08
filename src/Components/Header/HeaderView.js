@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './Header.css';
 import collapseLeft from '../Images/HeaderIcons/left_collapse.png';
 import expandRight from '../Images/HeaderIcons/double-right.png';
@@ -41,6 +41,7 @@ const HeaderView = ({ toggleSidebar, sidebarExpanded, toggleTheme, isDarkMode, f
     const topbarClass = sidebarExpanded ? "" : "topbar-expanded";
     const [showTasksDropdown, setShowTasksDropdown] = useState(false);
     const [upcomingTasks, setUpcomingTasks] = useState([]);
+    const tasksDropdownRef = useRef(null);
 
     const formatDateForComparison = (date) => {
         return date.toISOString().split('T')[0]; 
@@ -114,6 +115,20 @@ const HeaderView = ({ toggleSidebar, sidebarExpanded, toggleTheme, isDarkMode, f
             console.error("Error updating task completed status:", error);
         }
     };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (tasksDropdownRef.current && !tasksDropdownRef.current.contains(event.target)) {
+                setShowTasksDropdown(false);
+            }
+        };
+    
+        document.addEventListener('mousedown', handleClickOutside);
+    
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
     
 
     return (
@@ -141,7 +156,7 @@ const HeaderView = ({ toggleSidebar, sidebarExpanded, toggleTheme, isDarkMode, f
                     onClick={() => setShowTasksDropdown(!showTasksDropdown)}
                 />
                 {showTasksDropdown && (
-                    <div className="tasks-dropdown">
+                    <div className="tasks-dropdown" ref={tasksDropdownRef}>
                         <h4>Upcoming Dues:<span className='days'> (Next 5 Days Only)</span></h4>
                         {upcomingTasks.length > 0 ? (
                             upcomingTasks.map(task => (
