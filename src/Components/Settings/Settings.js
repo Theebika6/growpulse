@@ -4,7 +4,7 @@ import { auth } from '../../firebaseConfig';
 import { updateProfile, updateEmail, updatePassword } from 'firebase/auth';
 import { getDatabase, ref, onValue, set } from 'firebase/database';
 
-const Settings = ({ sidebarExpanded }) => {
+const Settings = ({ sidebarExpanded, isDarkMode }) => {
     const [newName, setNewName] = useState('');
     const [newEmail, setNewEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -82,8 +82,8 @@ const Settings = ({ sidebarExpanded }) => {
     };    
 
     return (
-        <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}>
-            <div className="settings">
+        <div className={`background-overlay ${isDarkMode ? 'dark-mode' : ''} ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}>
+            <div className={`settings ${isDarkMode ? 'dark-mode' : ''}`}>
             {error && <p className="error-message">{error}</p>}
                 <div className="account-settings">
                     <div className="account-detail">

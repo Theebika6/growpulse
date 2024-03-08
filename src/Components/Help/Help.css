@@ -78,3 +78,18 @@
     0%, 100% { opacity: 0; }
     10%, 90% { opacity: 1; }
 }
+
+/*DARK MODE*/
+
+.help.dark-mode{
+    background-color: #012e58;
+}
+
+.help.dark-mode label{
+    color: #ffffff;
+}
+
+.help.dark-mode input, .help.dark-mode textarea{
+    background-color: #012e58;
+    color: #ffffff;
+}

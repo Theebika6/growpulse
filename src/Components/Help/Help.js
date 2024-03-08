@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Help.css';
 // You may need to import a method to send emails or use an API here
 
-const Help = ({ sidebarExpanded }) => {
+const Help = ({ sidebarExpanded, isDarkMode }) => {
     const [email, setEmail] = useState('');
     const [subject, setSubject] = useState('');
     const [description, setDescription] = useState('');
@@ -41,8 +41,8 @@ const Help = ({ sidebarExpanded }) => {
     };
 
     return (
-        <div className={`background-overlay ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}>
-            <div className="help">
+        <div className={`background-overlay ${isDarkMode ? 'dark-mode' : ''} ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}>
+            <div className={`help ${isDarkMode ? 'dark-mode' : ''}`}>
                 {message && <div className={`message ${messageType}`}>{message}</div>}
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">

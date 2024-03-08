@@ -97,3 +97,9 @@
 .update-button:hover{
     background-color: #bb0000;
 }
+
+/*DARK MODE*/
+
+.settings.dark-mode h4, .settings.dark-mode span, .settings.dark-mode input{
+    color: #ffffff;
+}
