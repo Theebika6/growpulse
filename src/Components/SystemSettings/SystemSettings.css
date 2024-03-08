@@ -407,3 +407,7 @@
 .systemControl.dark-mode .flash-animation {
     animation: flash-white 1s;
 }
+
+.systemControl.dark-mode .time-container input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Invert the colors of the calendar icon */
+}
