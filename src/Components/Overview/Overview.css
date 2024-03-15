@@ -742,3 +742,9 @@
 .overview.dark-mode .flash-animation {
     animation: flash-white 1s;
 }
+
+
+.prediction-text{
+    font-size: 18px !important;
+    margin-left: -10px !important;
+}
