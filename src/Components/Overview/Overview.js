@@ -5,7 +5,7 @@ import 'chartjs-adapter-moment';
 import moment from 'moment';
 import { fetchImage} from '../Services/CameraServices';
 import {fetchPhAutoStatus, fetchPhValue} from "../Services/phServices";
-import {fetchTdsValue} from "../Services/tdsServices";
+import {fetchTdsValue, fetchMLPrediction} from "../Services/tdsServices";
 import {fetchWaterTempValue} from "../Services/WaterTempServices";
 import {fetchAirTemperature} from "../Services/AirTempServices";
 import { fetchHumidity } from '../Services/HumidityServices';
@@ -24,6 +24,18 @@ import './Overview.css';
 const Overview = ({ sidebarExpanded, isDarkMode}) => {
     const {systemName } = useParams();
     const [imageUrl, setImageUrl] = useState('');
+    const [mlPrediction, setMLPrediction] = useState(null);
+    const translateAndColorDeficiency = (abbreviation) => {
+        const mappings = {
+            'FN': {text: 'Fully Nutritional', color: 'green'},
+            'N': {text: 'Nitrogen Deficiency', color: 'red'},
+            'K': {text: 'Potassium Deficiency', color: 'red'},
+            'P': {text: 'Phosphorus Deficiency', color: 'red'}
+        };
+    
+        return mappings[abbreviation] || {text: abbreviation, color: 'grey'}; 
+    };
+    
     
     const [flashUpdate, setFlashUpdate] = useState(false);
     const [recentSamples, setRecentSamples] = useState({
@@ -220,6 +232,24 @@ const Overview = ({ sidebarExpanded, isDarkMode}) => {
         }
     };
 
+    /* ML prediction */
+    useEffect(() => {
+        setMLPrediction(null); 
+
+        fetchMLPrediction((newMLPrediction) => {
+            setFlashUpdate(true);
+
+            setTimeout(() => {
+                setFlashUpdate(false);
+            }, 1000);
+
+            const predictionInfo = translateAndColorDeficiency(newMLPrediction);
+            setMLPrediction(predictionInfo); 
+        }, systemName);
+
+    }, [systemName]); 
+
+    
     /*Light Control*/
     useEffect(() => {
         setLightON("00:00");
@@ -577,6 +607,15 @@ const Overview = ({ sidebarExpanded, isDarkMode}) => {
                                 <img className="camera" src={imageUrl} alt="Camera"/>
                             ) : (
                                 <p className="no-image">Loading image...</p>
+                            )}
+                            {mlPrediction ? (
+                                <div className="ml-prediction">
+                                    <p className="prediction-text" style={{ color: mlPrediction.color }}>
+                                        Deficiency Prediction: {mlPrediction.text}
+                                    </p>
+                                </div>
+                            ) : (
+                                <p className="prediction-text" style={{ color: 'grey' }}>No prediction</p>
                             )}
                     </div>
 
