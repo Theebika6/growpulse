@@ -11,7 +11,7 @@
     padding: 0 20px;
     z-index: 3;
     margin-left: 210px;
-    transition: all 0.3s ease;
+    transition: all ease;
 }
 
 .topbar-expanded {
@@ -20,7 +20,7 @@
 
 .topbar.dark-mode {
     background: #002f5b;
-    transition: all 0.3s ease;
+    transition: all ease;
     color: #fff; 
 }
 

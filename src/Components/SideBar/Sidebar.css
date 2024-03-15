@@ -216,13 +216,11 @@
     gap: 10px;
 }
 
-
-
 /* Dark Mode*/
 .sidebar.dark-mode {
     background: #002f5a; 
     color: #fff; 
-    transition: all 0.3s ease;
+    transition: all ease;
 }
 
 .sidebar.dark-mode .sidebar-icon,.sidebar.dark-mode .system-icon,.sidebar.dark-mode .subtitle-icon,.sidebar.dark-mode .expand,.sidebar.dark-mode .trash {
