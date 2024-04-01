@@ -530,14 +530,12 @@ body {
 
 
 /* Phone */
-
-
 @media (max-width: 768px) {
     .landing-title {
         font-size: 40px; /* Smaller font size for the title on small screens */
     }
 
-    .landing_description, .feature-description, .features-banner, .scroll-text {
+    .landing_description, .feature-description, .features-banner, .scroll-text, .contactUs-section p, .contact-form {
         font-size: 12px; /* Smaller font size for the description */
     }
     
@@ -568,7 +566,7 @@ body {
         padding: 4px;
         margin-top: 5rem;
         background-color: #fff;
-        left: 10%;
+        left: 3%;
     }
 
     .individual-feature{
@@ -578,4 +576,17 @@ body {
     .services-section{
         margin-top: 2rem;
     }
+
+    .Firebase{
+        width: 20%;
+        height: 25%;
+    }
+
+    .Concordia{
+        width: 30%;
+        height: auto;
+    }
+
+
+    
 }
