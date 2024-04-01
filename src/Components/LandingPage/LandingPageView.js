@@ -7,11 +7,8 @@ import headerLogo from '../Images/GrowpulseLogos/growpulse-leaf-white.png'
 import RegisterModal from "../RegisterModal/RegisterModal";
 import { features, descriptions } from './LandingPageModel';
 import { useLandingPageController } from './LandingPageController';
-import GreenConcordia from '../Images/LandingPageIcons/green_concordia.png';
 import Concordia from '../Images/LandingPageIcons/Concordia-logo.png';
-import SAF from '../Images/LandingPageIcons/SAF-Logo.png';
 import Firebase from '../Images/LandingPageIcons/Firebase_Logo.png';
-import AWS from '../Images/LandingPageIcons/aws-logo.png';
 
 function LandingPageView() {
     const introSectionRef = useRef(null);
@@ -31,6 +28,20 @@ function LandingPageView() {
         scrollToFeatureDescription,
         handleScroll
     } = useLandingPageController();
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+    
+        window.addEventListener('resize', handleResize);
+    
+        // Call handleResize immediately to set the initial state correctly
+        handleResize();
+    
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);    
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -67,7 +78,9 @@ function LandingPageView() {
                         <a href={"#features"} className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection(mainSectionRef); }}>Features</a>
                         <a href={"#about"} className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection(aboutUsSectionRef); }}>About Us</a>
                         <a href={"#contact"} className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection(contactUsSectionRef); }}>Contact Us</a>
-                        <button className="get-started-button" onClick={() => setIsRegisterModalOpen(true)}>Get Started</button>
+                        {windowWidth > 768 && (
+                            <button className="get-started-button" onClick={() => setIsRegisterModalOpen(true)}>Get Started</button>
+                        )}
                     </nav>
                 </header>
                 <div className="title-container">
@@ -114,13 +127,10 @@ function LandingPageView() {
             </section>
             <section ref={aboutUsSectionRef} className="aboutUs-section">
                 <div className="sponsors-section">
-                    <h2>Our Partners & Sponsors</h2>
+                    <h2>Services & Sponsors</h2>
                     <div className="sponsors-logos">
-                        <img src={GreenConcordia} alt="Green Concordia" className="sponsor-logo GreenConcordia" />
                         <img src={Concordia} alt="Concordia University" className="sponsor-logo Concordia" />
-                        <img src={SAF} alt="Sustainability Action Fund" className="sponsor-logo SAF" />
                         <img src={Firebase} alt="Firebase" className="sponsor-logo Firebase" />
-                        <img src={AWS} alt="Amazon Web Services" className="sponsor-logo AWS" />
                     </div>
                 </div>
             </section>

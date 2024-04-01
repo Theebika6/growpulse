@@ -526,3 +526,56 @@ body {
     box-sizing: border-box;
 }
 
+
+
+
+/* Phone */
+
+
+@media (max-width: 768px) {
+    .landing-title {
+        font-size: 40px; /* Smaller font size for the title on small screens */
+    }
+
+    .landing_description, .feature-description, .features-banner, .scroll-text {
+        font-size: 12px; /* Smaller font size for the description */
+    }
+    
+    .landing-header{
+        font-size: 12px;
+    }
+
+    .features-banner {
+        padding: 0.5rem;
+    }
+
+    .logo, .feature-icon{
+        width: 20%; 
+        height: auto;
+    }
+
+    .GrowPulse-icon{
+        width: 80%;
+        height: auto;
+    }
+
+    .individual-feature-icon{
+        width: 100%;
+        height: auto;
+    }
+
+    .feature-description.left, .feature-description.right{
+        padding: 4px;
+        margin-top: 5rem;
+        background-color: #fff;
+        left: 10%;
+    }
+
+    .individual-feature{
+        width: 70px;
+    }
+
+    .services-section{
+        margin-top: 2rem;
+    }
+}
