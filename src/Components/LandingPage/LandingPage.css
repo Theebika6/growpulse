@@ -527,8 +527,6 @@ body {
 }
 
 
-
-
 /* Phone */
 @media (max-width: 768px) {
     .landing-title {
@@ -587,6 +585,8 @@ body {
         height: auto;
     }
 
-
+    .navigation{
+        gap: 0;
+    }
     
 }
