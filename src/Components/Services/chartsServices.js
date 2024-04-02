@@ -1,5 +1,6 @@
 import Chart from 'chart.js/auto';
-import { auth, firestore } from "../../firebaseConfig";
+import { auth, firestore, database } from "../../firebaseConfig";
+import { ref, get } from "firebase/database";
 import {doc, getDoc } from "firebase/firestore";
 import moment from 'moment';
 
@@ -301,55 +302,49 @@ export const createAirTemperatureChart = (airTempCtx, recentSamples, airTempChar
 export const fetchLastSevenSamples = async (setRecentSamples, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
-        const sensorHistoryRef = doc(firestore, `Registered Users/${currentUser.uid}/${systemName}/SensorHistory`);
+        const sensorHistoryPath = `Registered Users/${currentUser.uid}/${systemName}/History/SensorHistory`;
+        const sensorHistoryRef = ref(database, sensorHistoryPath);
 
-        const sensorHistorySnapshot = await getDoc(sensorHistoryRef);
+        try {
+            const snapshot = await get(sensorHistoryRef);
+            if (snapshot.exists()) {
+                const sensorHistoryData = snapshot.val();
+                const dates = Object.keys(sensorHistoryData).sort((a, b) => moment(b, 'YYYY-MM-DD').diff(moment(a, 'YYYY-MM-DD')));
+                const mostRecentDate = dates[0]; // Most recent date
 
-        if (sensorHistorySnapshot.exists()) {
-            const sensorHistoryData = sensorHistorySnapshot.data();
-            // Convert the object keys (dates) into an array, sort them to find the most recent date
-            const dates = Object.keys(sensorHistoryData).sort((a, b) => moment(b, 'YYYY-MM-DD').diff(moment(a, 'YYYY-MM-DD')));
-            const mostRecentDate = dates[0]; // Most recent date
+                if (mostRecentDate && sensorHistoryData[mostRecentDate]) {
+                    const timeEntries = sensorHistoryData[mostRecentDate];
+                    const sortedTimeEntries = Object.entries(timeEntries)
+                        .sort(([timeA], [timeB]) => moment.utc(timeB, 'HH:mm:ss').diff(moment.utc(timeA, 'HH:mm:ss')))
+                        .slice(0, 7); // Get the last 7 samples
 
-            // Check if mostRecentDate exists and has entries
-            if (mostRecentDate && sensorHistoryData[mostRecentDate] && sensorHistoryData[mostRecentDate].DailyAverage) {
-                // Ignore the DailyAverage map
-                delete sensorHistoryData[mostRecentDate].DailyAverage;
-            }
+                    const recentSamples = {
+                        TDS: [],
+                        pH: [],
+                        AirTemperature: [],
+                        WaterTemperature : [],
+                        Humidity: [],
+                        Times: []
+                    };
 
-            if (mostRecentDate && sensorHistoryData[mostRecentDate]) {
-                // Access the map of time entries for the most recent date
-                const timeEntries = sensorHistoryData[mostRecentDate];
+                    sortedTimeEntries.forEach(([time, data]) => {
+                        recentSamples.TDS.push(data.tdsValue);
+                        recentSamples.pH.push(data.phValue);
+                        recentSamples.AirTemperature.push(data.AirTemperature);
+                        recentSamples.Humidity.push(data.Humidity);
+                        recentSamples.WaterTemperature.push(data.WaterTemperature);
+                        recentSamples.Times.push(moment(time, 'HH:mm:ss').format('HH:mm'));
+                    });
 
-                // Convert timeEntries object to an array and sort by time descending to get the last entries
-                const sortedTimeEntries = Object.entries(timeEntries)
-                    .sort(([timeA], [timeB]) => moment.utc(timeB, 'HH:mm:ss').diff(moment.utc(timeA, 'HH:mm:ss')))
-                    .slice(0, 7); // Get the last 7 samples
-
-                const recentSamples = {
-                    TDS: [],
-                    pH: [],
-                    AirTemperature: [],
-                    WaterTemperature : [],
-                    Humidity: [],
-                    Times: []
-                };
-
-                sortedTimeEntries.forEach(([time, data]) => {
-                    recentSamples.TDS.push(data.tdsValue);
-                    recentSamples.pH.push(data.phValue);
-                    recentSamples.AirTemperature.push(data.AirTemperature);
-                    recentSamples.Humidity.push(data.Humidity);
-                    recentSamples.WaterTemperature.push(data.WaterTemperature);
-                    recentSamples.Times.push(moment(time, 'HH:mm:ss').format('HH:mm'));
-                });
-
-                setRecentSamples(recentSamples);
+                    setRecentSamples(recentSamples);
+                } else {
+                    console.error("The most recent date does not have any entries or does not exist.");
+                }
             } else {
-                console.error("The most recent date does not have any entries or does not exist.");
+                console.error("The SensorHistory data does not exist.");
             }
-        } else {
-            console.error("The SensorHistory document does not exist.");
+        } catch (error) {
+            console.error("Error fetching sensor history data:", error);
         }
     } else {
         console.error("User is not logged in or authenticated.");
@@ -447,16 +442,14 @@ export const getChartData = (dayAverages) => {
 export const fetchLiveData = async (setLiveData, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
-        const sensorHistoryRef = doc(firestore, `Registered Users/${currentUser.uid}/${systemName}/SensorHistory`);
+        const sensorHistoryPath = `Registered Users/${currentUser.uid}/${systemName}/History/SensorHistory`;
+        const sensorHistoryRef = ref(database, sensorHistoryPath);
 
         try {
-            const liveDataSnapshot = await getDoc(sensorHistoryRef);
-            if (liveDataSnapshot.exists()) {
-                const sensorHistoryData = liveDataSnapshot.data();
+            const snapshot = await get(sensorHistoryRef);
+            if (snapshot.exists()) {
+                const sensorHistoryData = snapshot.val();
                 const filteredData = Object.entries(sensorHistoryData).flatMap(([date, timeData]) => {
-                    if (timeData.DailyAverage) {
-                        delete timeData.DailyAverage;
-                    }
                     return Object.entries(timeData).map(([time, sensorData]) => ({
                         date,
                         time,
@@ -465,7 +458,7 @@ export const fetchLiveData = async (setLiveData, systemName) => {
                 });
                 setLiveData(filteredData);
             } else {
-                console.error("No such document in Firestore.");
+                console.error("No such data in the Realtime Database.");
             }
         } catch (error) {
             console.error("Error fetching live data:", error);
