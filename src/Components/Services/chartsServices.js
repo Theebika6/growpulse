@@ -328,7 +328,7 @@ export const fetchLastSevenSamples = async (setRecentSamples, systemName) => {
                     };
 
                     sortedTimeEntries.forEach(([time, data]) => {
-                        recentSamples.TDS.push(data.tdsValue);
+                        recentSamples.TDS.push(data.TDSValue);
                         recentSamples.pH.push(data.phValue);
                         recentSamples.AirTemperature.push(data.AirTemperature);
                         recentSamples.Humidity.push(data.Humidity);
