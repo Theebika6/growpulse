@@ -1,9 +1,10 @@
-import { auth, firestore } from "../../firebaseConfig";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { auth, database } from "../../firebaseConfig";
+import { ref, get, update } from "firebase/database";
 
-const updateTotalAmounts = async (logHistoryDocRef, totals) => {
+const updateTotalAmounts = async (path, totals) => {
+    const refPath = ref(database, path);
     try {
-        await updateDoc(logHistoryDocRef, totals);
+        await update(refPath, totals);
     } catch (error) {
         console.error("Error updating totals: ", error);
     }
@@ -12,70 +13,71 @@ const updateTotalAmounts = async (logHistoryDocRef, totals) => {
 export const fetchLogHistory = async (setLogHistory, systemName) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
-        const logHistoryDocRef = doc(firestore, `Registered Users/${currentUser.uid}/${systemName}/DispenseHistory`);
-        const docSnapshot = await getDoc(logHistoryDocRef);
-        if (docSnapshot.exists()) {
-            const data = docSnapshot.data();
-            let formattedData = [];
-            let totals = { totalUp: 0, totalDown: 0, totalA: 0, totalB: 0 };
+        const logHistoryPath = `Registered Users/${currentUser.uid}/${systemName}/History/DispenseHistory`;
+        const logHistoryRef = ref(database, logHistoryPath);
 
-            for (const [date, timeEntries] of Object.entries(data)) {
-                for (const [time, logData] of Object.entries(timeEntries)) {
-                    for (const [type, amount] of Object.entries(logData)) {
-                        formattedData.push({
-                            rawDate: date,
-                            date: formatDate(date),
-                            time,
-                            Type: typeDisplayMapping[type] || type,
-                            Amount: amount
-                        });
+        try {
+            const snapshot = await get(logHistoryRef);
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                let formattedData = [];
+                let totals = { totalUp: 0, totalDown: 0, totalA: 0, totalB: 0 };
 
-                        if (type.includes('Up')) {
-                            totals.totalUp += amount;
-                        } else if (type.includes('Down')) {
-                            totals.totalDown += amount;
-                        } else if (type.includes('A')) {
-                            totals.totalA += amount;
-                        } else if (type.includes('B')) {
-                            totals.totalB += amount;
+                for (const [date, timeEntries] of Object.entries(data)) {
+                    for (const [time, logData] of Object.entries(timeEntries)) {
+                        for (const [type, amount] of Object.entries(logData)) {
+                            formattedData.push({
+                                rawDate: date,
+                                date: formatDate(date),
+                                time,
+                                Type: typeDisplayMapping[type] || type,
+                                Amount: amount
+                            });
+
+                            if (type.includes('Up')) {
+                                totals.totalUp += amount;
+                            } else if (type.includes('Down')) {
+                                totals.totalDown += amount;
+                            } else if (type.includes('A')) {
+                                totals.totalA += amount;
+                            } else if (type.includes('B')) {
+                                totals.totalB += amount;
+                            }
                         }
-
                     }
                 }
+
+                // Sort and remove rawDate as before
+                formattedData.sort((a, b) => {
+                    const aDateTime = new Date(`${a.rawDate}T${a.time}`);
+                    const bDateTime = new Date(`${b.rawDate}T${b.time}`);
+                    return bDateTime - aDateTime;
+                });
+                formattedData = formattedData.map(({ rawDate, ...item }) => item);
+
+                setLogHistory(formattedData);
+                await updateTotalAmounts(logHistoryPath, totals);
+            } else {
+                setLogHistory([]);
             }
-
-            // Sort the formattedData array by date and time in descending order
-            formattedData.sort((a, b) => {
-                const aDateTime = new Date(`${a.rawDate}T${a.time}`);
-                const bDateTime = new Date(`${b.rawDate}T${b.time}`);
-                return bDateTime - aDateTime;
-            });
-
-            // Remove the rawDate property from each object
-            formattedData = formattedData.map(({ rawDate, ...item }) => item);
-
-            setLogHistory(formattedData);
-            await updateTotalAmounts(logHistoryDocRef, totals);
-        } else {
-            setLogHistory([]);
+        } catch (error) {
+            console.error("Error fetching log history:", error);
         }
     }
 };
 
-
 const formatDate = (date) => {
-    // eslint-disable-next-line
     const [year, month, day] = date.split("-");
-    return `${day}/${month}`;
+    return `${day}/${month}/${year}`;
 };
 
 const typeDisplayMapping = {
-    dispensedVolumeUp: "Manual pH Up",
+    DP1: "Manual pH Up",
     dispensedVolumeUpAuto: "Automatic pH Up",
-    dispensedVolumeDown: "Manual pH Down",
+    DP2: "Manual pH Down",
     dispensedVolumeDownAuto: "Automatic pH Down",
     dispensedVolumeA_Init: "Initial Dose Sol. A",
     dispensedVolumeB_Init: "Initial Dose Sol. B",
-    dispensedVolumeA: "Manual Dose Sol. A",
-    dispensedVolumeB: "Manual Dose Sol. B"
+    DP3: "Manual Dose Sol. A",
+    DP4: "Manual Dose Sol. B"
 };
