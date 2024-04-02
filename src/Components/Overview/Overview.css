@@ -516,12 +516,13 @@
 
 .disposal-table{
     width: 100%;
+    max-height: 35rem;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     margin-right: 10px;
     transition: margin-top 0.3s ease;
-    height: 100%;
 }
 
 .sidebar-collapsed .disposal-table{
@@ -550,12 +551,14 @@
 
 .table-body-disp{
     table-layout: fixed;
+    height: 15rem;
 }
 
 .table-body-disp tbody {
     display: table;
     width: 100%;
     overflow-y: auto;
+    height: 15rem;
 }
 
 .table-body-disp tbody tr {
